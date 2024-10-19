@@ -4,6 +4,11 @@ import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 
+import java.time.LocalDate;
+
+import epicfitpc.modelo.pojos.Usuario;
+import epicfitpc.vista.paneles.PanelLogin;
+
 /**
  * JFrame que contiene el panel del menú.
  */
@@ -25,5 +30,10 @@ public class MainFrame extends JFrame {
 		setLocationRelativeTo(null);
 		setResizable(false);
 		getContentPane().setLayout(new BorderLayout());
+
+		PanelLogin panelLogin = new PanelLogin(this);
+		getContentPane().add(panelLogin);
+		revalidate();
+		repaint();
 	}
 }
