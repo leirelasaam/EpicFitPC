@@ -6,7 +6,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: EpicFit project ci/cd flow
+name: pre-commit
 
 on:
   push:
