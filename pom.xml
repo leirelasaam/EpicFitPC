@@ -6,12 +6,24 @@
 	<artifactId>EpicFitPC</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
+	<repositories>
+		<repository>
+			<id>google</id>
+			<url>https://maven.google.com</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
 		<!-- Firebase Admin SDK -->
 		<dependency>
 			<groupId>com.google.firebase</groupId>
 			<artifactId>firebase-admin</artifactId>
 			<version>9.4.1</version> <!-- última versión disponible -->
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>2.0.16</version>
 		</dependency>
 	</dependencies>
 </project>
