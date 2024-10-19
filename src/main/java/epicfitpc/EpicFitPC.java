@@ -40,7 +40,7 @@ public class EpicFitPC {
 					MainFrame frame = new MainFrame();
 					frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					System.out.println("Error: " + e.getMessage());
 				}
 			}
 		});
