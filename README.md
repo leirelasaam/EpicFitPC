@@ -13,6 +13,8 @@ La rama _main_ está protegida para que nadie pueda hacer un push o merge sin an
         ![image](https://github.com/user-attachments/assets/e67f8ff1-a20b-4768-96da-5c366f3623fc)
 
       - En caso de que no compile, no se deja aprobar el pull request y entonces, se debe cerrar. Cuando tengas una versión sin fallos, podrás volver a repetir este proceso.
+        ![image](https://github.com/user-attachments/assets/146300a4-3b95-4e8c-ab55-a6e27ab77fc7)
+8. Cuando se intente subir algo con fallos, el administrador (_Leire_) del repositorio recibe un correo electrónico.
 
 ## Conexión
 La conexión se establece mediante la clase **Conexion** dentro del paquete _utils_, haciendo uso del archivo de credenciales de Firestore que debe estar ubicado en la raíz del proyecto.
