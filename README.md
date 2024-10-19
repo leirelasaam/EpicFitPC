@@ -10,6 +10,8 @@ La rama _main_ está protegida para que nadie pueda hacer un push o merge sin an
 6. Entonces, saldrán las ramas y debes seleccionar la tuya.
 7. Al hacer el pull request, se comprueba si compila.
       - En caso de que compile, se puede aprobar el pull request y entonces, se hace merge al main.
+        ![image](https://github.com/user-attachments/assets/e67f8ff1-a20b-4768-96da-5c366f3623fc)
+
       - En caso de que no compile, no se deja aprobar el pull request y entonces, se debe cerrar. Cuando tengas una versión sin fallos, podrás volver a repetir este proceso.
 
 ## Conexión
