@@ -26,7 +26,21 @@ public class ItemPanel extends JPanel {
 
 		JLabel lblNombre = new JLabel("Nombre: " + workout.getNombre());
 		JLabel lblNivel = new JLabel("Nivel: " + workout.getNivel());
-		JLabel lblTiempo = new JLabel("Tiempo: " + (workout.getTiempo() / 60) + " min");
+		
+		// Obtener el tiempo en segundos
+		int tiempoEnSegundos = workout.getTiempo();
+
+		// Calcular horas, minutos y segundos
+		int horas = tiempoEnSegundos / 3600;
+		int minutos = (tiempoEnSegundos % 3600) / 60;
+		int segundos = tiempoEnSegundos % 60;
+		
+		String tiempoFormateado = "";
+		if (horas > 0) {
+			tiempoFormateado += horas + "h ";
+		} 
+		tiempoFormateado += minutos + "min " + segundos + "s";
+		JLabel lblTiempo = new JLabel("Tiempo: " + tiempoFormateado);
 		
 		add(lblNombre);
 		add(lblTiempo);
