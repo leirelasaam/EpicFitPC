@@ -3,13 +3,19 @@ package epicfitpc.vista.paneles;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
 
 import com.google.cloud.firestore.Firestore;
 
@@ -25,6 +31,7 @@ public class PanelMenu extends JPanel {
 	private MainFrame frame = null;
 	private Usuario usuario = null;
 	private JPanel panelWInterior = null;
+	private ArrayList<Workout> workouts = null;
 
 	public PanelMenu(MainFrame frame, Usuario usuario) {
 		this.frame = frame;
@@ -47,13 +54,12 @@ public class PanelMenu extends JPanel {
 
 		panelWInterior = new JPanel();
 		panelWInterior.setBackground(Color.BLACK);
-		panelWInterior.setLayout(new GridBagLayout());
+		panelWInterior.setLayout(new GridLayout(0, 3, 5, 5));
 		panelWorkouts.add(panelWInterior);
-		
-		
+
 		JScrollPane scrollPane = new JScrollPane(panelWInterior);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-	    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		panelWorkouts.add(scrollPane);
 
 		tabbedPane.addTab("Histórico", panelHistorico);
@@ -65,48 +71,40 @@ public class PanelMenu extends JPanel {
 		}
 
 		add(tabbedPane);
-
-		verWorkouts();
+		
+		crearItemsWorkout();
 	}
 
-	private void verWorkouts() {
+	private void crearItemsWorkout() {
 		Firestore db;
 		try {
 			db = Conexion.getConexion();
 			GestorDeWorkouts gdw = new GestorDeWorkouts(db);
-			ArrayList<Workout> workouts = gdw.obtenerTodosLosWorkouts();
-			GridBagConstraints gbc = new GridBagConstraints();
-			gbc.anchor = GridBagConstraints.NORTHWEST;
-
-			gbc.weightx = 0;
-			gbc.weighty = 0;
-
-			for (int i = 0; i < workouts.size(); i++) {
-				Workout workout = workouts.get(i);
-				ItemPanel itemPanel = new ItemPanel(workout);
-
-				gbc.gridx = i % 3;
-				gbc.gridy = i / 3;
-				gbc.insets = new Insets(10, 10, 10, 10);
-
-				panelWInterior.add(itemPanel, gbc);
-			}
-			
-			for (int i = 0; i < workouts.size(); i++) {
-				Workout workout = workouts.get(i);
-				ItemPanel itemPanel = new ItemPanel(workout);
-
-				gbc.gridx = (i+2) % 3;
-				gbc.gridy = (i+2) / 3;
-				gbc.insets = new Insets(10, 10, 10, 10);
-
-				panelWInterior.add(itemPanel, gbc);
-			}
+			workouts = gdw.obtenerTodosLosWorkouts();
+			agregarTarjetas(3, 4);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
+	
+    private void agregarTarjetas(int columnas, int filasMinimas) {
+        int numeroDeTarjetas = workouts.size();
+        int espaciosNecesarios = columnas * filasMinimas;
+
+        // Items reales para los workouts
+        for (Workout workout : workouts) {
+            ItemPanel card = new ItemPanel(workout);
+            panelWInterior.add(card);
+        }
+
+        // Paneles vacíos para que se ajusten bien los tamaños
+        for (int i = numeroDeTarjetas; i < espaciosNecesarios; i++) {
+            JPanel emptyPanel = new JPanel();
+            emptyPanel.setBackground(Color.BLACK);
+            panelWInterior.add(emptyPanel);
+        }
+    }
 
 }
