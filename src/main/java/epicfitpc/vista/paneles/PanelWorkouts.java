@@ -11,6 +11,8 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import epicfitpc.modelo.pojos.Workout;
+import epicfitpc.vista.componentes.ItemPanel;
+
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 
@@ -54,6 +56,7 @@ public class PanelWorkouts extends JPanel {
 
 	private void agregarPanelesWorkouts(int nivel) {
 		int numeroDeTarjetas = 0;
+		// Columnas * Filas
 		int espaciosNecesarios = 3 * 4;
 
 		// Items reales para los workouts

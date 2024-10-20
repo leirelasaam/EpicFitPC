@@ -1,4 +1,4 @@
-package epicfitpc.vista.paneles;
+package epicfitpc.vista.componentes;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
