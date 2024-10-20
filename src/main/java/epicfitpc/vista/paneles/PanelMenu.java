@@ -1,21 +1,9 @@
 package epicfitpc.vista.paneles;
 
 import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
 import java.util.ArrayList;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.SwingConstants;
 
 import com.google.cloud.firestore.Firestore;
 

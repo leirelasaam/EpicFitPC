@@ -10,13 +10,7 @@ import java.util.Set;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.border.EmptyBorder;
-
-import com.google.cloud.firestore.Firestore;
-
-import epicfitpc.modelo.bbdd.GestorDeWorkouts;
 import epicfitpc.modelo.pojos.Workout;
-import epicfitpc.utils.Conexion;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 
