@@ -10,11 +10,14 @@ import java.util.Set;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+
 import epicfitpc.modelo.pojos.Workout;
 import epicfitpc.vista.componentes.ItemPanel;
 
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class PanelWorkouts extends JPanel {
 
@@ -63,15 +66,22 @@ public class PanelWorkouts extends JPanel {
 		if (workouts != null) {
 			numeroDeTarjetas = workouts.size();
 			for (Workout workout : workouts) {
-				if (nivel == -1) {
-					ItemPanel card = new ItemPanel(workout);
-					panelWInterior.add(card);
-				} else {
-					if (workout.getNivel() == nivel) {
-						ItemPanel card = new ItemPanel(workout);
-						panelWInterior.add(card);
-					}
-				}
+		        if (nivel == -1 || workout.getNivel() == nivel) {
+		            ItemPanel itemPanel = new ItemPanel(workout);
+		            itemPanel.addMouseListener(new MouseAdapter() {
+		    			@Override
+		    			public void mouseClicked(MouseEvent e) {
+		    				removeAll();
+		    				JPanel panelWorkout = new JPanel();
+		    				panelWorkout.setLayout(null);
+		    				panelWorkout.setBackground(Color.RED);
+		    				add(panelWorkout);
+		    				revalidate();
+		    				repaint();
+		    			}
+		    		});
+		            panelWInterior.add(itemPanel);
+		        }
 			}
 		}
 

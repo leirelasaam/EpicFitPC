@@ -20,12 +20,13 @@ public class ItemPanel extends JPanel {
 	}
 
 	private void initialize() {
-		setLayout(new GridLayout(3, 1, 0, 0));
+		setLayout(new GridLayout(4, 1, 0, 0));
 		setBorder(new EmptyBorder(20, 20, 20, 20));
         setBackground(Color.ORANGE);
 
 		JLabel lblNombre = new JLabel("Nombre: " + workout.getNombre());
 		JLabel lblNivel = new JLabel("Nivel: " + workout.getNivel());
+		JLabel lblEjercicios = new JLabel("Ejercicios: " + workout.getEjercicios().size());
 		
 		// Obtener el tiempo en segundos
 		int tiempoEnSegundos = workout.getTiempo();
@@ -45,5 +46,6 @@ public class ItemPanel extends JPanel {
 		add(lblNombre);
 		add(lblTiempo);
 		add(lblNivel);
+		add(lblEjercicios);
 	}
 }
