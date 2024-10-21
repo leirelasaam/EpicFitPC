@@ -10,10 +10,16 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
+import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
+import java.awt.Font;
 
 public class PanelLogin extends JPanel {
 	private static final long serialVersionUID = 3044079574914466193L;
 	private MainFrame frame = null;
+	private JTextField txtIntroduceTuCorreo;
+	private JTextField txtIntroduceTuContrasea;
 
 	public PanelLogin(MainFrame frame) {
 		this.frame = frame;
@@ -24,11 +30,12 @@ public class PanelLogin extends JPanel {
 		setLayout(null);
 		setBounds(100, 100, 1200, 750);
 		
-		JLabel lblNewLabel = new JLabel("Login");
-		lblNewLabel.setBounds(10, 10, 45, 20);
+		JLabel lblNewLabel = new JLabel("¡Bienvenid@ a EpicFit!");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblNewLabel.setBounds(825, 110, 153, 31);
 		add(lblNewLabel);
 		
-		JButton btnNewButton = new JButton("Acceder");
+		JButton btnNewButton = new JButton("Iniciar sesión");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Usuario usuario = new Usuario("1", "Leire", "Lasa", "leire@gmail.com", "1234", LocalDate.now(), LocalDate.now(), 0, false);
@@ -38,7 +45,43 @@ public class PanelLogin extends JPanel {
 				frame.repaint();
 			}
 		});
-		btnNewButton.setBounds(10, 40, 85, 21);
+		btnNewButton.setBounds(772, 418, 241, 31);
 		add(btnNewButton);
+		
+		txtIntroduceTuCorreo = new JTextField();
+		txtIntroduceTuCorreo.setText("Introduce tu usuario");
+		txtIntroduceTuCorreo.setBounds(772, 275, 241, 26);
+		add(txtIntroduceTuCorreo);
+		txtIntroduceTuCorreo.setColumns(10);
+		
+		JLabel lblNewLabel_1 = new JLabel("Usuario");
+		lblNewLabel_1.setBounds(772, 250, 46, 14);
+		add(lblNewLabel_1);
+		
+		txtIntroduceTuContrasea = new JTextField();
+		txtIntroduceTuContrasea.setBounds(772, 347, 241, 31);
+		add(txtIntroduceTuContrasea);
+		txtIntroduceTuContrasea.setColumns(10);
+		
+		JLabel lblNewLabel_2 = new JLabel("Contraseña");
+		lblNewLabel_2.setBounds(772, 322, 80, 14);
+		add(lblNewLabel_2);
+		
+		JButton btnNewButton_1 = new JButton("Registrarme");
+		btnNewButton_1.setBounds(772, 575, 241, 31);
+		add(btnNewButton_1);
+		
+		JLabel lblNewLabel_3 = new JLabel("New label");
+		lblNewLabel_3.setIcon(new ImageIcon("C:\\Users\\in2dm3-v\\Downloads\\Logo.PNG"));
+		lblNewLabel_3.setBounds(0, -1, 602, 751);
+		add(lblNewLabel_3);
+		
+		JCheckBox chckbxNewCheckBox = new JCheckBox("Mantener sesión iniciada");
+		chckbxNewCheckBox.setBounds(776, 477, 183, 23);
+		add(chckbxNewCheckBox);
+		
+		JLabel lblNewLabel_2_1 = new JLabel("¿Todavia no tienes cuenta?");
+		lblNewLabel_2_1.setBounds(825, 550, 134, 14);
+		add(lblNewLabel_2_1);
 	}
 }
