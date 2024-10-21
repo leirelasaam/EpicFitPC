@@ -14,6 +14,8 @@ import epicfitpc.modelo.pojos.Workout;
 import epicfitpc.vista.componentes.ItemPanel;
 
 import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.ItemEvent;
 
 public class PanelWorkouts extends JPanel {
@@ -25,52 +27,75 @@ public class PanelWorkouts extends JPanel {
 	private static final String NIVELES_ALL = "-- Filtrar por nivel --";
 	private static final String NIVELES_NONE = "-- No hay workouts disponibles --";
 
+	/**
+	 * Constructor que inicializa el panel y recibe el listado de workouts.
+	 * 
+	 * @param workouts ArrayList de Workouts
+	 */
 	public PanelWorkouts(ArrayList<Workout> workouts) {
 		this.workouts = workouts;
 		initialize();
 	}
 
+	/**
+	 * Inicializa los componentes del panel.
+	 */
 	private void initialize() {
-		setLayout(new BorderLayout(0, 0));
+		setLayout(new GridLayout(0, 2));
+		
+		JPanel panelContenidoWorkout = new JPanel();
+		panelContenidoWorkout.setLayout(new BorderLayout(0, 0));
+		add(panelContenidoWorkout);
+		
 		comboBox = new JComboBox<String>();
 		comboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				filtrarPorNivel();
 			}
 		});
-		add(comboBox, BorderLayout.NORTH);
+		panelContenidoWorkout.add(comboBox, BorderLayout.NORTH);
 
 		panelWInterior = new JPanel();
-		panelWInterior.setBackground(Color.BLACK);
-		panelWInterior.setLayout(new GridLayout(0, 3, 5, 5));
-		add(panelWInterior);
+		panelWInterior.setBackground(Color.WHITE);
+		panelWInterior.setLayout(new GridLayout(0, 1, 5, 5));
+		panelContenidoWorkout.add(panelWInterior);
+		
+		JPanel panelEj= new JPanel();
+		panelEj.setBackground(Color.WHITE);
+		add(panelEj);
 
 		JScrollPane scrollPane = new JScrollPane(panelWInterior);
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		add(scrollPane);
+		panelContenidoWorkout.add(scrollPane);
 
 		agregarPanelesWorkouts(-1);
 		cargarCombo();
 	}
 
+	/**
+	 * Añade los paneles de cada workout al grid. Se añaden paneles vacíos en caso
+	 * de que no haya suficientes para mantener las proporciones.
+	 * 
+	 * @param nivel Número entero que es el nivel por el cual se filtra. -1 si no
+	 *              hay filtro.
+	 */
 	private void agregarPanelesWorkouts(int nivel) {
 		int numeroDeTarjetas = 0;
-		// Columnas * Filas
-		int espaciosNecesarios = 3 * 4;
+		int espaciosNecesarios = 5;
 
 		// Items reales para los workouts
 		if (workouts != null) {
-			numeroDeTarjetas = workouts.size();
 			for (Workout workout : workouts) {
-				if (nivel == -1) {
-					ItemPanel card = new ItemPanel(workout);
-					panelWInterior.add(card);
-				} else {
-					if (workout.getNivel() == nivel) {
-						ItemPanel card = new ItemPanel(workout);
-						panelWInterior.add(card);
-					}
+				if (nivel == -1 || workout.getNivel() == nivel) {
+					numeroDeTarjetas++;
+					ItemPanel itemPanel = new ItemPanel(workout);
+					panelWInterior.add(itemPanel);
+					itemPanel.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mouseClicked(MouseEvent e) {
+							
+						}
+					});
 				}
 			}
 		}
@@ -78,11 +103,16 @@ public class PanelWorkouts extends JPanel {
 		// Paneles vacíos para que se ajusten bien los tamaños
 		for (int i = numeroDeTarjetas; i < espaciosNecesarios; i++) {
 			JPanel emptyPanel = new JPanel();
-			emptyPanel.setBackground(Color.BLACK);
+			emptyPanel.setBackground(Color.WHITE);
 			panelWInterior.add(emptyPanel);
 		}
 	}
 
+	/**
+	 * Añade los posibles niveles al combo, comprobando los que hay en la base de
+	 * datos. Antes de añadir nada, resetea el listado cargado, eliminando los
+	 * items.
+	 */
 	private void cargarCombo() {
 		comboBox.removeAllItems();
 		// Set se utiliza para evitar duplicados
@@ -103,6 +133,10 @@ public class PanelWorkouts extends JPanel {
 		}
 	}
 
+	/**
+	 * Función que se activa cuando se cambia el valor seleccionado del combo.
+	 * Elimina todos los elementos y vuelve a cargarlos.
+	 */
 	private void filtrarPorNivel() {
 		if (workouts != null) {
 			String nivelSeleccionado = comboBox.getSelectedItem().toString();
@@ -113,6 +147,8 @@ public class PanelWorkouts extends JPanel {
 				int nivel = Integer.parseInt(nivelSeleccionado);
 				agregarPanelesWorkouts(nivel);
 			}
+
+			panelWInterior.revalidate();
 			panelWInterior.repaint();
 		}
 	}

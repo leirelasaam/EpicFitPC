@@ -1,26 +1,35 @@
-package epicfitpc.vista.componentes;
+package epicfitpc.vista.paneles;
+
+
+import java.awt.Color;
+import java.awt.GridLayout;
+import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import epicfitpc.modelo.pojos.Ejercicio;
 import epicfitpc.modelo.pojos.Workout;
 
-import java.awt.Color;
-import java.awt.GridLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+public class PanelWorkoutEjercicios extends JPanel {
 
-public class ItemPanel extends JPanel {
-
-	private static final long serialVersionUID = 8329219010128277587L;
+	private static final long serialVersionUID = 2651779404513169891L;
 	private Workout workout = null;
-	
-	public ItemPanel(Workout workout) {
+
+	/**
+	 * Constructor que inicializa el panel y recibe el listado de workouts.
+	 * 
+	 * @param workouts ArrayList de Workouts
+	 */
+	public PanelWorkoutEjercicios(Workout workout, ArrayList<Ejercicio> ejercicios) {
 		this.workout = workout;
 		initialize();
 	}
 
+	/**
+	 * Inicializa los componentes del panel.
+	 */
 	private void initialize() {
 		setLayout(new GridLayout(4, 1, 0, 0));
 		setBorder(new EmptyBorder(20, 20, 20, 20));
@@ -49,6 +58,5 @@ public class ItemPanel extends JPanel {
 		add(lblTiempo);
 		add(lblNivel);
 		add(lblEjercicios);
-		
 	}
 }
