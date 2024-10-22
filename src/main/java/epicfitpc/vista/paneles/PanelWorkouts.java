@@ -33,6 +33,7 @@ public class PanelWorkouts extends JPanel {
 	private ArrayList<Workout> workouts = null;
 	private static final String NIVELES_ALL = "-- Filtrar por nivel --";
 	private static final String NIVELES_NONE = "-- No hay workouts disponibles --";
+	private static final String SELECCIONA_WORKOUT = "Selecciona un workout";
 
 	/**
 	 * Constructor que inicializa el panel y recibe el listado de workouts.
@@ -72,7 +73,7 @@ public class PanelWorkouts extends JPanel {
 		panelEjerciciosW.setBackground(Color.WHITE);
 		add(panelEjerciciosW);
 
-		labelWorkout = new JLabel("Selecciona un workout");
+		labelWorkout = new JLabel(SELECCIONA_WORKOUT);
 		labelWorkout.setPreferredSize(new Dimension(labelWorkout.getPreferredSize().width, 30));
 		labelWorkout.setHorizontalAlignment(JLabel.CENTER);
 		panelEjerciciosW.add(labelWorkout, BorderLayout.NORTH);
