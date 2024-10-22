@@ -2,6 +2,7 @@ package epicfitpc.vista.paneles;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -27,6 +28,7 @@ public class PanelWorkouts extends JPanel {
 	private static final long serialVersionUID = 2651779404513169891L;
 	private JPanel panelWInterior;
 	private JPanel panelEj;
+	private JLabel labelWorkout;
 	private JComboBox<String> comboBox;
 	private ArrayList<Workout> workouts = null;
 	private static final String NIVELES_ALL = "-- Filtrar por nivel --";
@@ -47,11 +49,11 @@ public class PanelWorkouts extends JPanel {
 	 */
 	private void initialize() {
 		setLayout(new GridLayout(0, 2));
-		
+
 		JPanel panelContenidoWorkout = new JPanel();
 		panelContenidoWorkout.setLayout(new BorderLayout(0, 0));
 		add(panelContenidoWorkout);
-		
+
 		comboBox = new JComboBox<String>();
 		comboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -63,19 +65,28 @@ public class PanelWorkouts extends JPanel {
 		panelWInterior = new JPanel();
 		panelWInterior.setBackground(Color.WHITE);
 		panelWInterior.setLayout(new GridLayout(0, 1, 5, 5));
-		panelContenidoWorkout.add(panelWInterior);
-		
-		panelEj= new JPanel();
+
+		JPanel panelEjerciciosW = new JPanel();
+		panelEjerciciosW.setLayout(new BorderLayout(0, 0));
+		panelEjerciciosW.setBackground(Color.WHITE);
+		add(panelEjerciciosW);
+
+		labelWorkout = new JLabel("Selecciona un workout");
+		labelWorkout.setPreferredSize(new Dimension(labelWorkout.getPreferredSize().width, 40));
+		labelWorkout.setHorizontalAlignment(JLabel.CENTER);
+		panelEjerciciosW.add(labelWorkout, BorderLayout.NORTH);
+
+		panelEj = new JPanel();
 		panelEj.setLayout(new GridLayout(0, 1, 5, 5));
 		panelEj.setBackground(Color.WHITE);
-		add(panelEj);
-		
-		JLabel labelNo = new JLabel("No se ha seleccionado ningún workout");
-		panelEj.add(labelNo);
 
 		JScrollPane scrollPane = new JScrollPane(panelWInterior);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		panelContenidoWorkout.add(scrollPane);
+		
+		JScrollPane scrollPaneEj = new JScrollPane(panelEj);
+		scrollPaneEj.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		panelEjerciciosW.add(scrollPaneEj);
 
 		agregarPanelesWorkouts(-1);
 		cargarCombo();
@@ -89,39 +100,61 @@ public class PanelWorkouts extends JPanel {
 	 *              hay filtro.
 	 */
 	private void agregarPanelesWorkouts(int nivel) {
-		int numeroDeTarjetas = 0;
-		int espaciosNecesarios = 5;
+		int numeroDePaneles = 0;
+		int panelesNecesarios = 5;
 
 		// Items reales para los workouts
 		if (workouts != null) {
 			for (Workout workout : workouts) {
 				if (nivel == -1 || workout.getNivel() == nivel) {
-					numeroDeTarjetas++;
+					numeroDePaneles++;
 					WorkoutItemPanel itemPanel = new WorkoutItemPanel(workout);
 					panelWInterior.add(itemPanel);
 					itemPanel.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
-							panelEj.removeAll();
-							ArrayList<Ejercicio> ejercicios = workout.getEjercicios();
-							for (Ejercicio ejercicio : ejercicios) {
-								WorkoutEjItemPanel panelEj = new WorkoutEjItemPanel(ejercicio);
-								panelEj.add(itemPanel);
-							}
-							panelEj.revalidate();
-							panelEj.repaint();
+							agregarInfoEjercicios(workout);
 						}
 					});
 				}
 			}
 		}
 
+		generarPanelesVacios(numeroDePaneles, panelesNecesarios, panelWInterior);
+
+	}
+
+	private void generarPanelesVacios(int numeroDePaneles, int panelesNecesarios, JPanel panel) {
 		// Paneles vacíos para que se ajusten bien los tamaños
-		for (int i = numeroDeTarjetas; i < espaciosNecesarios; i++) {
+		for (int i = numeroDePaneles; i < panelesNecesarios; i++) {
 			JPanel emptyPanel = new JPanel();
 			emptyPanel.setBackground(Color.WHITE);
-			panelWInterior.add(emptyPanel);
+			panel.add(emptyPanel);
 		}
+	}
+
+	private void agregarInfoEjercicios(Workout workout) {
+		int numeroDePaneles = 0;
+		int panelesNecesarios = 4;
+
+		labelWorkout.setText(workout.getNombre());
+		
+		panelEj.removeAll();
+		
+		ArrayList<Ejercicio> ejercicios = workout.getEjercicios();
+		
+		if (null != ejercicios) {
+			for (Ejercicio ejercicio : ejercicios) {
+				numeroDePaneles++;
+				WorkoutEjItemPanel itemPanel = new WorkoutEjItemPanel(ejercicio);
+				panelEj.add(itemPanel);
+			}
+		}
+		
+		generarPanelesVacios(numeroDePaneles, panelesNecesarios, panelEj);
+
+		panelEj.revalidate();
+		panelEj.repaint();
 	}
 
 	/**
