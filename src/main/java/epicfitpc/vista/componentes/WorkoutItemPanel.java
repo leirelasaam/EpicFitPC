@@ -9,12 +9,12 @@ import epicfitpc.modelo.pojos.Workout;
 import java.awt.Color;
 import java.awt.GridLayout;
 
-public class ItemPanel extends JPanel {
+public class WorkoutItemPanel extends JPanel {
 
 	private static final long serialVersionUID = 8329219010128277587L;
 	private Workout workout = null;
 	
-	public ItemPanel(Workout workout) {
+	public WorkoutItemPanel(Workout workout) {
 		this.workout = workout;
 		initialize();
 	}

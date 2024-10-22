@@ -8,11 +8,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import epicfitpc.modelo.pojos.Ejercicio;
 import epicfitpc.modelo.pojos.Workout;
-import epicfitpc.vista.componentes.ItemPanel;
+import epicfitpc.vista.componentes.WorkoutEjItemPanel;
+import epicfitpc.vista.componentes.WorkoutItemPanel;
 
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
@@ -23,6 +26,7 @@ public class PanelWorkouts extends JPanel {
 
 	private static final long serialVersionUID = 2651779404513169891L;
 	private JPanel panelWInterior;
+	private JPanel panelEj;
 	private JComboBox<String> comboBox;
 	private ArrayList<Workout> workouts = null;
 	private static final String NIVELES_ALL = "-- Filtrar por nivel --";
@@ -61,9 +65,13 @@ public class PanelWorkouts extends JPanel {
 		panelWInterior.setLayout(new GridLayout(0, 1, 5, 5));
 		panelContenidoWorkout.add(panelWInterior);
 		
-		JPanel panelEj= new JPanel();
+		panelEj= new JPanel();
+		panelEj.setLayout(new GridLayout(0, 1, 5, 5));
 		panelEj.setBackground(Color.WHITE);
 		add(panelEj);
+		
+		JLabel labelNo = new JLabel("No se ha seleccionado ningún workout");
+		panelEj.add(labelNo);
 
 		JScrollPane scrollPane = new JScrollPane(panelWInterior);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -89,12 +97,19 @@ public class PanelWorkouts extends JPanel {
 			for (Workout workout : workouts) {
 				if (nivel == -1 || workout.getNivel() == nivel) {
 					numeroDeTarjetas++;
-					ItemPanel itemPanel = new ItemPanel(workout);
+					WorkoutItemPanel itemPanel = new WorkoutItemPanel(workout);
 					panelWInterior.add(itemPanel);
 					itemPanel.addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
-							
+							panelEj.removeAll();
+							ArrayList<Ejercicio> ejercicios = workout.getEjercicios();
+							for (Ejercicio ejercicio : ejercicios) {
+								WorkoutEjItemPanel panelEj = new WorkoutEjItemPanel(ejercicio);
+								panelEj.add(itemPanel);
+							}
+							panelEj.revalidate();
+							panelEj.repaint();
 						}
 					});
 				}
