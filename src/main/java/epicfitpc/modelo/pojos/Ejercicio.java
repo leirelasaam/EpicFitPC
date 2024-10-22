@@ -8,7 +8,7 @@ public class Ejercicio {
 	private int repeticiones = 0;
 	private int tiempoSerie = 0;
 	private int descanso = 0;
-	private int series;
+	private int series = 0;
 
 	public Ejercicio() {
 		// Constructor vacío

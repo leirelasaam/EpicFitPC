@@ -55,7 +55,7 @@ public class PanelMenu extends JPanel {
 	private void obtenerWorkouts() {
 		Firestore db;
 		try {
-			db = Conexion.getConexion();
+			db = Conexion.getInstance().getConexion();
 			GestorDeWorkouts gdw = new GestorDeWorkouts(db);
 			workouts = gdw.obtenerTodosLosWorkouts();
 		} catch (Exception e) {
