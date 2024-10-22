@@ -9,23 +9,24 @@ import epicfitpc.modelo.pojos.Workout;
 import java.awt.Color;
 import java.awt.GridLayout;
 
-public class ItemPanel extends JPanel {
+public class WorkoutItemPanel extends JPanel {
 
 	private static final long serialVersionUID = 8329219010128277587L;
 	private Workout workout = null;
 	
-	public ItemPanel(Workout workout) {
+	public WorkoutItemPanel(Workout workout) {
 		this.workout = workout;
 		initialize();
 	}
 
 	private void initialize() {
-		setLayout(new GridLayout(3, 1, 0, 0));
+		setLayout(new GridLayout(4, 1, 0, 0));
 		setBorder(new EmptyBorder(20, 20, 20, 20));
-        setBackground(Color.ORANGE);
+        setBackground(Color.LIGHT_GRAY);
 
 		JLabel lblNombre = new JLabel("Nombre: " + workout.getNombre());
 		JLabel lblNivel = new JLabel("Nivel: " + workout.getNivel());
+		JLabel lblEjercicios = new JLabel("Ejercicios: " + workout.getEjercicios().size());
 		
 		// Obtener el tiempo en segundos
 		int tiempoEnSegundos = workout.getTiempo();
@@ -45,5 +46,6 @@ public class ItemPanel extends JPanel {
 		add(lblNombre);
 		add(lblTiempo);
 		add(lblNivel);
+		add(lblEjercicios);
 	}
 }
