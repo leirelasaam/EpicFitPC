@@ -44,12 +44,11 @@ public class GestorDeWorkouts {
 			double nivel = documento.getDouble("nivel");
 			double tiempo = documento.getDouble("tiempo");
 			String video = documento.getString("video");
-			@SuppressWarnings("unchecked")
-			ArrayList<String> ejercicios = (ArrayList<String>) documento.get("ejercicios");
 			
-			Workout workout = new Workout(id, nombre, nivel, tiempo, video, ejercicios);
+			Workout workout = new Workout(id, nombre, nivel, tiempo, video, null);
 			
-			obtenerEjercicios(workout);
+			ArrayList<Ejercicio> ejercicios = obtenerEjercicios(workout);
+			workout.setEjercicios(ejercicios);
 			
 			if (null == workouts)
 				workouts = new ArrayList<Workout>();

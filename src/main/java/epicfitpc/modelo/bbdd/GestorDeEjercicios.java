@@ -30,7 +30,6 @@ public class GestorDeEjercicios {
 			throws InterruptedException, ExecutionException {
 		ArrayList<Ejercicio> ejercicios = null;
 		String idWorkout = workout.getId();
-		System.out.println("ID: " + idWorkout);
 
 		DocumentReference workoutsDb = db.collection(COLLECTION_WORKOUTS).document(idWorkout);
 		ApiFuture<DocumentSnapshot> futureQuery = workoutsDb.get();
@@ -47,7 +46,6 @@ public class GestorDeEjercicios {
 		@SuppressWarnings("unchecked")
 		List<DocumentReference> ejs = (List<DocumentReference>) docSnapshot.get("ejercicios");
 		for (DocumentReference ej : ejs) {
-			System.out.println("Ref: " + ej.getId());
 			DocumentReference ejerciciosDb = db.collection(COLLECTION_EJERCICIOS).document(ej.getId());
 			futureQuery = ejerciciosDb.get();
 			DocumentSnapshot docSnapshotEj = null;
@@ -59,31 +57,18 @@ public class GestorDeEjercicios {
 			} catch (ExecutionException e) {
 				throw e;
 			}
-			System.out.println(docSnapshotEj.toString());
-			Map<String, Object> datos = docSnapshotEj.getData();
 
-			for (Map.Entry<String, Object> entry : datos.entrySet()) {
-			    System.out.println("clave=" + entry.getKey() + ", valor=" + entry.getValue());
-			    if (entry.getKey().equals("id")) {
-			    	
-			    }
-			}
-			/*
-			String id = docSnapshot.getId();
-			String nombre = docSnapshot.getString("nombre");
-			double repeticiones = docSnapshot.getDouble("repeticiones");
-			double tiempo = docSnapshot.getDouble("tiempoSerie");
-			double descanso = docSnapshot.getDouble("descanso");
-			double series = docSnapshot.getDouble("series");
-			
-/*
-			Ejercicio ejercicio = new Ejercicio();
+			String id = docSnapshotEj.getId();
+			String nombre = docSnapshotEj.getString("nombre");
+			double repeticiones = docSnapshotEj.getDouble("repeticiones");
+			double tiempoSerie = docSnapshotEj.getDouble("tiempoSerie");
+			double descanso = docSnapshotEj.getDouble("descanso");
+			double series = docSnapshotEj.getDouble("series");
 
+			Ejercicio ejercicio = new Ejercicio(id, nombre, repeticiones, tiempoSerie, descanso, series);
 			if (null == ejercicios)
 				ejercicios = new ArrayList<Ejercicio>();
-
 			ejercicios.add(ejercicio);
-			*/
 		}
 
 		return ejercicios;

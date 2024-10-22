@@ -1,9 +1,11 @@
 package epicfitpc.modelo.pojos;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Ejercicio {
-
+public class Ejercicio implements Serializable {
+	private static final long serialVersionUID = 980898727046879368L;
+	private String id = null;
 	private String nombre = null;
 	private int repeticiones = 0;
 	private int tiempoSerie = 0;
@@ -14,13 +16,32 @@ public class Ejercicio {
 		// Constructor vacío
 	}
 
-	public Ejercicio(String nombre, int repeticiones, int tiempoSerie, int descanso, int series) {
+	public Ejercicio(String id, String nombre, int repeticiones, int tiempoSerie, int descanso, int series) {
 		super();
+		this.id = id;
 		this.nombre = nombre;
 		this.repeticiones = repeticiones;
 		this.tiempoSerie = tiempoSerie;
 		this.descanso = descanso;
 		this.series = series;
+	}
+	
+	public Ejercicio(String id, String nombre, double repeticiones, double tiempoSerie, double descanso, double series) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.repeticiones = (int) repeticiones;
+		this.tiempoSerie = (int) tiempoSerie;
+		this.descanso = (int) descanso;
+		this.series = (int) series;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getNombre() {
@@ -65,7 +86,7 @@ public class Ejercicio {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(descanso, nombre, repeticiones, series, tiempoSerie);
+		return Objects.hash(descanso, id, nombre, repeticiones, series, tiempoSerie);
 	}
 
 	@Override
@@ -77,14 +98,14 @@ public class Ejercicio {
 		if (getClass() != obj.getClass())
 			return false;
 		Ejercicio other = (Ejercicio) obj;
-		return descanso == other.descanso && Objects.equals(nombre, other.nombre) && repeticiones == other.repeticiones
-				&& series == other.series && tiempoSerie == other.tiempoSerie;
+		return descanso == other.descanso && Objects.equals(id, other.id) && Objects.equals(nombre, other.nombre)
+				&& repeticiones == other.repeticiones && series == other.series && tiempoSerie == other.tiempoSerie;
 	}
 
 	@Override
 	public String toString() {
-		return "Ejercicio [nombre=" + nombre + ", repeticiones=" + repeticiones + ", tiempoSerie=" + tiempoSerie
-				+ ", descanso=" + descanso + ", series=" + series + "]";
+		return "Ejercicio [id=" + id + ", nombre=" + nombre + ", repeticiones=" + repeticiones + ", tiempoSerie="
+				+ tiempoSerie + ", descanso=" + descanso + ", series=" + series + "]";
 	}
 
 }
