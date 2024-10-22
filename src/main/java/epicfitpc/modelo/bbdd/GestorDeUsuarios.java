@@ -58,5 +58,32 @@ public class GestorDeUsuarios {
 
 		return usuarios;
 	}
+	public boolean comprobarUsuario(String usuarioIntroducido, String contraseniaIntroducida) throws Exception {
+		boolean ret = false;
+		if (comprobarUsuario(usuarioIntroducido) && comprobarContrasenia(usuarioIntroducido, contraseniaIntroducida)) 
+			ret = true;
+		return ret;
+	}
+	
+	private boolean comprobarUsuario(String login) throws Exception {
+		UserManager userManager = new UserManager();
+		boolean ret = false;
+		if (login.equalsIgnoreCase(userManager.getLogin(login)))
+			ret = true;
+		return ret;
+	}
+
+	private boolean comprobarContrasenia(String login, String password) throws Exception {
+		UserManager userManager = new UserManager();
+		boolean ret = false;
+		if (password.equals(userManager.getPassword(login)))
+			ret = true;
+		return ret;
+	}
+
+	 {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }

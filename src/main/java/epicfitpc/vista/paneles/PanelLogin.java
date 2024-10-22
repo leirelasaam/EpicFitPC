@@ -2,10 +2,12 @@ package epicfitpc.vista.paneles;
 
 import javax.swing.JPanel;
 
+import epicfitpc.modelo.bbdd.GestorDeUsuarios;
 import epicfitpc.modelo.pojos.Usuario;
 import epicfitpc.vista.MainFrame;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
@@ -14,12 +16,13 @@ import javax.swing.JTextField;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import java.awt.Font;
+import java.awt.HeadlessException;
 
 public class PanelLogin extends JPanel {
 	private static final long serialVersionUID = 3044079574914466193L;
 	private MainFrame frame = null;
 	private JTextField txtIntroduceTuCorreo;
-	private JTextField txtIntroduceTuContrasea;
+	private JTextField txtIntroduceTuPass;
 
 	public PanelLogin(MainFrame frame) {
 		this.frame = frame;
@@ -43,6 +46,33 @@ public class PanelLogin extends JPanel {
 				frame.getContentPane().add(new PanelMenu(frame, usuario));
 				frame.revalidate();
 				frame.repaint();
+				
+				GestorDeUsuarios gestorUsuarios = new GestorDeUsuarios(null);
+				//Modificar
+				try {
+					//Obtener los datos introducidos
+					String usuarioIntroducido = txtIntroduceTuCorreo.getText();
+					String passIntroducido = txtIntroduceTuPass.getText();
+					
+					//Comprobar si los datos introducidos son correctos
+					if(gestorUsuarios.comprobarUsuario(usuarioIntroducido, passIntroducido)) {
+						//si usuario y login es correcto
+						JOptionPane.showMessageDialog(frame, "Bienvenido a EpicFit");
+						frame.getContentPane().removeAll();
+						frame.getContentPane().add(new PanelMenu(frame, usuario));
+						frame.revalidate();
+						frame.repaint();
+					}else {	
+						//si usuario y login es correcto
+						JOptionPane.showMessageDialog(frame, "El login y el password es incorrecto");
+					}
+				} catch (HeadlessException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		btnNewButton.setBounds(772, 418, 241, 31);
@@ -58,26 +88,33 @@ public class PanelLogin extends JPanel {
 		lblNewLabel_1.setBounds(772, 250, 46, 14);
 		add(lblNewLabel_1);
 		
-		txtIntroduceTuContrasea = new JTextField();
-		txtIntroduceTuContrasea.setBounds(772, 347, 241, 31);
-		add(txtIntroduceTuContrasea);
-		txtIntroduceTuContrasea.setColumns(10);
+		txtIntroduceTuPass = new JTextField();
+		txtIntroduceTuPass.setBounds(772, 347, 241, 31);
+		add(txtIntroduceTuPass);
+		txtIntroduceTuPass.setColumns(10);
 		
 		JLabel lblNewLabel_2 = new JLabel("Contraseña");
 		lblNewLabel_2.setBounds(772, 322, 80, 14);
 		add(lblNewLabel_2);
 		
 		JButton btnNewButton_1 = new JButton("Registrarme");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		btnNewButton_1.setBounds(772, 575, 241, 31);
 		add(btnNewButton_1);
 		
+		//logo de la compania
 		JLabel lblNewLabel_3 = new JLabel("New label");
 		lblNewLabel_3.setIcon(new ImageIcon("C:\\Users\\in2dm3-v\\Downloads\\Logo.PNG"));
 		lblNewLabel_3.setBounds(0, -1, 602, 751);
 		add(lblNewLabel_3);
 		
+		//Persistencia de los datos si esta opción está seleccionada
 		JCheckBox chckbxNewCheckBox = new JCheckBox("Mantener sesión iniciada");
-		chckbxNewCheckBox.setBounds(776, 477, 183, 23);
+		chckbxNewCheckBox.setBounds(772, 486, 183, 23);
 		add(chckbxNewCheckBox);
 		
 		JLabel lblNewLabel_2_1 = new JLabel("¿Todavia no tienes cuenta?");
