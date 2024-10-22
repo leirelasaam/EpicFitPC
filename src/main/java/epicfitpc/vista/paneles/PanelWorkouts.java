@@ -34,6 +34,7 @@ public class PanelWorkouts extends JPanel {
 	private static final String NIVELES_ALL = "-- Filtrar por nivel --";
 	private static final String NIVELES_NONE = "-- No hay workouts disponibles --";
 	private static final String SELECCIONA_WORKOUT = "Selecciona un workout";
+	private static final int PANELES_NECESARIOS = 5;
 
 	/**
 	 * Constructor que inicializa el panel y recibe el listado de workouts.
@@ -103,7 +104,7 @@ public class PanelWorkouts extends JPanel {
 	 */
 	private void agregarPanelesWorkouts(int nivel) {
 		int numeroDePaneles = 0;
-		int panelesNecesarios = 5;
+		int panelesNecesarios = PANELES_NECESARIOS;
 
 		// Items reales para los workouts
 		if (workouts != null) {
@@ -150,7 +151,7 @@ public class PanelWorkouts extends JPanel {
 	 */
 	private void agregarInfoEjercicios(Workout workout) {
 		int numeroDePaneles = 0;
-		int panelesNecesarios = 4;
+		int panelesNecesarios = PANELES_NECESARIOS;
 
 		labelWorkout.setText(workout.getNombre());
 
