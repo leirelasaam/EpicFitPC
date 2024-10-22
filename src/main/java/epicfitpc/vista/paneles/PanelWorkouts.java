@@ -55,6 +55,7 @@ public class PanelWorkouts extends JPanel {
 		add(panelContenidoWorkout);
 
 		comboBox = new JComboBox<String>();
+		comboBox.setPreferredSize(new Dimension(comboBox.getPreferredSize().width, 30));
 		comboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				filtrarPorNivel();
@@ -72,7 +73,7 @@ public class PanelWorkouts extends JPanel {
 		add(panelEjerciciosW);
 
 		labelWorkout = new JLabel("Selecciona un workout");
-		labelWorkout.setPreferredSize(new Dimension(labelWorkout.getPreferredSize().width, 40));
+		labelWorkout.setPreferredSize(new Dimension(labelWorkout.getPreferredSize().width, 30));
 		labelWorkout.setHorizontalAlignment(JLabel.CENTER);
 		panelEjerciciosW.add(labelWorkout, BorderLayout.NORTH);
 
@@ -83,7 +84,7 @@ public class PanelWorkouts extends JPanel {
 		JScrollPane scrollPane = new JScrollPane(panelWInterior);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		panelContenidoWorkout.add(scrollPane);
-		
+
 		JScrollPane scrollPaneEj = new JScrollPane(panelEj);
 		scrollPaneEj.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		panelEjerciciosW.add(scrollPaneEj);
@@ -124,6 +125,13 @@ public class PanelWorkouts extends JPanel {
 
 	}
 
+	/**
+	 * Genera paneles vacíos.
+	 * 
+	 * @param numeroDePaneles   Paneles generados hasta el momento.
+	 * @param panelesNecesarios Paneles necesarios en total.
+	 * @param panel             Panel padre al que se añaden el resto de paneles.
+	 */
 	private void generarPanelesVacios(int numeroDePaneles, int panelesNecesarios, JPanel panel) {
 		// Paneles vacíos para que se ajusten bien los tamaños
 		for (int i = numeroDePaneles; i < panelesNecesarios; i++) {
@@ -133,16 +141,22 @@ public class PanelWorkouts extends JPanel {
 		}
 	}
 
+	/**
+	 * Genera el contenido en el panel que muestra la información de los ejercicios
+	 * que componen el workout.
+	 * 
+	 * @param workout Workout seleccionado.
+	 */
 	private void agregarInfoEjercicios(Workout workout) {
 		int numeroDePaneles = 0;
 		int panelesNecesarios = 4;
 
 		labelWorkout.setText(workout.getNombre());
-		
+
 		panelEj.removeAll();
-		
+
 		ArrayList<Ejercicio> ejercicios = workout.getEjercicios();
-		
+
 		if (null != ejercicios) {
 			for (Ejercicio ejercicio : ejercicios) {
 				numeroDePaneles++;
@@ -150,7 +164,7 @@ public class PanelWorkouts extends JPanel {
 				panelEj.add(itemPanel);
 			}
 		}
-		
+
 		generarPanelesVacios(numeroDePaneles, panelesNecesarios, panelEj);
 
 		panelEj.revalidate();
