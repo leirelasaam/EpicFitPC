@@ -1,6 +1,7 @@
 package epicfitpc.vista.paneles;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -30,6 +31,7 @@ public class PanelMenu extends JPanel {
 	private void initialize() {
 		setLayout(new BorderLayout());
 		setBounds(100, 100, 1200, 750);
+		setBackground(Color.WHITE);
 
 		JTabbedPane tabbedPane = new JTabbedPane();
 
@@ -53,7 +55,7 @@ public class PanelMenu extends JPanel {
 	private void obtenerWorkouts() {
 		Firestore db;
 		try {
-			db = Conexion.getConexion();
+			db = Conexion.getInstance().getConexion();
 			GestorDeWorkouts gdw = new GestorDeWorkouts(db);
 			workouts = gdw.obtenerTodosLosWorkouts();
 		} catch (Exception e) {

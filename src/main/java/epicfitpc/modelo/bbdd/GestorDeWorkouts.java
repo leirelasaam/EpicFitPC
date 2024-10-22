@@ -10,6 +10,7 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 
+import epicfitpc.modelo.pojos.Ejercicio;
 import epicfitpc.modelo.pojos.Workout;
 
 public class GestorDeWorkouts {
@@ -43,11 +44,11 @@ public class GestorDeWorkouts {
 			double nivel = documento.getDouble("nivel");
 			double tiempo = documento.getDouble("tiempo");
 			String video = documento.getString("video");
-			@SuppressWarnings("unchecked")
-			ArrayList<String> ejercicios = (ArrayList<String>) documento.get("ejercicios");
 			
-
-			Workout workout = new Workout(id, nombre, nivel, tiempo, video, ejercicios);
+			Workout workout = new Workout(id, nombre, nivel, tiempo, video, null);
+			
+			ArrayList<Ejercicio> ejercicios = obtenerEjercicios(workout);
+			workout.setEjercicios(ejercicios);
 			
 			if (null == workouts)
 				workouts = new ArrayList<Workout>();
@@ -56,6 +57,21 @@ public class GestorDeWorkouts {
 		}
 
 		return workouts;
+	}
+	
+	private ArrayList<Ejercicio> obtenerEjercicios(Workout workout) throws InterruptedException, ExecutionException{
+		ArrayList<Ejercicio> ejercicios = null;
+		
+		GestorDeEjercicios gde = new GestorDeEjercicios(db);
+		try {
+			ejercicios = gde.obtenerEjerciciosPorWorkout(workout);
+		} catch (InterruptedException e) {
+			throw e;
+		} catch (ExecutionException e) {
+			throw e;
+		}
+		
+		return ejercicios;
 	}
 
 }
