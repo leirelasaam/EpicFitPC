@@ -13,29 +13,36 @@ import com.google.cloud.firestore.FirestoreOptions;
  */
 public class Conexion {
 
+	private static Conexion conn = null;
+
 	private static final String RUTA_CREDENCIALES = "epicfit_key_firestore.json";
 	private static final String PROJECT_ID = "epicfit-54195";
 
-	private static Firestore db; // Almacenará la instancia de Firestore
+	private FileInputStream serviceAccount = null;
+	private Firestore db = null;
 
-	// Evitar la instanciación de la clase
-	private Conexion() {
+	public static Conexion getInstance() {
+		if (null == conn)
+			conn = new Conexion();
+		return conn;
 	}
 
-	public static Firestore getConexion() throws FileNotFoundException, IOException {
-		if (db == null) { // Si no se ha inicializado, crear la conexión
-			synchronized (Conexion.class) { // Asegurar que solo un hilo inicialice la conexión
-				if (db == null) {
-					FileInputStream serviceAccount = new FileInputStream(RUTA_CREDENCIALES);
-
-					FirestoreOptions fsOptions = FirestoreOptions.getDefaultInstance().toBuilder()
-							.setProjectId(PROJECT_ID).setCredentials(GoogleCredentials.fromStream(serviceAccount))
-							.build();
-
-					db = fsOptions.getService(); // Almacena la instancia
-				}
-			}
+	private Conexion() {
+		try {
+			serviceAccount = new FileInputStream(RUTA_CREDENCIALES);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		}
-		return db; // Devuelve la conexión a Firestore
+	}
+
+	public Firestore getConexion() throws FileNotFoundException, IOException {
+
+		if (null == db) {
+			FirestoreOptions fsOptions = FirestoreOptions.getDefaultInstance().toBuilder().setProjectId(PROJECT_ID)
+					.setCredentials(GoogleCredentials.fromStream(serviceAccount)).build();
+
+			db = fsOptions.getService();
+		}
+		return db;
 	}
 }

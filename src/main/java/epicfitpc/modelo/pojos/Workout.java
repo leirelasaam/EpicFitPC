@@ -12,13 +12,13 @@ public class Workout implements Serializable {
 	private int nivel = 0;
 	private int tiempo = 0;
 	private String video = null;
-	private ArrayList<String> ejercicios = null;
+	private ArrayList<Ejercicio> ejercicios = null;
 
 	public Workout() {
 
 	}
 
-	public Workout(String id, String nombre, int nivel, int tiempo, String video, ArrayList<String> ejercicios) {
+	public Workout(String id, String nombre, int nivel, int tiempo, String video, ArrayList<Ejercicio> ejercicios) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
@@ -28,7 +28,8 @@ public class Workout implements Serializable {
 		this.ejercicios = ejercicios;
 	}
 
-	public Workout(String id, String nombre, double nivel, double tiempo, String video, ArrayList<String> ejercicios) {
+	public Workout(String id, String nombre, double nivel, double tiempo, String video,
+			ArrayList<Ejercicio> ejercicios) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
@@ -78,11 +79,11 @@ public class Workout implements Serializable {
 		this.video = video;
 	}
 
-	public ArrayList<String> getEjercicios() {
+	public ArrayList<Ejercicio> getEjercicios() {
 		return ejercicios;
 	}
 
-	public void setEjercicios(ArrayList<String> ejercicios) {
+	public void setEjercicios(ArrayList<Ejercicio> ejercicios) {
 		this.ejercicios = ejercicios;
 	}
 

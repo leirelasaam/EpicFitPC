@@ -47,3 +47,4 @@ La clase **GestorDeUsuarios** realiza operaciones CRUD sobre la base de datos de
 
 ## Lanzar la aplicación
 La aplicación se lanza mediante la clase **EpicFitPC** que instancia el _MainFrame_, donde se irán añadiendo los diferentes paneles que componen la vista.
+
