@@ -14,16 +14,19 @@ import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import java.awt.Font;
 import java.awt.HeadlessException;
+import javax.swing.JPasswordField;
 
 public class PanelLogin extends JPanel {
 	private static final long serialVersionUID = 3044079574914466193L;
 	private MainFrame frame = null;
 	private JTextField txtIntroduceTuCorreo;
 	private JTextField txtIntroduceTuPass;
+	private JPasswordField passwordField;
 
 	public PanelLogin(MainFrame frame) {
 		this.frame = frame;
@@ -84,7 +87,7 @@ public class PanelLogin extends JPanel {
 		lblNewLabel_1.setBounds(772, 250, 46, 14);
 		add(lblNewLabel_1);
 
-		txtIntroduceTuPass = new JTextField();
+		txtIntroduceTuPass = new JPasswordField();
 		txtIntroduceTuPass.setBounds(772, 347, 241, 31);
 		add(txtIntroduceTuPass);
 		txtIntroduceTuPass.setColumns(10);
@@ -92,7 +95,7 @@ public class PanelLogin extends JPanel {
 		JLabel lblNewLabel_2 = new JLabel("Contraseña");
 		lblNewLabel_2.setBounds(772, 322, 80, 14);
 		add(lblNewLabel_2);
-
+		
 		JButton btnNewButton_1 = new JButton("Registrarme");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -107,7 +110,8 @@ public class PanelLogin extends JPanel {
 
 		// logo de la compania
 		JLabel lblNewLabel_3 = new JLabel("New label");
-		lblNewLabel_3.setIcon(new ImageIcon("C:\\Users\\in2dm3-v\\Downloads\\Logo.PNG"));
+		lblNewLabel_3.setIcon((Icon) new ImageIcon("resources/Logo.PNG"));
+		
 		lblNewLabel_3.setBounds(0, -1, 602, 751);
 		add(lblNewLabel_3);
 
@@ -115,9 +119,16 @@ public class PanelLogin extends JPanel {
 		JCheckBox chckbxNewCheckBox = new JCheckBox("Mantener sesión iniciada");
 		chckbxNewCheckBox.setBounds(772, 486, 183, 23);
 		add(chckbxNewCheckBox);
+		
+		//Si el check box está seleccionado, tiene que tener los datos ya introducidos
+		if(chckbxNewCheckBox.isSelected()) {
+			//txtIntroduceTuCorreo.setText("usuarioGuardado");
+			//txtIntroduceTuCorreo.setText("contraseñaGuardada");
+		}
 
 		JLabel lblNewLabel_2_1 = new JLabel("¿Todavia no tienes cuenta?");
 		lblNewLabel_2_1.setBounds(825, 550, 134, 14);
 		add(lblNewLabel_2_1);
+		
 	}
 }

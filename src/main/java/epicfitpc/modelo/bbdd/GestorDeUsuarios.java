@@ -64,7 +64,7 @@ public class GestorDeUsuarios {
 	    for (Usuario usuario : usuarios) {
 
 	    	// Verificar que userName no sea null antes de comparar
-	        if (usuario.getUser() != null && usuario.getUser().equals(usuarioIntroducido)) {
+	        if (usuario.getUser() != null && usuario.getUser().equalsIgnoreCase(usuarioIntroducido)) {
 	            // Usuario encontrado, ahora verificamos la contraseña
 	            if (usuario.getPass() != null && usuario.getPass().equals(contraseniaIntroducida)) {
 	                // Usuario y contraseña correctos
