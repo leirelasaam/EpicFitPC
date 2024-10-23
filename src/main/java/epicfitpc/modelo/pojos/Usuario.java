@@ -43,12 +43,13 @@ public class Usuario implements Serializable {
 	}
 
 	// Constructor que recibe los valores crudos desde el documento
-	public Usuario(String id, String nombre, String apellido, String correo, String pass, double nivel,
+	public Usuario(String id, String nombre, String apellido, String correo,String user, String pass, double nivel,
 			Timestamp fechaNac, Timestamp fechaAlt, boolean esEntrenador) {
 		this.id = id;
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.correo = correo;
+		this.user = user;
 		this.pass = pass;
 
 		this.nivel = (int) nivel;
@@ -92,7 +93,7 @@ public class Usuario implements Serializable {
 	}
 
 	public String getUser() {
-		return pass;
+		return user;
 	}
 
 	public void setUser(String user) {

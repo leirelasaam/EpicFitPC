@@ -26,11 +26,9 @@ public class GestorDeUsuarios {
 
 	public ArrayList<Usuario> obtenerTodosLosUsuarios() throws InterruptedException, ExecutionException {
 		ArrayList<Usuario> usuarios = null;
-
 		CollectionReference usuariosDb = db.collection("Usuarios");
 		ApiFuture<QuerySnapshot> futureQuery = usuariosDb.get();
 		QuerySnapshot querySnapshot = null;
-
 		try {
 			querySnapshot = futureQuery.get();
 		} catch (InterruptedException e) {
@@ -38,7 +36,6 @@ public class GestorDeUsuarios {
 		} catch (ExecutionException e) {
 			throw e;
 		}
-
 		List<QueryDocumentSnapshot> documentos = querySnapshot.getDocuments();
 		for (QueryDocumentSnapshot documento : documentos) {
 			String id = documento.getId();
@@ -49,49 +46,62 @@ public class GestorDeUsuarios {
 			Timestamp fechaNac = documento.getTimestamp("fechaNac");
 			Timestamp fechaAlt = documento.getTimestamp("fechaAlt");
 			boolean esEntrenador = documento.getBoolean("esEntrenador");
-
 			String user = documento.getString("usuario");
 			String pass = documento.getString("pass");
-
-			Usuario usuario = new Usuario(id, nombre, apellido, correo, pass, nivel, fechaNac, fechaAlt, esEntrenador);
-
+			Usuario usuario = new Usuario(id, nombre, apellido, correo, user, pass, nivel, fechaNac, fechaAlt, esEntrenador);
 			if (null == usuarios)
 				usuarios = new ArrayList<Usuario>();
-
 			usuarios.add(usuario);
 		}
-
 		return usuarios;
 	}
 
 	public Usuario comprobarUsuario(String usuarioIntroducido, String contraseniaIntroducida) throws Exception {
 	    Firestore db = Conexion.getConexion();
 	    ArrayList<Usuario> usuarios = obtenerTodosLosUsuarios();
-	    boolean usuarioEncontrado = false;
-
+	    
+	    // Recorremos los usuarios para buscar el usuario introducido
 	    for (Usuario usuario : usuarios) {
-	        // Comprobamos si el usuario introducido existe
-	        if (usuario.user.toString().equals(usuarioIntroducido)) {
-	            usuarioEncontrado = true;
-	            // Si el usuario es correcto, verificamos la contraseña
-	            if (usuario.getPass().equals(contraseniaIntroducida)) {
-	                JOptionPane.showMessageDialog(null, "Usuario y contraseña correctos.");
-	                return usuario; // Retorna el usuario si ambas condiciones son correctas
+
+	    	// Verificar que userName no sea null antes de comparar
+	        if (usuario.getUser() != null && usuario.getUser().equals(usuarioIntroducido)) {
+	            // Usuario encontrado, ahora verificamos la contraseña
+	            if (usuario.getPass() != null && usuario.getPass().equals(contraseniaIntroducida)) {
+	                // Usuario y contraseña correctos
+	                JOptionPane.showMessageDialog(null, "Acceso concedido.");
+	                return usuario; // Devuelve el usuario si ambas condiciones son correctas
 	            } else {
-	                // Si la contraseña no es correcta, lanza una excepción
-	                throw new Exception("Contraseña incorrecta.");
+	                // Si la contraseña no es correcta, lanzamos excepción genérica
+	                JOptionPane.showMessageDialog(null, "Datos introducidos incorrectos2.");
+	                throw new Exception("Datos incorrectos.");
 	            }
 	        }
 	    }
-
-	    // Si no encuentra el usuario, lanza una excepción y muestra mensaje
-	    if (!usuarioEncontrado) {
-	        JOptionPane.showMessageDialog(null, "Usuario no encontrado.");
-	        throw new Exception("El usuario no existe.");
-	    }
-
-	    return null;
+	    
+	    // Si no se encuentra el usuario en la base de datos, lanzamos otra excepción genérica
+	    JOptionPane.showMessageDialog(null, "Datos introducidos incorrectos1.");
+	    throw new Exception("Datos incorrectos.");
 	}
 
+	
+	//Prueba para comprobar que se conecta a la firebase e imprime todos los usuarios -> ID: zoVUUYKznIh8KDXOxjUc, Nombre: Leire, Usuario: 1234
+	public void imprimirTodosLosUsuarios() throws Exception {
+	    // Conexión a firestore
+	    Firestore db = Conexion.getConexion();
+
+	    // Obtenemos todos los usuarios
+	    ArrayList<Usuario> usuarios = obtenerTodosLosUsuarios();
+
+	    // Si hay usuarios en la lista, los imprime
+	    if (usuarios != null && !usuarios.isEmpty()) {
+	        System.out.println("Usuarios encontrados:");
+	        for (Usuario usuario : usuarios) {
+	            System.out.println("ID: " + usuario.getId() + ", Nombre: " + usuario.getNombre() + ", Usuario: " + usuario.getUser());
+	        }
+	    } else {
+	        System.out.println("No se encontraron usuarios.");
+	    }
+	}
+	
 
 }
