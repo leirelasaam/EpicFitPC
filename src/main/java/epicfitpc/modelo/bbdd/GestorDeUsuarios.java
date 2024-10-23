@@ -72,14 +72,14 @@ public class GestorDeUsuarios {
 	                return usuario; // Devuelve el usuario si ambas condiciones son correctas
 	            } else {
 	                // Si la contraseña no es correcta, lanzamos excepción genérica
-	                JOptionPane.showMessageDialog(null, "Datos introducidos incorrectos2.");
+	                JOptionPane.showMessageDialog(null, "Datos introducidos incorrectos.");
 	                throw new Exception("Datos incorrectos.");
 	            }
 	        }
 	    }
 	    
 	    // Si no se encuentra el usuario en la base de datos, lanzamos otra excepción genérica
-	    JOptionPane.showMessageDialog(null, "Datos introducidos incorrectos1.");
+	    JOptionPane.showMessageDialog(null, "Datos introducidos incorrectos.");
 	    throw new Exception("Datos incorrectos.");
 	}
 
