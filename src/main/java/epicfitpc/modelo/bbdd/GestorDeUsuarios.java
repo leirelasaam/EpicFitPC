@@ -49,14 +49,21 @@ public class GestorDeUsuarios {
 			boolean esEntrenador = documento.getBoolean("esEntrenador");
 
 			Usuario usuario = new Usuario(id, nombre, apellido, correo, pass, nivel, fechaNac, fechaAlt, esEntrenador);
-			
+
 			if (null == usuarios)
 				usuarios = new ArrayList<Usuario>();
-			
+
 			usuarios.add(usuario);
 		}
 
 		return usuarios;
+	}
+
+	public void guardarUsuarios(Usuario usuario) throws InterruptedException, ExecutionException {
+
+		CollectionReference usuariosDb = db.collection("Usuarios");
+		/*(V.U)*///MAP!! hacer el hashmap 
+		
 	}
 
 }
