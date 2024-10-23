@@ -1,12 +1,16 @@
 package epicfitpc.modelo.bbdd;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
+
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
@@ -63,7 +67,14 @@ public class GestorDeUsuarios {
 
 		CollectionReference usuariosDb = db.collection("Usuarios");
 		/*(V.U)*///MAP!! hacer el hashmap 
+		Map<String, Object> user = new HashMap<String, Object>();
+		user.put("nombre", usuario.getNombre());
+		user.put("apellido", usuario.getApellido());
+		user.put("pass", usuario.getPass());
+		user.put("correo", usuario.getCorreo());
+		user.put("fechaNac", usuario.getFechaNac());
+		user.put("fechaAlt", usuario.getFechaAlt());
+		DocumentReference userNew = usuariosDb.document();
+	}
 		
 	}
-
-}

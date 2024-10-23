@@ -139,16 +139,18 @@ public class PanelRegistro extends JPanel {
 				}
 				usuario.setFechaAlt(LocalDate.now());
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
-				String date = textFechaNac.getText() ;
+				String date = textFechaNac.getText();
 				// convert String to LocalDate
 				LocalDate localDate = LocalDate.parse(date, formatter);
-				
+
 				usuario.setFechaNac(localDate);
 				usuario.setNombre(textNombre.getName());
 				usuario.setPass(passwordField.getPassword().toString());
-				//usuario.set
-				
+				// usuario.set
+				/* falta el login del usuario añadirlo al action listener */
+
 			}
+
 		});
 		add(btnNewButton);
 
