@@ -102,6 +102,32 @@ public class GestorDeUsuarios {
 	        System.out.println("No se encontraron usuarios.");
 	    }
 	}
+
+	public void guardarDatosLogin(String usuarioIntroducido, String passIntroducido) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public String obtenerUsuario() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String obtenerPass() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void guardarEstadoSesion(boolean b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Boolean cargarEstadoSesion() {
+
+		return true;
+	}
+
 	
 /*
 	Firestore db;
