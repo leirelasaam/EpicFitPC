@@ -45,5 +45,4 @@ public class Conexion {
 		}
 		return db;
 	}
-
 }
