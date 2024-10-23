@@ -2,6 +2,7 @@ package epicfitpc.vista.paneles;
 
 import javax.swing.JPanel;
 import java.awt.GridBagLayout;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
@@ -12,9 +13,12 @@ import java.util.List;
 
 import javax.swing.JSpinner;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
 
+import epicfitpc.modelo.bbdd.GestorDeUsuarios;
 import epicfitpc.modelo.pojos.Usuario;
+import epicfitpc.utils.Conexion;
 import epicfitpc.vista.MainFrame;
 
 import javax.swing.JTextField;
@@ -26,6 +30,7 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 
@@ -54,7 +59,7 @@ public class PanelRegistro extends JPanel {
 		add(lblNewLabel);
 
 		JLabel lblNewLabel_1 = new JLabel("Nombre de Usuario:");
-		lblNewLabel_1.setBounds(94, 83, 102, 14);
+		lblNewLabel_1.setBounds(94, 83, 130, 14);
 		add(lblNewLabel_1);
 
 		JLabel lblNewLabel_2 = new JLabel("Repita la contraseña:");
@@ -131,6 +136,7 @@ public class PanelRegistro extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				Usuario usuario = new Usuario();
 				usuario.setApellido(textApellido.getText());
+				usuario.setUser(textUsuario.getText());
 				usuario.setCorreo(textEmail.getText());
 				if (spinnerTipoUsuario.getValue() == "Entrenador") {
 					usuario.setEsEntrenador(true);
@@ -138,7 +144,7 @@ public class PanelRegistro extends JPanel {
 					usuario.setEsEntrenador(false);
 				}
 				usuario.setFechaAlt(LocalDate.now());
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 				String date = textFechaNac.getText();
 				// convert String to LocalDate
 				LocalDate localDate = LocalDate.parse(date, formatter);
@@ -146,20 +152,61 @@ public class PanelRegistro extends JPanel {
 				usuario.setFechaNac(localDate);
 				usuario.setNombre(textNombre.getName());
 				usuario.setPass(passwordField.getPassword().toString());
-				// usuario.set
-				/* falta el login del usuario añadirlo al action listener */
 
+				/*CODIGO REUTILIZADDO LUCIAN POR SI DA ERROR,hacerlo parecido, verificando si el usuario existe y el correo no est*/
+				
+				try {
+					GestorDeUsuarios gestorDeUsuarios = new GestorDeUsuarios(Conexion.getInstance().getConexion());
+
+					// Obtener los datos introducidos
+					String usuarioIntroducido = textUsuario.getText();
+					String passIntroducido = passwordField.getPassword().toString();
+
+					// Devolverá el usuario si los datos introducidos son correctos
+					Usuario user = gestorDeUsuarios.comprobarUsuario(usuarioIntroducido, passIntroducido);
+					if (user != null) { // si usuario == null significa que los datos introducidos son incorrectos
+						// si usuario y login es correcto
+						// JOptionPane.showMessageDialog(frame, "Bienvenido a EpicFit");
+						frame.getContentPane().removeAll();
+						frame.getContentPane().add(new PanelMenu(frame, user));
+						frame.revalidate();
+						frame.repaint();
+					} else {
+						// si usuario y login es correcto
+						JOptionPane.showMessageDialog(frame, "El login y el password es incorrecto");
+						
+					}
+				
+					
+				} catch (HeadlessException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 
 		});
 		add(btnNewButton);
 
-		JButton btnNewButton_1 = new JButton("Arrow!");
-		btnNewButton_1.setBounds(10, 519, 89, 23);
-		add(btnNewButton_1);
-		initialize();
+		
 	}
-
+	/*BOTON ACTION PARA VOLVER MODIFICARLO*/
+	/*btnNewButton_1.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			frame.getContentPane().removeAll();
+			frame.getContentPane().add(new PanelRegistro(frame));
+			frame.revalidate();
+			frame.repaint();*/
+		
+	
+	// logo de la compania
+//	JLabel lblNewLabel_3 = new JLabel("New label");
+//	lblNewLabel_3.setIcon(new ImageIcon("C:\\Users\\in2dm3-v\\Downloads\\Logo.PNG"));
+//	lblNewLabel_3.setBounds(0, -1, 602, 751);
+//	add(lblNewLabel_3);
+	
 	private void initialize() {
 	}
 }

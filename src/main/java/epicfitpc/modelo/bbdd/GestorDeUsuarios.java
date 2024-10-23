@@ -67,9 +67,10 @@ public class GestorDeUsuarios {
 		CollectionReference usuariosDb = db.collection("Usuarios");
 		/* (V.U) */// MAP!! hacer el hashmap
 		Map<String, Object> user = new HashMap<String, Object>();
+		user.put("user", usuario.getUser());
+		user.put("pass", usuario.getPass());
 		user.put("nombre", usuario.getNombre());
 		user.put("apellido", usuario.getApellido());
-		user.put("pass", usuario.getPass());
 		user.put("correo", usuario.getCorreo());
 		user.put("fechaNac", usuario.getFechaNac());
 		user.put("fechaAlt", usuario.getFechaAlt());
@@ -78,7 +79,6 @@ public class GestorDeUsuarios {
 
 	public Usuario comprobarUsuario(String usuarioIntroducido, String contraseniaIntroducida) throws Exception {
 		Firestore db = Conexion.getInstance().getConexion();
-		;
 		ArrayList<Usuario> usuarios = obtenerTodosLosUsuarios();
 
 		// Recorremos los usuarios para buscar el usuario introducido
