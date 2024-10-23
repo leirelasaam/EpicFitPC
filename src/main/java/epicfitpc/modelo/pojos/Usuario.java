@@ -15,6 +15,7 @@ public class Usuario implements Serializable {
 	private String nombre = null;
 	private String apellido = null;
 	private String correo = null;
+	public String user = null;
 	private String pass = null;
 	private LocalDate fechaNac = null;
 	private LocalDate fechaAlt = null;
@@ -26,13 +27,14 @@ public class Usuario implements Serializable {
 	}
 
 	// Constructor sobrecargado
-	public Usuario(String id, String nombre, String apellido, String correo, String pass, LocalDate fechaNac,
+	public Usuario(String id, String nombre, String apellido, String correo,String user, String pass, LocalDate fechaNac,
 			LocalDate fechaAlt, int nivel, boolean esEntrenador) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.correo = correo;
+		this.user = user;
 		this.pass = pass;
 		this.fechaNac = fechaNac;
 		this.fechaAlt = fechaAlt;
@@ -41,12 +43,13 @@ public class Usuario implements Serializable {
 	}
 
 	// Constructor que recibe los valores crudos desde el documento
-	public Usuario(String id, String nombre, String apellido, String correo, String pass, double nivel,
+	public Usuario(String id, String nombre, String apellido, String correo,String user, String pass, double nivel,
 			Timestamp fechaNac, Timestamp fechaAlt, boolean esEntrenador) {
 		this.id = id;
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.correo = correo;
+		this.user = user;
 		this.pass = pass;
 
 		this.nivel = (int) nivel;
@@ -89,6 +92,14 @@ public class Usuario implements Serializable {
 		this.correo = correo;
 	}
 
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+	
 	public String getPass() {
 		return pass;
 	}
@@ -131,7 +142,7 @@ public class Usuario implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(apellido, correo, esEntrenador, fechaAlt, fechaNac, id, nivel, nombre, pass);
+		return Objects.hash(apellido, correo, esEntrenador, fechaAlt, fechaNac, id, nivel, nombre, user, pass);
 	}
 
 	@Override
