@@ -43,7 +43,7 @@ public class PanelLogin extends JPanel {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					GestorDeUsuarios gestorDeUsuarios = new GestorDeUsuarios(Conexion.getConexion());
+					GestorDeUsuarios gestorDeUsuarios = new GestorDeUsuarios(Conexion.getInstance().getConexion());
 
 					// Obtener los datos introducidos
 					String usuarioIntroducido = txtIntroduceTuCorreo.getText();

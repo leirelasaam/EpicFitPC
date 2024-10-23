@@ -57,7 +57,7 @@ public class GestorDeUsuarios {
 	}
 
 	public Usuario comprobarUsuario(String usuarioIntroducido, String contraseniaIntroducida) throws Exception {
-	    Firestore db = Conexion.getConexion();
+	    Firestore db = Conexion.getInstance().getConexion();;
 	    ArrayList<Usuario> usuarios = obtenerTodosLosUsuarios();
 	    
 	    // Recorremos los usuarios para buscar el usuario introducido
@@ -87,7 +87,7 @@ public class GestorDeUsuarios {
 	//Prueba para comprobar que se conecta a la firebase e imprime todos los usuarios -> ID: zoVUUYKznIh8KDXOxjUc, Nombre: Leire, Usuario: 1234
 	public void imprimirTodosLosUsuarios() throws Exception {
 	    // Conexión a firestore
-	    Firestore db = Conexion.getConexion();
+	    Firestore db = Conexion.getInstance().getConexion();
 
 	    // Obtenemos todos los usuarios
 	    ArrayList<Usuario> usuarios = obtenerTodosLosUsuarios();
@@ -103,5 +103,15 @@ public class GestorDeUsuarios {
 	    }
 	}
 	
-
+/*
+	Firestore db;
+	try {
+		db = Conexion.getInstance().getConexion();
+		GestorDeWorkouts gdw = new GestorDeWorkouts(db);
+		workouts = gdw.obtenerTodosLosWorkouts();
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+*/	
 }
