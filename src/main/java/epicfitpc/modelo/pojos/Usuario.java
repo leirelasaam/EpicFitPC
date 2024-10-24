@@ -132,7 +132,7 @@ public class Usuario implements Serializable {
 		this.nivel = nivel;
 	}
 
-	public boolean isEsEntrenador() {
+	public boolean getIsEsEntrenador() {
 		return esEntrenador;
 	}
 

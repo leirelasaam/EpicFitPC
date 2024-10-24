@@ -16,6 +16,7 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 
+import epicfitpc.EpicFitPC;
 import epicfitpc.modelo.pojos.Usuario;
 import epicfitpc.utils.Conexion;
 
@@ -64,17 +65,23 @@ public class GestorDeUsuarios {
 
 	public void guardarUsuarios(Usuario usuario) throws InterruptedException, ExecutionException {
 
-		CollectionReference usuariosDb = db.collection("Usuarios");
+		CollectionReference epicFit = db.collection("EpicFit");
 		/* (V.U) */// MAP!! hacer el hashmap
 		Map<String, Object> user = new HashMap<String, Object>();
-		user.put("user", usuario.getUser());
+		user.put("usuario", usuario.getUser());
 		user.put("pass", usuario.getPass());
 		user.put("nombre", usuario.getNombre());
 		user.put("apellido", usuario.getApellido());
 		user.put("correo", usuario.getCorreo());
 		user.put("fechaNac", usuario.getFechaNac());
 		user.put("fechaAlt", usuario.getFechaAlt());
-		DocumentReference userNew = usuariosDb.document();
+		user.put("esEntrenador", usuario.getIsEsEntrenador());
+		user.put("nivel", usuario.getNivel());
+		DocumentReference userNew = epicFit.document();
+		userNew.set(user);
+		CollectionReference usuarios = userNew.collection("Usuarios");
+		usuarios.add(user);
+		
 	}
 
 	public Usuario comprobarUsuario(String usuarioIntroducido, String contraseniaIntroducida) throws Exception {

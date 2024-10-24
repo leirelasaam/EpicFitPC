@@ -43,7 +43,7 @@ public class PanelMenu extends JPanel {
 		tabbedPane.addTab("Histórico", panelHistorico);
 		tabbedPane.addTab("Perfil", panelPerfil);
 
-		if (usuario.isEsEntrenador()) {
+		if (usuario.getIsEsEntrenador()) {
 			JPanel panelEntrenador = new JPanel();
 			tabbedPane.addTab("Entrenador", panelEntrenador);
 		}
