@@ -5,28 +5,27 @@ import javax.swing.JPanel;
 import epicfitpc.modelo.bbdd.GestorDeUsuarios;
 import epicfitpc.modelo.pojos.Usuario;
 import epicfitpc.utils.Conexion;
+import epicfitpc.utils.UsuarioLogueado;
 import epicfitpc.vista.MainFrame;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.time.LocalDate;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
+
 import java.awt.Font;
 import java.awt.HeadlessException;
 
 public class PanelLogin extends JPanel {
 	private static final long serialVersionUID = 3044079574914466193L;
-	private MainFrame frame = null;
 	private JTextField txtIntroduceTuCorreo;
 	private JTextField txtIntroduceTuPass;
 
-	public PanelLogin(MainFrame frame) {
-		this.frame = frame;
+	public PanelLogin() {
 		initialize();
 	}
 
@@ -54,13 +53,14 @@ public class PanelLogin extends JPanel {
 					if (usuario != null) { // si usuario == null significa que los datos introducidos son incorrectos
 						// si usuario y login es correcto
 						// JOptionPane.showMessageDialog(frame, "Bienvenido a EpicFit");
-						frame.getContentPane().removeAll();
-						frame.getContentPane().add(new PanelMenu(frame, usuario));
-						frame.revalidate();
-						frame.repaint();
+						UsuarioLogueado.getInstance().setUsuario(usuario);
+                        MainFrame.getInstance().getContentPane().removeAll();
+                        MainFrame.getInstance().getContentPane().add(new PanelMenu());
+                        MainFrame.getInstance().revalidate();
+                        MainFrame.getInstance().repaint();
 					} else {
 						// si usuario y login es correcto
-						JOptionPane.showMessageDialog(frame, "El login y el password es incorrecto");
+						JOptionPane.showMessageDialog(MainFrame.getInstance(), "El login y el password es incorrecto");
 					}
 				} catch (HeadlessException e1) {
 					// TODO Auto-generated catch block
@@ -75,7 +75,7 @@ public class PanelLogin extends JPanel {
 		add(btnNewButton);
 
 		txtIntroduceTuCorreo = new JTextField();
-		txtIntroduceTuCorreo.setText("Introduce tu usuario");
+		txtIntroduceTuCorreo.setText("");
 		txtIntroduceTuCorreo.setBounds(772, 275, 241, 26);
 		add(txtIntroduceTuCorreo);
 		txtIntroduceTuCorreo.setColumns(10);
@@ -96,10 +96,10 @@ public class PanelLogin extends JPanel {
 		JButton btnNewButton_1 = new JButton("Registrarme");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.getContentPane().removeAll();
-				frame.getContentPane().add(new PanelRegistro());
-				frame.revalidate();
-				frame.repaint();
+				MainFrame.getInstance().getContentPane().removeAll();
+				MainFrame.getInstance().getContentPane().add(new PanelRegistro());
+				MainFrame.getInstance().revalidate();
+				MainFrame.getInstance().repaint();
 			}
 		});
 		btnNewButton_1.setBounds(772, 575, 241, 31);

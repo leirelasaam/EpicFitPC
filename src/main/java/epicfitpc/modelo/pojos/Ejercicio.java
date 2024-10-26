@@ -16,26 +16,6 @@ public class Ejercicio implements Serializable {
 		// Constructor vacío
 	}
 
-	public Ejercicio(String id, String nombre, int repeticiones, int tiempoSerie, int descanso, int series) {
-		super();
-		this.id = id;
-		this.nombre = nombre;
-		this.repeticiones = repeticiones;
-		this.tiempoSerie = tiempoSerie;
-		this.descanso = descanso;
-		this.series = series;
-	}
-	
-	public Ejercicio(String id, String nombre, double repeticiones, double tiempoSerie, double descanso, double series) {
-		super();
-		this.id = id;
-		this.nombre = nombre;
-		this.repeticiones = (int) repeticiones;
-		this.tiempoSerie = (int) tiempoSerie;
-		this.descanso = (int) descanso;
-		this.series = (int) series;
-	}
-
 	public String getId() {
 		return id;
 	}
