@@ -157,7 +157,7 @@ public class PanelWorkouts extends JPanel {
 
 		panelEj.removeAll();
 
-		ArrayList<Ejercicio> ejercicios = workout.getEjercicios();
+		ArrayList<Ejercicio> ejercicios = workout.getEjerciciosArray();
 
 		if (null != ejercicios) {
 			for (Ejercicio ejercicio : ejercicios) {

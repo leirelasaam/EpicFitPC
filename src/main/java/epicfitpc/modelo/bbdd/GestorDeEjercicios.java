@@ -54,14 +54,9 @@ public class GestorDeEjercicios {
 				throw e;
 			}
 
-			String id = docSnapshotEj.getId();
-			String nombre = docSnapshotEj.getString("nombre");
-			double repeticiones = docSnapshotEj.getDouble("repeticiones");
-			double tiempoSerie = docSnapshotEj.getDouble("tiempoSerie");
-			double descanso = docSnapshotEj.getDouble("descanso");
-			double series = docSnapshotEj.getDouble("series");
-
-			Ejercicio ejercicio = new Ejercicio(id, nombre, repeticiones, tiempoSerie, descanso, series);
+			Ejercicio ejercicio = docSnapshotEj.toObject(Ejercicio.class);
+			ejercicio.setId(docSnapshotEj.getId());
+			
 			if (null == ejercicios)
 				ejercicios = new ArrayList<Ejercicio>();
 			ejercicios.add(ejercicio);
