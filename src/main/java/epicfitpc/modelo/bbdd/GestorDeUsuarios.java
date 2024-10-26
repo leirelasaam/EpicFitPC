@@ -1,10 +1,14 @@
 package epicfitpc.modelo.bbdd;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
 
@@ -16,7 +20,6 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 
-import epicfitpc.EpicFitPC;
 import epicfitpc.modelo.pojos.Usuario;
 import epicfitpc.utils.Conexion;
 
@@ -63,25 +66,26 @@ public class GestorDeUsuarios {
 		return usuarios;
 	}
 
-	public void guardarUsuarios(Usuario usuario) throws InterruptedException, ExecutionException {
+	public boolean guardarUsuarios(Usuario usuario)
+			throws InterruptedException, ExecutionException, FileNotFoundException, IOException {
 
-		CollectionReference epicFit = db.collection("EpicFit");
-		/* (V.U) */// MAP!! hacer el hashmap
 		Map<String, Object> user = new HashMap<String, Object>();
 		user.put("usuario", usuario.getUser());
 		user.put("pass", usuario.getPass());
 		user.put("nombre", usuario.getNombre());
 		user.put("apellido", usuario.getApellido());
 		user.put("correo", usuario.getCorreo());
-		user.put("fechaNac", usuario.getFechaNac());
-		user.put("fechaAlt", usuario.getFechaAlt());
+		user.put("fechaNac", java.sql.Timestamp.valueOf(usuario.getFechaNac().atStartOfDay()));
+		user.put("fechaAlt", java.sql.Timestamp.valueOf(usuario.getFechaAlt().atStartOfDay()));
 		user.put("esEntrenador", usuario.getIsEsEntrenador());
 		user.put("nivel", usuario.getNivel());
-		DocumentReference userNew = epicFit.document();
-		userNew.set(user);
-		CollectionReference usuarios = userNew.collection("Usuarios");
-		usuarios.add(user);
 		
+	
+		CollectionReference usuarios = db.collection("Usuarios");
+		DocumentReference devolver = usuarios.add(user).get();
+		if(devolver.getId() != null)
+			return true;
+		return false;
 	}
 
 	public Usuario comprobarUsuario(String usuarioIntroducido, String contraseniaIntroducida) throws Exception {
@@ -111,6 +115,43 @@ public class GestorDeUsuarios {
 		JOptionPane.showMessageDialog(null, "Datos introducidos incorrectos.");
 		throw new Exception("Datos incorrectos.");
 	}
+//
+//	public Usuario comprobarRegistro(Usuario usuario ) throws FileNotFoundException, IOException {
+//		Firestore db = Conexion.getInstance().getConexion();
+//		return usuario;
+//		
+//		
+//	}
+
+    public boolean validarNombre(String nombre) {
+        return nombre != null && !nombre.isEmpty() && nombre.length() <= 50;
+    }
+
+    public boolean validarApellido(String apellido) {
+        boolean validar = apellido != null && !apellido.isEmpty() && apellido.length() <= 50;
+    	return validar;
+    }
+
+    public boolean validarCorreo(String correo) {
+        String regexCorreo = "^[\\w-\\.]+@[\\w-]+\\.[a-z]{2,6}$";
+        return correo != null && Pattern.matches(regexCorreo, correo);
+    }
+
+    public boolean validarUsername(String user) {
+        String regexUser = "^(?=.*[A-Z])(?=.*[a-z]){2,15}$";
+        return user != null && Pattern.matches(regexUser, user);
+    }
+
+    public boolean validarPassword(String pass) {
+        String regexPass = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!_]).{8,20}$";
+        return pass != null && Pattern.matches(regexPass, pass);
+    }
+
+    
+    public boolean validarFechaNacimiento(LocalDate fechaNac) {
+        LocalDate fechaMinima = LocalDate.now().minusYears(14);
+        return fechaNac != null && fechaNac.isBefore(fechaMinima);
+    }
 
 	// Prueba para comprobar que se conecta a la firebase e imprime todos los
 	// usuarios -> ID: zoVUUYKznIh8KDXOxjUc, Nombre: Leire, Usuario: 1234

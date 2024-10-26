@@ -5,11 +5,15 @@ import java.awt.GridBagLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.JSpinner;
 import javax.swing.GroupLayout;
@@ -143,70 +147,138 @@ public class PanelRegistro extends JPanel {
 				} else {
 					usuario.setEsEntrenador(false);
 				}
-				usuario.setFechaAlt(LocalDate.now());
+
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 				String date = textFechaNac.getText();
 				// convert String to LocalDate
 				LocalDate localDate = LocalDate.parse(date, formatter);
-
 				usuario.setFechaNac(localDate);
-				usuario.setNombre(textNombre.getName());
-				usuario.setPass(passwordField.getPassword().toString());
 
-				/*CODIGO REUTILIZADDO LUCIAN POR SI DA ERROR,hacerlo parecido, verificando si el usuario existe y el correo no est*/
+				usuario.setFechaAlt(LocalDate.now());
+				usuario.setNombre(textNombre.getText());
+				usuario.setPass(new String(passwordField.getPassword()));
+
+				boolean guardadoCorrectamente = false;
+				GestorDeUsuarios gestorDeUsuarios = inicializarGestorDeUsuarios();
+
+				boolean validar = validacionesCamposCorrectos(frame, usuario, gestorDeUsuarios);
 				
-				try {
-					GestorDeUsuarios gestorDeUsuarios = new GestorDeUsuarios(Conexion.getInstance().getConexion());
-
-					// Obtener los datos introducidos
-					String usuarioIntroducido = textUsuario.getText();
-					String passIntroducido = passwordField.getPassword().toString();
-
-					// Devolverá el usuario si los datos introducidos son correctos
-					Usuario user = gestorDeUsuarios.comprobarUsuario(usuarioIntroducido, passIntroducido);
-					if (user != null) { // si usuario == null significa que los datos introducidos son incorrectos
-						// si usuario y login es correcto
-						// JOptionPane.showMessageDialog(frame, "Bienvenido a EpicFit");
-						frame.getContentPane().removeAll();
-						frame.getContentPane().add(new PanelMenu(frame, user));
-						frame.revalidate();
-						frame.repaint();
-					} else {
-						// si usuario y login es correcto
-						JOptionPane.showMessageDialog(frame, "El login y el password es incorrecto");
-						
-					}
-				
+				if (validar) {
 					
-				} catch (HeadlessException e1) {
-					// TODO Auto-generated catch block
+					guardarUsuario(frame, usuario, guardadoCorrectamente, gestorDeUsuarios);
+				}
+				 
+			}
+
+			/**
+			 * @param frame
+			 * @param usuario
+			 * @param guardadoCorrectamente
+			 * @param gestorDeUsuarios
+			 */
+			public void guardarUsuario(MainFrame frame, Usuario usuario, boolean guardadoCorrectamente,
+					GestorDeUsuarios gestorDeUsuarios) {
+				try {
+					guardadoCorrectamente = gestorDeUsuarios.guardarUsuarios(usuario);
+
+				} catch (IOException e1) {
 					e1.printStackTrace();
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				} catch (ExecutionException e1) {
 					e1.printStackTrace();
 				}
+				if (guardadoCorrectamente == false) {
+					JOptionPane.showMessageDialog(frame,
+							"No se ha podido crear correctamente, vuelva a intentarlo más tarde.");
+				} else {
+					JOptionPane.showMessageDialog(frame, "Usuario creado correctamente");
+					frame.getContentPane().removeAll();
+					frame.getContentPane().add(new PanelLogin(frame));
+					frame.revalidate();
+					frame.repaint();
+
+				}
+			}
+
+			/**
+			 * @param frame
+			 * @param usuario
+			 * @param gestorDeUsuarios
+			 */
+			public boolean validacionesCamposCorrectos(MainFrame frame, Usuario usuario,
+					GestorDeUsuarios gestorDeUsuarios) {
+				boolean validar = true;
+				String pass1 = new String(passwordField.getPassword());
+				String pass2 =  new String(passwordField_2.getPassword());
+				
+				if (!gestorDeUsuarios.validarApellido(usuario.getApellido())) {
+					JOptionPane.showMessageDialog(frame, "El apellido esta vacio o es mayor de 50 carácteres");
+					validar = false;
+				} else if (!gestorDeUsuarios.validarCorreo(usuario.getCorreo())) {
+					JOptionPane.showMessageDialog(frame, "Correo incorrecto, vuelva a insertarlo.");
+					validar = false;
+				} else if (!gestorDeUsuarios.validarFechaNacimiento(usuario.getFechaNac())) {
+					JOptionPane.showMessageDialog(frame,
+							"Fecha de nacimiento incorrecta. El usuario tiene que ser mayor de 14 años.");
+					validar = false;
+				} else if (!gestorDeUsuarios.validarNombre(usuario.getNombre())) {
+					JOptionPane.showMessageDialog(frame, "Nombre incorrecto, esta vacio o es mayor de 50 carácteres.");
+					validar = false;
+				} else if (!gestorDeUsuarios.validarPassword(usuario.getPass())) {
+					JOptionPane.showMessageDialog(frame, "Contraseña incorrecta, debe tener entre 8 y 20 caracteres, "
+							+ "incluir al menos una letra minúscula, una mayúscula, un número y un carácter especial.");
+					validar = false;
+				} else if (!pass1.equals(pass2)) {
+					JOptionPane.showMessageDialog(frame, "Contraseñas distintas, vuelva a intentarlo.");
+					validar = false;
+				} else if (!gestorDeUsuarios.validarUsername(usuario.user)) {
+					JOptionPane.showMessageDialog(frame, "Usuario incorrecta, vuelva a intentarlo incluyendo al menos una letra minúscula "
+							+ "y una mayúscula.");
+					validar = false;
+				}
+
+				return validar;
+			}
+
+			/**
+			 * @return
+			 */
+			public GestorDeUsuarios inicializarGestorDeUsuarios() {
+				GestorDeUsuarios gestorDeUsuarios = null;
+				try {
+					gestorDeUsuarios = new GestorDeUsuarios(Conexion.getInstance().getConexion());
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				return gestorDeUsuarios;
 			}
 
 		});
 		add(btnNewButton);
 
-		
+		JButton btnNewButton_1 = new JButton("Volver");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.getContentPane().removeAll();
+				frame.getContentPane().add(new PanelLogin(frame));
+				frame.revalidate();
+				frame.repaint();
+			}
+		});
+		btnNewButton_1.setBounds(10, 531, 89, 23);
+		add(btnNewButton_1);
+
 	}
-	/*BOTON ACTION PARA VOLVER MODIFICARLO*/
-	/*btnNewButton_1.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			frame.getContentPane().removeAll();
-			frame.getContentPane().add(new PanelRegistro(frame));
-			frame.revalidate();
-			frame.repaint();*/
-		
-	
+
 	// logo de la compania
 //	JLabel lblNewLabel_3 = new JLabel("New label");
 //	lblNewLabel_3.setIcon(new ImageIcon("C:\\Users\\in2dm3-v\\Downloads\\Logo.PNG"));
 //	lblNewLabel_3.setBounds(0, -1, 602, 751);
 //	add(lblNewLabel_3);
-	
+
 	private void initialize() {
 	}
 }
