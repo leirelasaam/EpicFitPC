@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import epicfitpc.modelo.pojos.Workout;
+import epicfitpc.utils.DateUtils;
 
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -27,20 +28,9 @@ public class WorkoutItemPanel extends JPanel {
 		JLabel lblNombre = new JLabel("Nombre: " + workout.getNombre());
 		JLabel lblNivel = new JLabel("Nivel: " + workout.getNivel());
 		JLabel lblEjercicios = new JLabel("Ejercicios: " + workout.getEjercicios().size());
-		
-		// Obtener el tiempo en segundos
+	
 		int tiempoEnSegundos = workout.getTiempo();
-
-		// Calcular horas, minutos y segundos
-		int horas = tiempoEnSegundos / 3600;
-		int minutos = (tiempoEnSegundos % 3600) / 60;
-		int segundos = tiempoEnSegundos % 60;
-		
-		String tiempoFormateado = "";
-		if (horas > 0) {
-			tiempoFormateado += horas + "h ";
-		} 
-		tiempoFormateado += minutos + "min " + segundos + "s";
+		String tiempoFormateado = DateUtils.formatearTiempo(tiempoEnSegundos);
 		JLabel lblTiempo = new JLabel("Tiempo: " + tiempoFormateado);
 		
 		add(lblNombre);
