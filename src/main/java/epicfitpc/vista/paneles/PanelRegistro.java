@@ -1,10 +1,7 @@
 package epicfitpc.vista.paneles;
 
 import javax.swing.JPanel;
-import java.awt.GridBagLayout;
 import javax.swing.JSpinner;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;

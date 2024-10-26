@@ -13,8 +13,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import com.google.cloud.firestore.Firestore;
+
+import epicfitpc.modelo.bbdd.GestorDeWorkouts;
 import epicfitpc.modelo.pojos.Ejercicio;
+import epicfitpc.modelo.pojos.Usuario;
 import epicfitpc.modelo.pojos.Workout;
+import epicfitpc.utils.Conexion;
+import epicfitpc.utils.UsuarioLogueado;
 import epicfitpc.vista.componentes.WorkoutEjItemPanel;
 import epicfitpc.vista.componentes.WorkoutItemPanel;
 
@@ -31,6 +37,8 @@ public class PanelWorkouts extends JPanel {
 	private JLabel labelWorkout;
 	private JComboBox<String> comboBox;
 	private ArrayList<Workout> workouts = null;
+	private Usuario usuario = null;
+	
 	private static final String NIVELES_ALL = "-- Filtrar por nivel --";
 	private static final String NIVELES_NONE = "-- No hay workouts disponibles --";
 	private static final String SELECCIONA_WORKOUT = "Selecciona un workout";
@@ -41,8 +49,9 @@ public class PanelWorkouts extends JPanel {
 	 * 
 	 * @param workouts ArrayList de Workouts
 	 */
-	public PanelWorkouts(ArrayList<Workout> workouts) {
-		this.workouts = workouts;
+	public PanelWorkouts() {
+		this.usuario =  UsuarioLogueado.getInstance().getUsuario();
+		this.workouts = obtenerWorkouts();
 		initialize();
 	}
 
@@ -216,6 +225,22 @@ public class PanelWorkouts extends JPanel {
 			panelWInterior.revalidate();
 			panelWInterior.repaint();
 		}
+	}
+	
+	private ArrayList<Workout> obtenerWorkouts() {
+		ArrayList<Workout> workouts = null;
+		Firestore db;
+		try {
+			db = Conexion.getInstance().getConexion();
+			GestorDeWorkouts gdw = new GestorDeWorkouts(db);
+			workouts = gdw.obtenerWorkoutsPorNivelUsuario(usuario.getNivel());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return workouts;
+
 	}
 
 }

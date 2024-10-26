@@ -5,7 +5,6 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import epicfitpc.modelo.pojos.Ejercicio;
-import epicfitpc.modelo.pojos.Workout;
 
 import java.awt.Color;
 import java.awt.GridLayout;
