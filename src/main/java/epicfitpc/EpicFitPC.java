@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutionException;
 
 import epicfitpc.ficheros.GestorDeBackups;
 import epicfitpc.utils.Conexion;
+import epicfitpc.utils.GestorDeConexiones;
 import epicfitpc.vista.MainFrame;
 import com.google.cloud.firestore.Firestore;
 
@@ -20,7 +21,7 @@ public class EpicFitPC {
 			db = Conexion.getInstance().getConexion();
 			gdb = new GestorDeBackups(db);
 			
-			boolean conectado = gdb.hayConexion();
+			boolean conectado = GestorDeConexiones.getInstance().hayConexion();
 			if (conectado) {
 				System.out.println("Hay conexión a Internet");
 				gdb.realizarBackup();
