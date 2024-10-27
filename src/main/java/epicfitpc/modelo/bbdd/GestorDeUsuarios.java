@@ -79,11 +79,10 @@ public class GestorDeUsuarios {
 		user.put("fechaAlt", java.sql.Timestamp.valueOf(usuario.getFechaAlt().atStartOfDay()));
 		user.put("esEntrenador", usuario.getIsEsEntrenador());
 		user.put("nivel", usuario.getNivel());
-		
-	
+
 		CollectionReference usuarios = db.collection("Usuarios");
 		DocumentReference devolver = usuarios.add(user).get();
-		if(devolver.getId() != null)
+		if (devolver.getId() != null)
 			return true;
 		return false;
 	}
@@ -115,6 +114,18 @@ public class GestorDeUsuarios {
 		JOptionPane.showMessageDialog(null, "Datos introducidos incorrectos.");
 		throw new Exception("Datos incorrectos.");
 	}
+
+	public boolean comprobarSiExisteNombreUsuario(String usuarioIntroducido) throws Exception {
+		ArrayList<Usuario> usuarios = obtenerTodosLosUsuarios();
+
+		for (Usuario usuario : usuarios) {
+
+			if (usuario.getUser() != null && usuario.getUser().equals(usuarioIntroducido)) {
+				return true;
+			}
+		}
+		return false;
+	}
 //
 //	public Usuario comprobarRegistro(Usuario usuario ) throws FileNotFoundException, IOException {
 //		Firestore db = Conexion.getInstance().getConexion();
@@ -123,35 +134,34 @@ public class GestorDeUsuarios {
 //		
 //	}
 
-    public boolean validarNombre(String nombre) {
-        return nombre != null && !nombre.isEmpty() && nombre.length() <= 50;
-    }
+	public boolean validarNombre(String nombre) {
+		return nombre != null && !nombre.isEmpty() && nombre.length() <= 50;
+	}
 
-    public boolean validarApellido(String apellido) {
-        boolean validar = apellido != null && !apellido.isEmpty() && apellido.length() <= 50;
-    	return validar;
-    }
+	public boolean validarApellido(String apellido) {
+		boolean validar = apellido != null && !apellido.isEmpty() && apellido.length() <= 50;
+		return validar;
+	}
 
-    public boolean validarCorreo(String correo) {
-        String regexCorreo = "^[\\w-\\.]+@[\\w-]+\\.[a-z]{2,6}$";
-        return correo != null && Pattern.matches(regexCorreo, correo);
-    }
+	public boolean validarCorreo(String correo) {
+		String regexCorreo = "^[\\w-\\.]+@[\\w-]+\\.[a-z]{2,6}$";
+		return correo != null && Pattern.matches(regexCorreo, correo);
+	}
 
-    public boolean validarUsername(String user) {
-        String regexUser = "^(?=.*[A-Z])(?=.*[a-z]){2,15}$";
-        return user != null && Pattern.matches(regexUser, user);
-    }
+	public boolean validarUsername(String user) {
+		String regexUser = "^(?=.*[a-z])(?=.*[A-Z]).{2,15}$";
+		return user != null && Pattern.matches(regexUser, user);
+	}
 
-    public boolean validarPassword(String pass) {
-        String regexPass = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!_]).{8,20}$";
-        return pass != null && Pattern.matches(regexPass, pass);
-    }
+	public boolean validarPassword(String pass) {
+		String regexPass = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!_]).{8,20}$";
+		return pass != null && Pattern.matches(regexPass, pass);
+	}
 
-    
-    public boolean validarFechaNacimiento(LocalDate fechaNac) {
-        LocalDate fechaMinima = LocalDate.now().minusYears(14);
-        return fechaNac != null && fechaNac.isBefore(fechaMinima);
-    }
+	public boolean validarFechaNacimiento(LocalDate fechaNac) {
+		LocalDate fechaMinima = LocalDate.now().minusYears(14);
+		return fechaNac != null && fechaNac.isBefore(fechaMinima);
+	}
 
 	// Prueba para comprobar que se conecta a la firebase e imprime todos los
 	// usuarios -> ID: zoVUUYKznIh8KDXOxjUc, Nombre: Leire, Usuario: 1234

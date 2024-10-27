@@ -1,24 +1,17 @@
 package epicfitpc.vista.paneles;
 
 import javax.swing.JPanel;
-import java.awt.GridBagLayout;
-import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.JSpinner;
-import javax.swing.GroupLayout;
-import javax.swing.ImageIcon;
-import javax.swing.GroupLayout.Alignment;
 
 import epicfitpc.modelo.bbdd.GestorDeUsuarios;
 import epicfitpc.modelo.pojos.Usuario;
@@ -29,10 +22,6 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerModel;
 
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
@@ -41,7 +30,6 @@ import javax.swing.JButton;
 public class PanelRegistro extends JPanel {
 
 	private static final long serialVersionUID = -7631458094715795013L;
-	private static final ActionListener ActionListener = null;
 	private JTextField textUsuario;
 	private JPasswordField passwordField;
 	private JPasswordField passwordField_2;
@@ -138,6 +126,30 @@ public class PanelRegistro extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				Usuario usuario = crearObjetoUsuario(spinnerTipoUsuario);
+
+				boolean guardadoCorrectamente = false;
+				GestorDeUsuarios gestorDeUsuarios = inicializarGestorDeUsuarios();
+
+				boolean validar = false;
+				try {
+					validar = validacionesCamposCorrectos(frame, usuario, gestorDeUsuarios);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				
+				if (validar) {
+					
+					guardarUsuario(frame, usuario, guardadoCorrectamente, gestorDeUsuarios);
+				}
+				 
+			}
+
+			/**
+			 * @param spinnerTipoUsuario
+			 * @return
+			 */
+			public Usuario crearObjetoUsuario(JSpinner spinnerTipoUsuario) {
 				Usuario usuario = new Usuario();
 				usuario.setApellido(textApellido.getText());
 				usuario.setUser(textUsuario.getText());
@@ -148,26 +160,24 @@ public class PanelRegistro extends JPanel {
 					usuario.setEsEntrenador(false);
 				}
 
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-				String date = textFechaNac.getText();
-				// convert String to LocalDate
-				LocalDate localDate = LocalDate.parse(date, formatter);
+				LocalDate localDate = convertirStringToLocalDate();
 				usuario.setFechaNac(localDate);
 
 				usuario.setFechaAlt(LocalDate.now());
 				usuario.setNombre(textNombre.getText());
 				usuario.setPass(new String(passwordField.getPassword()));
+				return usuario;
+			}
 
-				boolean guardadoCorrectamente = false;
-				GestorDeUsuarios gestorDeUsuarios = inicializarGestorDeUsuarios();
-
-				boolean validar = validacionesCamposCorrectos(frame, usuario, gestorDeUsuarios);
-				
-				if (validar) {
-					
-					guardarUsuario(frame, usuario, guardadoCorrectamente, gestorDeUsuarios);
-				}
-				 
+			/**
+			 * @return
+			 */
+			public LocalDate convertirStringToLocalDate() {
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+				String date = textFechaNac.getText();
+				// convert String to LocalDate
+				LocalDate localDate = LocalDate.parse(date, formatter);
+				return localDate;
 			}
 
 			/**
@@ -205,9 +215,10 @@ public class PanelRegistro extends JPanel {
 			 * @param frame
 			 * @param usuario
 			 * @param gestorDeUsuarios
+			 * @throws Exception 
 			 */
 			public boolean validacionesCamposCorrectos(MainFrame frame, Usuario usuario,
-					GestorDeUsuarios gestorDeUsuarios) {
+					GestorDeUsuarios gestorDeUsuarios) throws Exception {
 				boolean validar = true;
 				String pass1 = new String(passwordField.getPassword());
 				String pass2 =  new String(passwordField_2.getPassword());
@@ -236,6 +247,8 @@ public class PanelRegistro extends JPanel {
 					JOptionPane.showMessageDialog(frame, "Usuario incorrecta, vuelva a intentarlo incluyendo al menos una letra minúscula "
 							+ "y una mayúscula.");
 					validar = false;
+				}else if (gestorDeUsuarios.comprobarSiExisteNombreUsuario(usuario.getUser())) {
+					JOptionPane.showMessageDialog(frame, "El nombre de usuario ya existe.");
 				}
 
 				return validar;
@@ -278,7 +291,4 @@ public class PanelRegistro extends JPanel {
 //	lblNewLabel_3.setIcon(new ImageIcon("C:\\Users\\in2dm3-v\\Downloads\\Logo.PNG"));
 //	lblNewLabel_3.setBounds(0, -1, 602, 751);
 //	add(lblNewLabel_3);
-
-	private void initialize() {
-	}
 }
