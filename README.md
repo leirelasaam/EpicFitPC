@@ -1,6 +1,6 @@
 # EpicFitPC
 ## Protección de la rama main
-La rama _main_ está protegida para que nadie pueda hacer un push o merge sin antes hacer un pull request. Además, debe pasar la validación incluída, que comprueba que el proyecto compila.
+La rama _main_ está protegida para que nadie pueda hacer un push o merge sin antes hacer un **pull request**. Además, debe pasar la validación incluída, que comprueba que el proyecto compila.
 ### Pasos para pull request
 1. Hay que trabajar cada uno en su rama e ir subiendo las actualizaciones a la misma. Para esto no se comprueba la compilación, puede haber errores.
 2. Una vez la rama esté lista para hacer merge al main, es necesario como siempre hacer merge de la rama actualizada del main a la tuya y gestionar conflictos.
@@ -47,3 +47,4 @@ La clase **GestorDeUsuarios** realiza operaciones CRUD sobre la base de datos de
 
 ## Lanzar la aplicación
 La aplicación se lanza mediante la clase **EpicFitPC** que instancia el _MainFrame_, donde se irán añadiendo los diferentes paneles que componen la vista.
+

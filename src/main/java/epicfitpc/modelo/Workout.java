@@ -1,8 +1,10 @@
-package epicfitpc.modelo.pojos;
+package epicfitpc.modelo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
+
+import com.google.cloud.firestore.DocumentReference;
 
 public class Workout implements Serializable {
 
@@ -12,30 +14,12 @@ public class Workout implements Serializable {
 	private int nivel = 0;
 	private int tiempo = 0;
 	private String video = null;
-	private ArrayList<String> ejercicios = null;
+	private String tipo = null;
+	private transient ArrayList<DocumentReference> ejercicios = null;
+	private ArrayList<Ejercicio> ejerciciosArray = null;
 
 	public Workout() {
 
-	}
-
-	public Workout(String id, String nombre, int nivel, int tiempo, String video, ArrayList<String> ejercicios) {
-		super();
-		this.id = id;
-		this.nombre = nombre;
-		this.nivel = nivel;
-		this.tiempo = tiempo;
-		this.video = video;
-		this.ejercicios = ejercicios;
-	}
-
-	public Workout(String id, String nombre, double nivel, double tiempo, String video, ArrayList<String> ejercicios) {
-		super();
-		this.id = id;
-		this.nombre = nombre;
-		this.nivel = (int) nivel;
-		this.tiempo = (int) tiempo;
-		this.video = video;
-		this.ejercicios = ejercicios;
 	}
 
 	public String getId() {
@@ -78,17 +62,33 @@ public class Workout implements Serializable {
 		this.video = video;
 	}
 
-	public ArrayList<String> getEjercicios() {
+	public ArrayList<DocumentReference> getEjercicios() {
 		return ejercicios;
 	}
 
-	public void setEjercicios(ArrayList<String> ejercicios) {
+	public void setEjercicios(ArrayList<DocumentReference> ejercicios) {
 		this.ejercicios = ejercicios;
+	}
+
+	public ArrayList<Ejercicio> getEjerciciosArray() {
+		return ejerciciosArray;
+	}
+
+	public void setEjerciciosArray(ArrayList<Ejercicio> ejerciciosArray) {
+		this.ejerciciosArray = ejerciciosArray;
+	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(ejercicios, id, nivel, nombre, tiempo, video);
+		return Objects.hash(ejercicios, ejerciciosArray, id, nivel, nombre, tiempo, tipo, video);
 	}
 
 	@Override
@@ -100,14 +100,16 @@ public class Workout implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Workout other = (Workout) obj;
-		return Objects.equals(ejercicios, other.ejercicios) && Objects.equals(id, other.id) && nivel == other.nivel
-				&& Objects.equals(nombre, other.nombre) && tiempo == other.tiempo && Objects.equals(video, other.video);
+		return Objects.equals(ejercicios, other.ejercicios) && Objects.equals(ejerciciosArray, other.ejerciciosArray)
+				&& Objects.equals(id, other.id) && nivel == other.nivel && Objects.equals(nombre, other.nombre)
+				&& tiempo == other.tiempo && Objects.equals(tipo, other.tipo) && Objects.equals(video, other.video);
 	}
 
 	@Override
 	public String toString() {
 		return "Workout [id=" + id + ", nombre=" + nombre + ", nivel=" + nivel + ", tiempo=" + tiempo + ", video="
-				+ video + ", ejercicios=" + ejercicios + "]";
+				+ video + ", tipo=" + tipo + ", ejercicios=" + ejercicios + ", ejerciciosArray=" + ejerciciosArray
+				+ "]";
 	}
 
 }

@@ -13,12 +13,15 @@ public class PanelRegistro extends JPanel {
 	
 	private static final long serialVersionUID = -7631458094715795013L;
 	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
 	private JTextField textField_3;
 	private JTextField textField_4;
 	private JTextField textField_5;
 	private JTextField textField_6;
 	private JPasswordField passwordField;
 	private JPasswordField passwordField_1;
+
 
 	public PanelRegistro() {
 		setLayout(null);
@@ -101,6 +104,7 @@ public class PanelRegistro extends JPanel {
 		btnNewButton.setBackground(new Color(0, 0, 0));
 		btnNewButton.setBounds(469, 462, 149, 20);
 		add(btnNewButton);
+
 		initialize();
 	}
 	
