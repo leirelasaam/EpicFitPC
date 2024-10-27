@@ -1,4 +1,4 @@
-package epicfitpc.modelo.pojos;
+package epicfitpc.modelo;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -13,8 +13,8 @@ public class Historico implements Serializable {
 	private Timestamp fecha = null;
 	private int porcentaje = 0;
 	private int tiempo = 0;
-	private DocumentReference usuario = null;
-	private DocumentReference workout = null;
+	private transient DocumentReference usuario = null;
+	private transient DocumentReference workout = null;
 	private Usuario usuarioObj = null;
 	private Workout workoutObj = null;
 

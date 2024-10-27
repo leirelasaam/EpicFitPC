@@ -4,7 +4,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import epicfitpc.modelo.pojos.Ejercicio;
+import epicfitpc.modelo.Ejercicio;
 
 import java.awt.Color;
 import java.awt.GridLayout;

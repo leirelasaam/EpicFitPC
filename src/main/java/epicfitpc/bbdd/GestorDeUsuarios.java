@@ -1,4 +1,4 @@
-package epicfitpc.modelo.bbdd;
+package epicfitpc.bbdd;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 
-import epicfitpc.modelo.pojos.Usuario;
+import epicfitpc.modelo.Usuario;
 
 public class GestorDeUsuarios {
 

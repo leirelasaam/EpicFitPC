@@ -1,16 +1,19 @@
-package epicfitpc.modelo.bbdd;
+package epicfitpc.bbdd;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
 
-import epicfitpc.modelo.pojos.Ejercicio;
-import epicfitpc.modelo.pojos.Workout;
+import epicfitpc.modelo.Ejercicio;
+import epicfitpc.modelo.Workout;
 
 public class GestorDeEjercicios {
 
@@ -20,6 +23,35 @@ public class GestorDeEjercicios {
 
 	public GestorDeEjercicios(Firestore db) {
 		this.db = db;
+	}
+
+	public ArrayList<Ejercicio> obtenerTodosLosEjercicios() throws InterruptedException, ExecutionException {
+		ArrayList<Ejercicio> ejercicios = null;
+
+		CollectionReference ejerciciosDb = db.collection(COLLECTION_EJERCICIOS);
+		ApiFuture<QuerySnapshot> futureQuery = ejerciciosDb.get();
+		QuerySnapshot querySnapshot = null;
+
+		try {
+			querySnapshot = futureQuery.get();
+		} catch (InterruptedException e) {
+			throw e;
+		} catch (ExecutionException e) {
+			throw e;
+		}
+
+		List<QueryDocumentSnapshot> documentos = querySnapshot.getDocuments();
+		for (QueryDocumentSnapshot documento : documentos) {
+			Ejercicio ejercicio = documento.toObject(Ejercicio.class);
+			ejercicio.setId(documento.getId());
+			
+			if (null == ejercicios)
+				ejercicios = new ArrayList<Ejercicio>();
+			
+			ejercicios.add(ejercicio);
+		}
+
+		return ejercicios;
 	}
 
 	public ArrayList<Ejercicio> obtenerEjerciciosPorWorkout(Workout workout)
@@ -56,7 +88,7 @@ public class GestorDeEjercicios {
 
 			Ejercicio ejercicio = docSnapshotEj.toObject(Ejercicio.class);
 			ejercicio.setId(docSnapshotEj.getId());
-			
+
 			if (null == ejercicios)
 				ejercicios = new ArrayList<Ejercicio>();
 			ejercicios.add(ejercicio);

@@ -1,4 +1,4 @@
-package epicfitpc.modelo.pojos;
+package epicfitpc.modelo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ public class Workout implements Serializable {
 	private int tiempo = 0;
 	private String video = null;
 	private String tipo = null;
-	private ArrayList<DocumentReference> ejercicios = null;
+	private transient ArrayList<DocumentReference> ejercicios = null;
 	private ArrayList<Ejercicio> ejerciciosArray = null;
 
 	public Workout() {

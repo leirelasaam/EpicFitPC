@@ -6,7 +6,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.google.cloud.Timestamp;
 
-import epicfitpc.modelo.pojos.Historico;
+import epicfitpc.modelo.Historico;
 import epicfitpc.utils.DateUtils;
 
 import java.awt.Color;
