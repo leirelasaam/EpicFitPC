@@ -1,6 +1,6 @@
 package epicfitpc.utils;
 
-import epicfitpc.modelo.pojos.Usuario;
+import epicfitpc.modelo.Usuario;
 
 public class UsuarioLogueado {
     private static UsuarioLogueado instance;

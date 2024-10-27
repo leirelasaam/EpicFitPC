@@ -1,4 +1,4 @@
-package epicfitpc.modelo.pojos;
+package epicfitpc.modelo;
 
 import java.io.Serializable;
 import java.util.Objects;

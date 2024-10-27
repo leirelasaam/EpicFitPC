@@ -15,10 +15,10 @@ import javax.swing.JScrollPane;
 
 import com.google.cloud.firestore.Firestore;
 
-import epicfitpc.modelo.bbdd.GestorDeWorkouts;
-import epicfitpc.modelo.pojos.Ejercicio;
-import epicfitpc.modelo.pojos.Usuario;
-import epicfitpc.modelo.pojos.Workout;
+import epicfitpc.bbdd.GestorDeWorkouts;
+import epicfitpc.modelo.Ejercicio;
+import epicfitpc.modelo.Usuario;
+import epicfitpc.modelo.Workout;
 import epicfitpc.utils.Conexion;
 import epicfitpc.utils.UsuarioLogueado;
 import epicfitpc.vista.componentes.WorkoutEjItemPanel;

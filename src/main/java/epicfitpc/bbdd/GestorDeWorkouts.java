@@ -1,4 +1,4 @@
-package epicfitpc.modelo.bbdd;
+package epicfitpc.bbdd;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +10,8 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 
-import epicfitpc.modelo.pojos.Ejercicio;
-import epicfitpc.modelo.pojos.Workout;
+import epicfitpc.modelo.Ejercicio;
+import epicfitpc.modelo.Workout;
 
 public class GestorDeWorkouts {
 

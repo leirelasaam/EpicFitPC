@@ -9,9 +9,9 @@ import javax.swing.JScrollPane;
 
 import com.google.cloud.firestore.Firestore;
 
-import epicfitpc.modelo.bbdd.GestorDeHistoricos;
-import epicfitpc.modelo.pojos.Historico;
-import epicfitpc.modelo.pojos.Usuario;
+import epicfitpc.bbdd.GestorDeHistoricos;
+import epicfitpc.modelo.Historico;
+import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.Conexion;
 import epicfitpc.utils.UsuarioLogueado;
 import epicfitpc.vista.componentes.HistoricoItemPanel;

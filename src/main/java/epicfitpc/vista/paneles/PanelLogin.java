@@ -2,8 +2,8 @@ package epicfitpc.vista.paneles;
 
 import javax.swing.JPanel;
 
-import epicfitpc.modelo.bbdd.GestorDeUsuarios;
-import epicfitpc.modelo.pojos.Usuario;
+import epicfitpc.bbdd.GestorDeUsuarios;
+import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.Conexion;
 import epicfitpc.utils.UsuarioLogueado;
 import epicfitpc.vista.MainFrame;
