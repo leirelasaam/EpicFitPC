@@ -8,6 +8,7 @@ import javax.swing.JTabbedPane;
 public class PanelMenu extends JPanel {
 
 	private static final long serialVersionUID = 6067181926807089944L;
+	private JTabbedPane tabbedPane;
 
 	public PanelMenu() {
 		initialize();
@@ -18,11 +19,12 @@ public class PanelMenu extends JPanel {
 		setBounds(100, 100, 1200, 750);
 		setBackground(Color.WHITE);
 
-		JTabbedPane tabbedPane = new JTabbedPane();
+		tabbedPane = new JTabbedPane();
 
-		PanelWorkouts panelWorkouts = new PanelWorkouts();
-		JPanel panelHistorico = new PanelHistorico();
-		JPanel panelPerfil = new PanelPerfil();
+		PanelWorkouts panelWorkouts = new PanelWorkouts(this);
+		PanelHistorico panelHistorico = new PanelHistorico();
+		PanelPerfil panelPerfil = new PanelPerfil();
+		PanelEjercicio panelEjercicio = new PanelEjercicio(null);
 
 		tabbedPane.addTab("Workouts", panelWorkouts);
 		tabbedPane.addTab("Histórico", panelHistorico);
@@ -30,5 +32,10 @@ public class PanelMenu extends JPanel {
 
 		add(tabbedPane);
 	}
+	
+    public void agregarNuevoTab(String titulo, JPanel nuevoPanel) {
+        tabbedPane.addTab(titulo, nuevoPanel);
+        tabbedPane.setSelectedComponent(nuevoPanel);
+    }
 
 }
