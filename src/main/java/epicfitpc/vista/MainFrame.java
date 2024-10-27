@@ -4,9 +4,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 
-import java.time.LocalDate;
-
-import epicfitpc.modelo.pojos.Usuario;
+import epicfitpc.utils.Estilos;
 import epicfitpc.vista.paneles.PanelLogin;
 import epicfitpc.vista.paneles.PanelRegistro;
 
@@ -16,6 +14,7 @@ import epicfitpc.vista.paneles.PanelRegistro;
 public class MainFrame extends JFrame {
 
 	private static final long serialVersionUID = -7633771846060976450L;
+	private static MainFrame instance;
 
 	public MainFrame() {
 		initialize();
@@ -31,6 +30,7 @@ public class MainFrame extends JFrame {
 		setLocationRelativeTo(null);
 		setResizable(false);
 		getContentPane().setLayout(new BorderLayout());
+		setBackground(Estilos.DARK_BACKGROUND);
 
 		PanelLogin panelLogin = new PanelLogin(this);
 		getContentPane().add(panelLogin);
@@ -40,4 +40,11 @@ public class MainFrame extends JFrame {
 		revalidate();
 		repaint();
 	}
+	
+    public static synchronized MainFrame getInstance() {
+        if (instance == null) {
+            instance = new MainFrame();
+        }
+        return instance;
+    }
 }

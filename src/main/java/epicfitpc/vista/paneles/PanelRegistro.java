@@ -5,22 +5,25 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.JSpinner;
 
-import epicfitpc.modelo.bbdd.GestorDeUsuarios;
-import epicfitpc.modelo.pojos.Usuario;
+import epicfitpc.bbdd.GestorDeUsuarios;
+import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.Conexion;
 import epicfitpc.vista.MainFrame;
 
 import javax.swing.JTextField;
 import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerModel;
+
+import com.google.cloud.Timestamp;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -152,7 +155,7 @@ public class PanelRegistro extends JPanel {
 			public Usuario crearObjetoUsuario(JSpinner spinnerTipoUsuario) {
 				Usuario usuario = new Usuario();
 				usuario.setApellido(textApellido.getText());
-				usuario.setUser(textUsuario.getText());
+				usuario.setUsuario(textUsuario.getText());
 				usuario.setCorreo(textEmail.getText());
 				if (spinnerTipoUsuario.getValue() == "Entrenador") {
 					usuario.setEsEntrenador(true);
@@ -160,10 +163,10 @@ public class PanelRegistro extends JPanel {
 					usuario.setEsEntrenador(false);
 				}
 
-				LocalDate localDate = convertirStringToLocalDate();
+				Timestamp localDate = convertirStringToTimestamp();
 				usuario.setFechaNac(localDate);
 
-				usuario.setFechaAlt(LocalDate.now());
+				usuario.setFechaAlt(Timestamp.now());
 				usuario.setNombre(textNombre.getText());
 				usuario.setPass(new String(passwordField.getPassword()));
 				return usuario;
@@ -172,12 +175,18 @@ public class PanelRegistro extends JPanel {
 			/**
 			 * @return
 			 */
-			public LocalDate convertirStringToLocalDate() {
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-				String date = textFechaNac.getText();
-				// convert String to LocalDate
-				LocalDate localDate = LocalDate.parse(date, formatter);
-				return localDate;
+			public Timestamp convertirStringToTimestamp() {
+				
+				SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+	            Date parsedDate = null;
+	            String fecNac = textFechaNac.getText();
+				try {
+					parsedDate = dateFormat.parse(textFechaNac.getText());
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	            return Timestamp.of(parsedDate);
 			}
 
 			/**
@@ -243,11 +252,11 @@ public class PanelRegistro extends JPanel {
 				} else if (!pass1.equals(pass2)) {
 					JOptionPane.showMessageDialog(frame, "Contraseñas distintas, vuelva a intentarlo.");
 					validar = false;
-				} else if (!gestorDeUsuarios.validarUsername(usuario.user)) {
+				} else if (!gestorDeUsuarios.validarUsername(usuario.getUsuario())) {
 					JOptionPane.showMessageDialog(frame, "Usuario incorrecta, vuelva a intentarlo incluyendo al menos una letra minúscula "
 							+ "y una mayúscula.");
 					validar = false;
-				}else if (gestorDeUsuarios.comprobarSiExisteNombreUsuario(usuario.getUser())) {
+				}else if (gestorDeUsuarios.comprobarSiExisteNombreUsuario(usuario.getUsuario())) {
 					JOptionPane.showMessageDialog(frame, "El nombre de usuario ya existe.");
 				}
 
