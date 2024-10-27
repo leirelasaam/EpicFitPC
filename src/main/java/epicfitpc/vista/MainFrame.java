@@ -3,6 +3,8 @@ package epicfitpc.vista;
 import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
+
+import epicfitpc.utils.Estilos;
 import epicfitpc.vista.paneles.PanelLogin;
 
 /**
@@ -27,6 +29,7 @@ public class MainFrame extends JFrame {
 		setLocationRelativeTo(null);
 		setResizable(false);
 		getContentPane().setLayout(new BorderLayout());
+		setBackground(Estilos.DARK_BACKGROUND);
 
 		PanelLogin panelLogin = new PanelLogin();
 		getContentPane().add(panelLogin);

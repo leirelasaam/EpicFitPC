@@ -1,6 +1,5 @@
 package epicfitpc.vista.componentes;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -8,9 +7,12 @@ import com.google.cloud.Timestamp;
 
 import epicfitpc.modelo.Historico;
 import epicfitpc.utils.DateUtils;
+import epicfitpc.utils.Estilos;
 
-import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.RenderingHints;
 
 public class HistoricoItemPanel extends JPanel {
 
@@ -21,28 +23,41 @@ public class HistoricoItemPanel extends JPanel {
 		this.historico = historico;
 		initialize();
 	}
+	
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		// Establecer propiedades para dibujar
+		Graphics2D g2d = (Graphics2D) g;
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+		// Color de fondo
+		g2d.setColor(getBackground());
+		g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20); // Fondo redondeado
+	}
 
 	private void initialize() {
 		setLayout(new GridLayout(6, 1, 0, 0));
 		setBorder(new EmptyBorder(20, 20, 20, 20));
-		setBackground(Color.LIGHT_GRAY);
+		setOpaque(false);
+		setBackground(Estilos.CARD_BACKGROUND);
 
-		JLabel lblNombre = new JLabel("Nombre: " + historico.getWorkoutObj().getNombre());
-		JLabel lblNivel = new JLabel("Nivel: " + historico.getWorkoutObj().getNivel());
+		JLabelTitle lblNombre = new JLabelTitle(historico.getWorkoutObj().getNombre());
+		JLabelText lblNivel = new JLabelText("Nivel: " + historico.getWorkoutObj().getNivel());
 		
 		int tiempoPrevEnSegundos = historico.getWorkoutObj().getTiempo();
 		String tiempoPrevFormateado = DateUtils.formatearTiempo(tiempoPrevEnSegundos);
-		JLabel lblTiempo = new JLabel("Tiempo previsto: " + tiempoPrevFormateado);
+		JLabelText lblTiempo = new JLabelText("Tiempo previsto: " + tiempoPrevFormateado);
 		
 		int tiempoEnSegundos = historico.getTiempo();
 		String tiempoFormateado = DateUtils.formatearTiempo(tiempoEnSegundos);
-		JLabel lblTiempoReal = new JLabel("Tiempo real: " + tiempoFormateado);
+		JLabelText lblTiempoReal = new JLabelText("Tiempo real: " + tiempoFormateado);
 
 		Timestamp fecha = historico.getFecha();
 		String fechaFormateada = DateUtils.formatearTimestamp(fecha);
-		JLabel lblFecha = new JLabel("Fecha: " + fechaFormateada);
+		JLabelText lblFecha = new JLabelText(fechaFormateada);
 		
-		JLabel lblPorcentaje = new JLabel("Porcentaje: " + historico.getPorcentaje());
+		JLabelText lblPorcentaje = new JLabelText(historico.getPorcentaje() + "%");
 		
 		add(lblNombre);
 		add(lblNivel);

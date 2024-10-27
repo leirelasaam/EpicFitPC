@@ -1,48 +1,55 @@
 package epicfitpc.vista.componentes;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import epicfitpc.modelo.Ejercicio;
+import epicfitpc.utils.DateUtils;
+import epicfitpc.utils.Estilos;
 
-import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.RenderingHints;
 
 public class WorkoutEjItemPanel extends JPanel {
 
 	private static final long serialVersionUID = 8329219010128277587L;
 	private Ejercicio ejercicio = null;
-	
+
 	public WorkoutEjItemPanel(Ejercicio ejercicio) {
 		this.ejercicio = ejercicio;
 		initialize();
 	}
 
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		// Establecer propiedades para dibujar
+		Graphics2D g2d = (Graphics2D) g;
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+		// Color de fondo
+		g2d.setColor(getBackground());
+		g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20); // Fondo redondeado
+	}
+
 	private void initialize() {
 		setLayout(new GridLayout(4, 1, 0, 0));
 		setBorder(new EmptyBorder(20, 20, 20, 20));
-        setBackground(Color.LIGHT_GRAY);
+		setOpaque(false);
+		setBackground(Estilos.CARD_BACKGROUND);
 
-		JLabel lblNombre = new JLabel("Ejercicio: " + ejercicio.getNombre());
-		JLabel lblSeries = new JLabel("Series: " + ejercicio.getSeries());
-		
+		JLabelTitle lblNombre = new JLabelTitle(ejercicio.getNombre());
+		JLabelText lblSeries = new JLabelText("Series: " + ejercicio.getSeries());
+
 		// Obtener el tiempo en segundos
 		int tiempoEnSegundos = ejercicio.getTiempoSerie();
+;
+		String tiempoFormateado = DateUtils.formatearTiempo(tiempoEnSegundos);
+		JLabelText lblTiempo = new JLabelText("Tiempo por serie: " + tiempoFormateado);
 
-		// Calcular horas, minutos y segundos
-		int horas = tiempoEnSegundos / 3600;
-		int minutos = (tiempoEnSegundos % 3600) / 60;
-		int segundos = tiempoEnSegundos % 60;
-		
-		String tiempoFormateado = "";
-		if (horas > 0) {
-			tiempoFormateado += horas + "h ";
-		} 
-		tiempoFormateado += minutos + "min " + segundos + "s";
-		JLabel lblTiempo = new JLabel("Tiempo por serie: " + tiempoFormateado);
-		
-		JLabel lblTiempoDescanso = new JLabel("Tiempo descanso: " + ejercicio.getDescanso() + "s");
+		JLabelText lblTiempoDescanso = new JLabelText("Tiempo descanso: " + ejercicio.getDescanso() + "s");
 
 		add(lblNombre);
 		add(lblSeries);
