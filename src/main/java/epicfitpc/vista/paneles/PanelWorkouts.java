@@ -1,18 +1,20 @@
 package epicfitpc.vista.paneles;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ListCellRenderer;
+import javax.swing.border.EmptyBorder;
 
 import com.google.cloud.firestore.Firestore;
 
@@ -20,8 +22,11 @@ import epicfitpc.bbdd.GestorDeWorkouts;
 import epicfitpc.modelo.Ejercicio;
 import epicfitpc.modelo.Usuario;
 import epicfitpc.modelo.Workout;
+import epicfitpc.utils.Estilos;
 import epicfitpc.utils.Conexion;
 import epicfitpc.utils.UsuarioLogueado;
+import epicfitpc.vista.componentes.JButtonPrimary;
+import epicfitpc.vista.componentes.JLabelText;
 import epicfitpc.vista.componentes.WorkoutEjItemPanel;
 import epicfitpc.vista.componentes.WorkoutItemPanel;
 
@@ -37,18 +42,18 @@ public class PanelWorkouts extends JPanel {
 	private static final long serialVersionUID = 2651779404513169891L;
 	private JPanel panelWInterior;
 	private JPanel panelEj;
-	private JLabel labelWorkout;
+	private JLabelText labelWorkout;
 	private JComboBox<String> comboBox;
 	private ArrayList<Workout> workouts = null;
 	private Usuario usuario = null;
-	private JButton playButton;
+	private JButtonPrimary playButton;
 	private PanelMenu panelMenu = null;
 	private Workout workoutSeleccionado = null;
 	
 	private static final String NIVELES_ALL = "-- Filtrar por nivel --";
 	private static final String NIVELES_NONE = "-- No hay workouts disponibles --";
 	private static final String SELECCIONA_WORKOUT = "Selecciona un workout";
-	private static final int PANELES_NECESARIOS = 5;
+	private static final int PANELES_NECESARIOS = 4;
 
 	/**
 	 * Constructor que inicializa el panel y recibe el listado de workouts.
@@ -73,6 +78,9 @@ public class PanelWorkouts extends JPanel {
 		add(panelContenidoWorkout);
 
 		comboBox = new JComboBox<String>();
+		comboBox.setBackground(Estilos.PRIMARY);
+		comboBox.setForeground(Estilos.WHITE);
+		comboBox.setFont(Estilos.FONT_SMALL);
 		comboBox.setPreferredSize(new Dimension(comboBox.getPreferredSize().width, 30));
 		comboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -80,26 +88,31 @@ public class PanelWorkouts extends JPanel {
 			}
 		});
 		panelContenidoWorkout.add(comboBox, BorderLayout.NORTH);
+		comboBox.setRenderer(new ComboBoxRenderer());
 
 		panelWInterior = new JPanel();
-		panelWInterior.setBackground(Color.WHITE);
-		panelWInterior.setLayout(new GridLayout(0, 1, 5, 5));
+		panelWInterior.setBackground(Estilos.DARK_BACKGROUND);
+		panelWInterior.setBorder(new EmptyBorder(10, 10, 10, 10));
+		panelWInterior.setLayout(new GridLayout(0, 1, 10, 10));
 
 		JPanel panelEjerciciosW = new JPanel();
 		panelEjerciciosW.setLayout(new BorderLayout(0, 0));
-		panelEjerciciosW.setBackground(Color.WHITE);
+		panelEjerciciosW.setBackground(Estilos.DARK_BACKGROUND);
 		add(panelEjerciciosW);
 
-		labelWorkout = new JLabel(SELECCIONA_WORKOUT);
+		labelWorkout = new JLabelText(SELECCIONA_WORKOUT);
+		labelWorkout.setBackground(Estilos.WHITE);
+		labelWorkout.setOpaque(true);
 		labelWorkout.setPreferredSize(new Dimension(labelWorkout.getPreferredSize().width, 30));
 		labelWorkout.setHorizontalAlignment(JLabel.CENTER);
 		panelEjerciciosW.add(labelWorkout, BorderLayout.NORTH);
 
 		panelEj = new JPanel();
-		panelEj.setLayout(new GridLayout(0, 1, 5, 5));
-		panelEj.setBackground(Color.WHITE);
+		panelEj.setLayout(new GridLayout(0, 1, 10, 10));
+		panelEj.setBackground(Estilos.DARK_BACKGROUND);
+		panelEj.setBorder(new EmptyBorder(10, 10, 10, 10));
 		
-        playButton = new JButton("Play");
+        playButton = new JButtonPrimary("Play");
         playButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		iniciarWorkout();
@@ -164,7 +177,7 @@ public class PanelWorkouts extends JPanel {
 		// Paneles vacíos para que se ajusten bien los tamaños
 		for (int i = numeroDePaneles; i < panelesNecesarios; i++) {
 			JPanel emptyPanel = new JPanel();
-			emptyPanel.setBackground(Color.WHITE);
+			emptyPanel.setBackground(Estilos.DARK_BACKGROUND);
 			panel.add(emptyPanel);
 		}
 	}
@@ -268,5 +281,25 @@ public class PanelWorkouts extends JPanel {
 		PanelEjercicio panelEjercicio = new PanelEjercicio(workoutSeleccionado);
         panelMenu.agregarNuevoTab("Ejercicio", panelEjercicio);
 	}
+	
+    private class ComboBoxRenderer extends JLabel implements ListCellRenderer<String> {
+		private static final long serialVersionUID = -3995483244577557908L;
+		public ComboBoxRenderer() {
+            setOpaque(true);
+        }
+		@Override
+		public Component getListCellRendererComponent(JList<? extends String> list, String value, int index,
+				boolean isSelected, boolean cellHasFocus) {
+            setText(value);
+            if (isSelected) {
+                setBackground(Estilos.PRIMARY_DARK);
+                setForeground(Estilos.WHITE);
+            } else {
+                setBackground(Estilos.PRIMARY);
+                setForeground(Estilos.WHITE);
+            }
+            return this;
+		}
+    }
 
 }

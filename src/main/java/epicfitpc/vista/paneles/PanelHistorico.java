@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.border.EmptyBorder;
 
 import com.google.cloud.firestore.Firestore;
 
@@ -13,6 +14,7 @@ import epicfitpc.bbdd.GestorDeHistoricos;
 import epicfitpc.modelo.Historico;
 import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.Conexion;
+import epicfitpc.utils.Estilos;
 import epicfitpc.utils.UsuarioLogueado;
 import epicfitpc.vista.componentes.HistoricoItemPanel;
 
@@ -22,7 +24,7 @@ public class PanelHistorico extends JPanel {
 	private JPanel panelHInterior;
 	private ArrayList<Historico> historicos = null;
 	private Usuario usuario = null;
-	private static final int PANELES_NECESARIOS = 4;
+	private static final int PANELES_NECESARIOS = 3;
 
 	/**
 	 * Constructor que inicializa el panel y recibe el listado de workouts.
@@ -43,7 +45,9 @@ public class PanelHistorico extends JPanel {
 
 		panelHInterior = new JPanel();
 		panelHInterior.setBackground(Color.WHITE);
-		panelHInterior.setLayout(new GridLayout(0, 1, 5, 5));
+		panelHInterior.setLayout(new GridLayout(0, 1, 10, 10));
+		panelHInterior.setBorder(new EmptyBorder(10, 10, 10, 10));
+		panelHInterior.setBackground(Estilos.DARK_BACKGROUND);
 
 		JScrollPane scrollPane = new JScrollPane(panelHInterior);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -87,7 +91,7 @@ public class PanelHistorico extends JPanel {
 		// Paneles vacíos para que se ajusten bien los tamaños
 		for (int i = numeroDePaneles; i < panelesNecesarios; i++) {
 			JPanel emptyPanel = new JPanel();
-			emptyPanel.setBackground(Color.WHITE);
+			emptyPanel.setBackground(Estilos.DARK_BACKGROUND);
 			panel.add(emptyPanel);
 		}
 	}

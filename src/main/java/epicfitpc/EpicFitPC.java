@@ -1,12 +1,17 @@
 package epicfitpc;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
+import javax.swing.UIManager;
+import javax.swing.plaf.ColorUIResource;
+
 import epicfitpc.ficheros.GestorDeBackups;
 import epicfitpc.utils.Conexion;
+import epicfitpc.utils.Estilos;
 import epicfitpc.utils.GestorDeConexiones;
 import epicfitpc.vista.MainFrame;
 import com.google.cloud.firestore.Firestore;
@@ -47,6 +52,14 @@ public class EpicFitPC {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		// Colores comboBox
+		UIManager.put("ComboBox.selectionBackground", Estilos.PRIMARY_DARK);
+		UIManager.put("ComboBox.selectionForeground", Estilos.WHITE);
+		
+        // Configuración de colores para el JTabbedPane
+        UIManager.put("TabbedPane.selectedBackground", Estilos.DARK_BACKGROUND);
+        UIManager.put("TabbedPane.selectedForeground", Estilos.WHITE);
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {

@@ -7,10 +7,11 @@ import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.Conexion;
 import epicfitpc.utils.UsuarioLogueado;
 import epicfitpc.vista.MainFrame;
+import epicfitpc.vista.componentes.JButtonOutlined;
+import epicfitpc.vista.componentes.JButtonPrimary;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
@@ -38,7 +39,7 @@ public class PanelLogin extends JPanel {
 		lblNewLabel.setBounds(825, 110, 153, 31);
 		add(lblNewLabel);
 
-		JButton btnNewButton = new JButton("Iniciar sesión");
+		JButtonPrimary btnNewButton = new JButtonPrimary("Iniciar sesión");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -93,7 +94,7 @@ public class PanelLogin extends JPanel {
 		lblNewLabel_2.setBounds(772, 322, 80, 14);
 		add(lblNewLabel_2);
 
-		JButton btnNewButton_1 = new JButton("Registrarme");
+		JButtonOutlined btnNewButton_1 = new JButtonOutlined("Registrarme");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				MainFrame.getInstance().getContentPane().removeAll();
