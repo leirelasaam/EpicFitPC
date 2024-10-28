@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 
 import epicfitpc.utils.Estilos;
 import epicfitpc.vista.paneles.PanelLogin;
+import epicfitpc.vista.paneles.PanelRegistro;
 
 /**
  * JFrame que contiene el panel del menú.
@@ -31,8 +32,11 @@ public class MainFrame extends JFrame {
 		getContentPane().setLayout(new BorderLayout());
 		setBackground(Estilos.DARK_BACKGROUND);
 
-		PanelLogin panelLogin = new PanelLogin();
+		PanelLogin panelLogin = new PanelLogin(this);
 		getContentPane().add(panelLogin);
+		
+		/*PanelRegistro panelRegistro = new PanelRegistro(this);
+		getContentPane().add(panelRegistro);*/
 		revalidate();
 		repaint();
 	}

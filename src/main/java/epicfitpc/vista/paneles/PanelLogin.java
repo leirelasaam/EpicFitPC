@@ -26,11 +26,11 @@ public class PanelLogin extends JPanel {
 	private JTextField txtIntroduceTuCorreo;
 	private JTextField txtIntroduceTuPass;
 
-	public PanelLogin() {
-		initialize();
+	public PanelLogin(MainFrame frame) {
+		initialize(frame);
 	}
 
-	private void initialize() {
+	private void initialize(MainFrame frame) {
 		setLayout(null);
 		setBounds(100, 100, 1200, 750);
 
@@ -98,7 +98,7 @@ public class PanelLogin extends JPanel {
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				MainFrame.getInstance().getContentPane().removeAll();
-				MainFrame.getInstance().getContentPane().add(new PanelRegistro());
+				MainFrame.getInstance().getContentPane().add(new PanelRegistro(frame));
 				MainFrame.getInstance().revalidate();
 				MainFrame.getInstance().repaint();
 			}
