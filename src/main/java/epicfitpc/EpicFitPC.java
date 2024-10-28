@@ -1,13 +1,11 @@
 package epicfitpc;
 
-import java.awt.Color;
 import java.awt.EventQueue;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.UIManager;
-import javax.swing.plaf.ColorUIResource;
 
 import epicfitpc.ficheros.GestorDeBackups;
 import epicfitpc.utils.Conexion;

@@ -28,7 +28,7 @@ public class PanelEjercicio extends JPanel {
 		setLayout(new BorderLayout(0, 0));
 		JPanel panelSuperior = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
-		JButtonPrimary btnCerrar = new JButtonPrimary("Cerrar");
+		JButtonPrimary btnCerrar = new JButtonPrimary("CERRAR");
 		btnCerrar.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		cerrarPanel();
@@ -74,12 +74,12 @@ public class PanelEjercicio extends JPanel {
 	
 	private void pausarWorkout() {
 		if (cronGeneral != null) {
-            if (btnPausar.getText().equals("Pausar")) {
+            if (btnPausar.getText().equalsIgnoreCase("PAUSAR")) {
                 cronGeneral.pausar();
-                btnPausar.setText("Reanudar");
+                btnPausar.setText("REANUDAR");
             } else {
                 cronGeneral.reanudar();
-                btnPausar.setText("Pausar");
+                btnPausar.setText("PAUSAR");
             }
         }
 	}
