@@ -13,7 +13,7 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 
-import epicfitpc.modelo.pojos.Usuario;
+import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.Conexion;
 
 public class GestorDeUsuarios {
@@ -64,7 +64,7 @@ public class GestorDeUsuarios {
 	    for (Usuario usuario : usuarios) {
 
 	    	// Verificar que userName no sea null antes de comparar
-	        if (usuario.getUser() != null && usuario.getUser().equalsIgnoreCase(usuarioIntroducido)) {
+	        if (usuario.getUsuario() != null && usuario.getUsuario().equalsIgnoreCase(usuarioIntroducido)) {
 	            // Usuario encontrado, ahora verificamos la contraseña
 	            if (usuario.getPass() != null && usuario.getPass().equals(contraseniaIntroducida)) {
 	                // Usuario y contraseña correctos
@@ -96,48 +96,10 @@ public class GestorDeUsuarios {
 	    if (usuarios != null && !usuarios.isEmpty()) {
 	        System.out.println("Usuarios encontrados:");
 	        for (Usuario usuario : usuarios) {
-	            System.out.println("ID: " + usuario.getId() + ", Nombre: " + usuario.getNombre() + ", Usuario: " + usuario.getUser());
+	            System.out.println("ID: " + usuario.getId() + ", Nombre: " + usuario.getNombre() + ", Usuario: " + usuario.getUsuario());
 	        }
 	    } else {
 	        System.out.println("No se encontraron usuarios.");
 	    }
 	}
-
-	public void guardarDatosLogin(String usuarioIntroducido, String passIntroducido) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public String obtenerUsuario() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String obtenerPass() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void guardarEstadoSesion(boolean b) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public Boolean cargarEstadoSesion() {
-
-		return true;
-	}
-
-	
-/*
-	Firestore db;
-	try {
-		db = Conexion.getInstance().getConexion();
-		GestorDeWorkouts gdw = new GestorDeWorkouts(db);
-		workouts = gdw.obtenerTodosLosWorkouts();
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-*/	
 }

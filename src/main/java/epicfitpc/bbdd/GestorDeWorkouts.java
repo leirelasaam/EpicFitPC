@@ -1,4 +1,4 @@
-package epicfitpc.modelo.bbdd;
+package epicfitpc.bbdd;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +10,8 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 
-import epicfitpc.modelo.pojos.Ejercicio;
-import epicfitpc.modelo.pojos.Workout;
+import epicfitpc.modelo.Ejercicio;
+import epicfitpc.modelo.Workout;
 
 public class GestorDeWorkouts {
 
@@ -39,16 +39,11 @@ public class GestorDeWorkouts {
 
 		List<QueryDocumentSnapshot> documentos = querySnapshot.getDocuments();
 		for (QueryDocumentSnapshot documento : documentos) {
-			String id = documento.getId();
-			String nombre = documento.getString("nombre");
-			double nivel = documento.getDouble("nivel");
-			double tiempo = documento.getDouble("tiempo");
-			String video = documento.getString("video");
-			
-			Workout workout = new Workout(id, nombre, nivel, tiempo, video, null);
+			Workout workout = documento.toObject(Workout.class);
+			workout.setId(documento.getId());
 			
 			ArrayList<Ejercicio> ejercicios = obtenerEjercicios(workout);
-			workout.setEjercicios(ejercicios);
+			workout.setEjerciciosArray(ejercicios);
 			
 			if (null == workouts)
 				workouts = new ArrayList<Workout>();
@@ -72,6 +67,38 @@ public class GestorDeWorkouts {
 		}
 		
 		return ejercicios;
+	}
+	
+	public ArrayList<Workout> obtenerWorkoutsPorNivelUsuario(int nivelUsuario) throws InterruptedException, ExecutionException {
+		ArrayList<Workout> workouts = null;
+
+		CollectionReference workoutsDb = db.collection(COLLECTION);
+		ApiFuture<QuerySnapshot> futureQuery = workoutsDb.whereLessThanOrEqualTo("nivel", nivelUsuario).get();
+		QuerySnapshot querySnapshot = null;
+
+		try {
+			querySnapshot = futureQuery.get();
+		} catch (InterruptedException e) {
+			throw e;
+		} catch (ExecutionException e) {
+			throw e;
+		}
+
+		List<QueryDocumentSnapshot> documentos = querySnapshot.getDocuments();
+		for (QueryDocumentSnapshot documento : documentos) {
+			Workout workout = documento.toObject(Workout.class);
+			workout.setId(documento.getId());
+			
+			ArrayList<Ejercicio> ejercicios = obtenerEjercicios(workout);
+			workout.setEjerciciosArray(ejercicios);
+			
+			if (null == workouts)
+				workouts = new ArrayList<Workout>();
+			
+			workouts.add(workout);
+		}
+
+		return workouts;
 	}
 
 }

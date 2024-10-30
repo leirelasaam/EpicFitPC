@@ -1,68 +1,44 @@
 package epicfitpc.vista.paneles;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.util.ArrayList;
+
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import com.google.cloud.firestore.Firestore;
-
-import epicfitpc.modelo.bbdd.GestorDeWorkouts;
-import epicfitpc.modelo.pojos.Usuario;
-import epicfitpc.modelo.pojos.Workout;
-import epicfitpc.utils.Conexion;
-import epicfitpc.vista.MainFrame;
+import epicfitpc.utils.Estilos;
 
 public class PanelMenu extends JPanel {
 
 	private static final long serialVersionUID = 6067181926807089944L;
-	private MainFrame frame = null;
-	private Usuario usuario = null;
-	private ArrayList<Workout> workouts = null;
+	private JTabbedPane tabbedPane;
 
-	public PanelMenu(MainFrame frame, Usuario usuario) {
-		this.frame = frame;
-		this.usuario = usuario;
-		obtenerWorkouts();
+	public PanelMenu() {
 		initialize();
 	}
 
 	private void initialize() {
 		setLayout(new BorderLayout());
 		setBounds(100, 100, 1200, 750);
-		setBackground(Color.WHITE);
+		setBackground(Estilos.WHITE);
 
-		JTabbedPane tabbedPane = new JTabbedPane();
+		tabbedPane = new JTabbedPane();
+		
+		// Personalizar el tabbedPane
+        tabbedPane.setFont(Estilos.FONT_SMALL);
 
-		PanelWorkouts panelWorkouts = new PanelWorkouts(workouts);
-		JPanel panelHistorico = new JPanel();
-		JPanel panelPerfil = new JPanel();
+		PanelWorkouts panelWorkouts = new PanelWorkouts(this);
+		PanelHistorico panelHistorico = new PanelHistorico();
+		PanelPerfil panelPerfil = new PanelPerfil();
 
 		tabbedPane.addTab("Workouts", panelWorkouts);
 		tabbedPane.addTab("Histórico", panelHistorico);
 		tabbedPane.addTab("Perfil", panelPerfil);
 
-		if (usuario.isEsEntrenador()) {
-			JPanel panelEntrenador = new JPanel();
-			tabbedPane.addTab("Entrenador", panelEntrenador);
-		}
-
 		add(tabbedPane);
 	}
-
-
-	private void obtenerWorkouts() {
-		Firestore db;
-		try {
-			db = Conexion.getInstance().getConexion();
-			GestorDeWorkouts gdw = new GestorDeWorkouts(db);
-			workouts = gdw.obtenerTodosLosWorkouts();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
+	
+    public void agregarNuevoTab(String titulo, JPanel nuevoPanel) {
+        tabbedPane.addTab(titulo, nuevoPanel);
+        tabbedPane.setSelectedComponent(nuevoPanel);
+    }
 }

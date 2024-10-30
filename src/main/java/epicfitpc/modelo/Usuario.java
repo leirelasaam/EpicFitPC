@@ -1,9 +1,6 @@
-package epicfitpc.modelo.pojos;
+package epicfitpc.modelo;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.Objects;
 
 import com.google.cloud.Timestamp;
@@ -15,50 +12,53 @@ public class Usuario implements Serializable {
 	private String nombre = null;
 	private String apellido = null;
 	private String correo = null;
-	public String user = null;
+	public String usuario = null;
 	private String pass = null;
-	private LocalDate fechaNac = null;
-	private LocalDate fechaAlt = null;
+	private Timestamp fechaNac = null;
+	private Timestamp fechaAlt = null;
 	private int nivel = 0;
 	private boolean esEntrenador = false;
 
 	public Usuario() {
 		// Constructor vacío
 	}
+	
+	
 
-	// Constructor sobrecargado
-	public Usuario(String id, String nombre, String apellido, String correo,String user, String pass, LocalDate fechaNac,
-			LocalDate fechaAlt, int nivel, boolean esEntrenador) {
+	public Usuario(String id, String nombre, String apellido, String correo, String usuario, String pass,
+			Timestamp fechaNac, Timestamp fechaAlt, int nivel, boolean esEntrenador) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.correo = correo;
-		this.user = user;
+		this.usuario = usuario;
 		this.pass = pass;
 		this.fechaNac = fechaNac;
 		this.fechaAlt = fechaAlt;
 		this.nivel = nivel;
 		this.esEntrenador = esEntrenador;
 	}
-
+	
 	// Constructor que recibe los valores crudos desde el documento
-	public Usuario(String id, String nombre, String apellido, String correo,String user, String pass, double nivel,
-			Timestamp fechaNac, Timestamp fechaAlt, boolean esEntrenador) {
-		this.id = id;
-		this.nombre = nombre;
-		this.apellido = apellido;
-		this.correo = correo;
-		this.user = user;
-		this.pass = pass;
+		public Usuario(String id, String nombre, String apellido, String correo,String user, String pass, double nivel,
+				Timestamp fechaNac, Timestamp fechaAlt, boolean esEntrenador) {
+			this.id = id;
+			this.nombre = nombre;
+			this.apellido = apellido;
+			this.correo = correo;
+			this.usuario = user;
+			this.pass = pass;
 
-		this.nivel = (int) nivel;
+			this.nivel = (int) nivel;
 
-		this.fechaNac = convertirTimestampALocalDate(fechaNac);
-		this.fechaAlt = convertirTimestampALocalDate(fechaAlt);
+			this.fechaNac = fechaNac;
+			this.fechaAlt = fechaAlt;
 
-		this.esEntrenador = esEntrenador;
-	}
+			this.esEntrenador = esEntrenador;
+		}
+
+
 
 	public String getId() {
 		return id;
@@ -92,14 +92,14 @@ public class Usuario implements Serializable {
 		this.correo = correo;
 	}
 
-	public String getUser() {
-		return user;
+	public String getUsuario() {
+		return usuario;
 	}
 
-	public void setUser(String user) {
-		this.user = user;
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
 	}
-	
+
 	public String getPass() {
 		return pass;
 	}
@@ -108,19 +108,19 @@ public class Usuario implements Serializable {
 		this.pass = pass;
 	}
 
-	public LocalDate getFechaNac() {
+	public Timestamp getFechaNac() {
 		return fechaNac;
 	}
 
-	public void setFechaNac(LocalDate fechaNac) {
+	public void setFechaNac(Timestamp fechaNac) {
 		this.fechaNac = fechaNac;
 	}
 
-	public LocalDate getFechaAlt() {
+	public Timestamp getFechaAlt() {
 		return fechaAlt;
 	}
 
-	public void setFechaAlt(LocalDate fechaAlt) {
+	public void setFechaAlt(Timestamp fechaAlt) {
 		this.fechaAlt = fechaAlt;
 	}
 
@@ -132,7 +132,7 @@ public class Usuario implements Serializable {
 		this.nivel = nivel;
 	}
 
-	public boolean isEsEntrenador() {
+	public boolean getIsEsEntrenador() {
 		return esEntrenador;
 	}
 
@@ -142,7 +142,7 @@ public class Usuario implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(apellido, correo, esEntrenador, fechaAlt, fechaNac, id, nivel, nombre, user, pass);
+		return Objects.hash(apellido, correo, esEntrenador, fechaAlt, fechaNac, id, nivel, nombre, pass, usuario);
 	}
 
 	@Override
@@ -157,22 +157,15 @@ public class Usuario implements Serializable {
 		return Objects.equals(apellido, other.apellido) && Objects.equals(correo, other.correo)
 				&& esEntrenador == other.esEntrenador && Objects.equals(fechaAlt, other.fechaAlt)
 				&& Objects.equals(fechaNac, other.fechaNac) && Objects.equals(id, other.id) && nivel == other.nivel
-				&& Objects.equals(nombre, other.nombre) && Objects.equals(pass, other.pass);
+				&& Objects.equals(nombre, other.nombre) && Objects.equals(pass, other.pass)
+				&& Objects.equals(usuario, other.usuario);
 	}
 
 	@Override
 	public String toString() {
-		return "Usuario [id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", correo=" + correo + ", pass="
-				+ pass + ", fechaNac=" + fechaNac + ", fechaAlt=" + fechaAlt + ", nivel=" + nivel + ", esEntrenador="
-				+ esEntrenador + "]";
-	}
-
-	private LocalDate convertirTimestampALocalDate(Timestamp timestamp) {
-		if (timestamp != null) {
-			Date date = timestamp.toDate();
-			return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		}
-		return null;
+		return "Usuario [id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", correo=" + correo
+				+ ", usuario=" + usuario + ", pass=" + pass + ", fechaNac=" + fechaNac + ", fechaAlt=" + fechaAlt
+				+ ", nivel=" + nivel + ", esEntrenador=" + esEntrenador + "]";
 	}
 
 }
