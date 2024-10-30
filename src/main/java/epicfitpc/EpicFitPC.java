@@ -22,7 +22,7 @@ public class EpicFitPC {
 	public static void main(String[] args) {
 		Firestore db;
 		GestorDeBackups gdb = null;
-		try {
+		/*try {
 			db = Conexion.getInstance().getConexion();
 			gdb = new GestorDeBackups(db);
 			
@@ -52,7 +52,7 @@ public class EpicFitPC {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		*/
 		// Colores comboBox
 		UIManager.put("ComboBox.selectionBackground", Estilos.PRIMARY_DARK);
 		UIManager.put("ComboBox.selectionForeground", Estilos.WHITE);

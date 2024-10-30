@@ -9,6 +9,7 @@ import epicfitpc.utils.UsuarioLogueado;
 import epicfitpc.vista.MainFrame;
 import epicfitpc.vista.componentes.JButtonOutlined;
 import epicfitpc.vista.componentes.JButtonPrimary;
+import epicfitpc.vista.componentes.JLabelText;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -21,6 +22,8 @@ import javax.swing.JCheckBox;
 
 import java.awt.Font;
 import java.awt.HeadlessException;
+import java.awt.Image;
+
 import javax.swing.JPasswordField;
 
 public class PanelLogin extends JPanel {
@@ -28,7 +31,6 @@ public class PanelLogin extends JPanel {
 	private JTextField txtIntroduceTuCorreo;
 	private JTextField txtIntroduceTuPass;
 	private JPasswordField passwordField;
-	private JCheckBox chckbxNewCheckBox;
 
 	// Declarar el gestor de usuarios como un atributo de la clase
 	private GestorDeUsuarios gestorDeUsuarios;
@@ -41,7 +43,7 @@ public class PanelLogin extends JPanel {
 		setLayout(null);
 		setBounds(100, 100, 1200, 750);
 
-		JLabel lblNewLabel = new JLabel("¡Bienvenid@ a EpicFit!");
+		JLabelText lblNewLabel = new JLabelText("¡Bienvenid@ a EpicFit!");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblNewLabel.setBounds(825, 110, 153, 31);
 		add(lblNewLabel);
@@ -85,8 +87,8 @@ public class PanelLogin extends JPanel {
 		add(txtIntroduceTuCorreo);
 		txtIntroduceTuCorreo.setColumns(10);
 
-		JLabel lblNewLabel_1 = new JLabel("Usuario");
-		lblNewLabel_1.setBounds(772, 250, 46, 14);
+		JLabelText lblNewLabel_1 = new JLabelText("Usuario");
+		lblNewLabel_1.setBounds(772, 250, 241, 14);
 		add(lblNewLabel_1);
 
 		txtIntroduceTuPass = new JPasswordField();
@@ -94,8 +96,8 @@ public class PanelLogin extends JPanel {
 		add(txtIntroduceTuPass);
 		txtIntroduceTuPass.setColumns(10);
 
-		JLabel lblNewLabel_2 = new JLabel("Contraseña");
-		lblNewLabel_2.setBounds(772, 322, 80, 14);
+		JLabelText lblNewLabel_2 = new JLabelText("Contraseña");
+		lblNewLabel_2.setBounds(772, 322, 241, 14);
 		add(lblNewLabel_2);
 
 		JButtonOutlined btnNewButton_1 = new JButtonOutlined("Registrarme");
@@ -111,17 +113,14 @@ public class PanelLogin extends JPanel {
 		add(btnNewButton_1);
 
 		// Logo de la compania
-		JLabel lblNewLabel_3 = new JLabel("LogoEpicFit");
-		lblNewLabel_3.setIcon((Icon) new ImageIcon("resources/Logo.PNG"));
-		lblNewLabel_3.setBounds(0, -1, 602, 751);
+		JLabel lblNewLabel_3 = new JLabel("");
+		
+		ImageIcon icon = new ImageIcon("resources/Logo.PNG");
+		Image img = icon.getImage();
+		Image resizedImg = img.getScaledInstance(600, 600, java.awt.Image.SCALE_SMOOTH);
+		lblNewLabel_3.setIcon(new ImageIcon(resizedImg));
+		lblNewLabel_3.setBounds(94, 87, 579, 547);
 		add(lblNewLabel_3);
-
-		chckbxNewCheckBox.setBounds(772, 486, 183, 23);
-		add(chckbxNewCheckBox);
-
-		JLabel lblNewLabel_2_1 = new JLabel("¿Todavia no tienes cuenta?");
-		lblNewLabel_2_1.setBounds(825, 550, 134, 14);
-		add(lblNewLabel_2_1);
 
 	}
 }
