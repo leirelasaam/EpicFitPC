@@ -2,8 +2,6 @@ package epicfitpc.ficheros;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -21,24 +19,6 @@ public class GestorDeBackups {
 
 	public GestorDeBackups(Firestore db) {
 		this.db = db;
-	}
-
-	public boolean hayConexion() {
-		boolean conexion = true;
-
-		try {
-
-			@SuppressWarnings("deprecation")
-			URL url = new URL("https://www.google.com");
-			HttpURLConnection urlConnect = (HttpURLConnection) url.openConnection();
-			urlConnect.setConnectTimeout(1000);
-			urlConnect.connect();
-			conexion = (urlConnect.getResponseCode() == 200);
-		} catch (IOException e) {
-			conexion = false;
-		}
-
-		return conexion;
 	}
 
 	public void realizarBackup() throws FileNotFoundException, InterruptedException, ExecutionException, IOException {

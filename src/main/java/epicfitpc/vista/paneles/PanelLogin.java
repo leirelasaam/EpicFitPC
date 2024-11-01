@@ -1,11 +1,13 @@
 package epicfitpc.vista.paneles;
 
-
 import javax.swing.JPanel;
 
 import epicfitpc.bbdd.GestorDeUsuarios;
+import epicfitpc.controlador.Controlador;
+import epicfitpc.ficheros.GestorDeFicherosBinarios;
 import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.Conexion;
+import epicfitpc.utils.GestorDeConexiones;
 import epicfitpc.utils.UsuarioLogueado;
 import epicfitpc.vista.MainFrame;
 import epicfitpc.vista.componentes.JButtonOutlined;
@@ -14,6 +16,7 @@ import epicfitpc.vista.componentes.JButtonPrimary;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.ImageIcon;
@@ -25,6 +28,8 @@ public class PanelLogin extends JPanel {
 	private static final long serialVersionUID = 3044079574914466193L;
 	private JTextField txtIntroduceTuCorreo;
 	private JTextField txtIntroduceTuPass;
+	private static final String CARPETA_BACKUP = "src\\main\\java\\epicfitpc\\ficheros\\backup\\";
+	private static final String FICHERO_USUARIOS = CARPETA_BACKUP + "usuarios.dat";
 
 	public PanelLogin() {
 		initialize();
@@ -43,25 +48,38 @@ public class PanelLogin extends JPanel {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					GestorDeUsuarios gestorDeUsuarios = new GestorDeUsuarios(Conexion.getInstance().getConexion());
-
 					// Obtener los datos introducidos
 					String usuarioIntroducido = txtIntroduceTuCorreo.getText();
 					String passIntroducido = txtIntroduceTuPass.getText();
 
+					boolean hayConexion = GestorDeConexiones.getInstance().hayConexion();
+					ArrayList<Usuario> usuarios = null;
+					Usuario usuario = null;
+
+					// CARGAR DEPENDIENDO DE CONEXIÓN
+					if (hayConexion) {
+						GestorDeUsuarios gestorDeUsuarios = new GestorDeUsuarios(Conexion.getInstance().getConexion());
+						usuarios = gestorDeUsuarios.obtenerTodosLosUsuarios();
+					} else {
+						GestorDeFicherosBinarios<Usuario> gdfb = new GestorDeFicherosBinarios<Usuario>(FICHERO_USUARIOS);
+						usuarios = gdfb.leer();
+					}
+					
 					// Devolverá el usuario si los datos introducidos son correctos
-					Usuario usuario = gestorDeUsuarios.comprobarUsuario(usuarioIntroducido, passIntroducido);
-					if (usuario != null) { // si usuario == null significa que los datos introducidos son incorrectos
+					Controlador controlador = new Controlador();
+					usuario = controlador.comprobarUsuario(usuarios, usuarioIntroducido, passIntroducido);
+					if (usuario != null) {
 						// si usuario y login es correcto
 						// JOptionPane.showMessageDialog(frame, "Bienvenido a EpicFit");
 						UsuarioLogueado.getInstance().setUsuario(usuario);
-                        MainFrame.getInstance().getContentPane().removeAll();
-                        MainFrame.getInstance().getContentPane().add(new PanelMenu());
-                        MainFrame.getInstance().revalidate();
-                        MainFrame.getInstance().repaint();
+						MainFrame.getInstance().getContentPane().removeAll();
+						MainFrame.getInstance().getContentPane().add(new PanelMenu());
+						MainFrame.getInstance().revalidate();
+						MainFrame.getInstance().repaint();
 					} else {
 						// si usuario y login es correcto
-						//JOptionPane.showMessageDialog(MainFrame.getInstance(), "El login y el password es incorrecto");
+						// JOptionPane.showMessageDialog(MainFrame.getInstance(), "El login y el
+						// password es incorrecto");
 					}
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block

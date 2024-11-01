@@ -15,6 +15,7 @@ import epicfitpc.modelo.Historico;
 import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.Conexion;
 import epicfitpc.utils.Estilos;
+import epicfitpc.utils.GestorDeConexiones;
 import epicfitpc.utils.UsuarioLogueado;
 import epicfitpc.vista.componentes.HistoricoItemPanel;
 
@@ -32,7 +33,7 @@ public class PanelHistorico extends JPanel {
 	 * @param workouts ArrayList de Workouts
 	 */
 	public PanelHistorico() {
-		this.usuario =  UsuarioLogueado.getInstance().getUsuario();
+		this.usuario = UsuarioLogueado.getInstance().getUsuario();
 		this.historicos = obtenerHistoricos();
 		initialize();
 	}
@@ -41,7 +42,7 @@ public class PanelHistorico extends JPanel {
 	 * Inicializa los componentes del panel.
 	 */
 	private void initialize() {
-		setLayout(new BorderLayout(0,0));
+		setLayout(new BorderLayout(0, 0));
 
 		panelHInterior = new JPanel();
 		panelHInterior.setBackground(Color.WHITE);
@@ -95,19 +96,25 @@ public class PanelHistorico extends JPanel {
 			panel.add(emptyPanel);
 		}
 	}
-	
+
 	private ArrayList<Historico> obtenerHistoricos() {
 		ArrayList<Historico> historicos = null;
 		Firestore db;
-		try {
-			db = Conexion.getInstance().getConexion();
-			GestorDeHistoricos gdh = new GestorDeHistoricos(db);
-			historicos = gdh.obtenerTodosLosHistoricosPorUsuario(usuario);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		boolean hayConexion = GestorDeConexiones.getInstance().hayConexion();
+
+		if (hayConexion) {
+			try {
+				db = Conexion.getInstance().getConexion();
+				GestorDeHistoricos gdh = new GestorDeHistoricos(db);
+				historicos = gdh.obtenerTodosLosHistoricosPorUsuario(usuario);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			historicos = usuario.getHistoricos();
 		}
-		
+
 		return historicos;
 
 	}
