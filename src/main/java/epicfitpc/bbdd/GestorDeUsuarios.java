@@ -34,6 +34,33 @@ public class GestorDeUsuarios {
 		} catch (ExecutionException e) {
 			throw e;
 		}
+
+		List<QueryDocumentSnapshot> documentos = querySnapshot.getDocuments();
+		for (QueryDocumentSnapshot documento : documentos) {
+			Usuario usuario = documento.toObject(Usuario.class);
+			usuario.setId(documento.getId());
+
+			if (null == usuarios)
+				usuarios = new ArrayList<Usuario>();
+			usuarios.add(usuario);
+		}
+		return usuarios;
+	}
+	
+	// Para el backup
+	public ArrayList<Usuario> obtenerUsuariosConHistoricos() throws InterruptedException, ExecutionException {
+		ArrayList<Usuario> usuarios = null;
+		CollectionReference usuariosDb = db.collection("Usuarios");
+		ApiFuture<QuerySnapshot> futureQuery = usuariosDb.get();
+		QuerySnapshot querySnapshot = null;
+		
+		try {
+			querySnapshot = futureQuery.get();
+		} catch (InterruptedException e) {
+			throw e;
+		} catch (ExecutionException e) {
+			throw e;
+		}
 		
 		GestorDeHistoricos gdh = new GestorDeHistoricos(db);
 		List<QueryDocumentSnapshot> documentos = querySnapshot.getDocuments();

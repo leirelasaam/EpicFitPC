@@ -65,7 +65,7 @@ public class GestorDeBackups {
 	public void escribirUsuarios() throws InterruptedException, ExecutionException, FileNotFoundException, IOException {
 		GestorDeFicherosBinarios<Usuario> gdfb = new GestorDeFicherosBinarios<Usuario>(FICHERO_USUARIOS);
 		GestorDeUsuarios gdu = new GestorDeUsuarios(db);
-		ArrayList<Usuario> usuarios = gdu.obtenerTodosLosUsuarios();
+		ArrayList<Usuario> usuarios = gdu.obtenerUsuariosConHistoricos();
 
 		System.out.println("ESCRIBIENDO Usuarios...");
 		if (null != usuarios) {
