@@ -107,7 +107,7 @@ public class GestorDeUsuarios {
 		user.put("correo", usuario.getCorreo());
 		user.put("fechaNac", usuario.getFechaNac());
 		user.put("fechaAlt", usuario.getFechaAlt());
-		user.put("esEntrenador", usuario.getIsEsEntrenador());
+		user.put("esEntrenador", usuario.isEsEntrenador());
 		user.put("nivel", usuario.getNivel());
 
 		CollectionReference usuarios = db.collection("Usuarios");

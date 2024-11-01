@@ -19,15 +19,13 @@ public class Usuario implements Serializable {
 	private Timestamp fechaAlt = null;
 	private int nivel = 0;
 	private boolean esEntrenador = false;
-	
+
 	// SUBCOLECCIÓN DE HISTÓRICOS
 	private ArrayList<Historico> historicos = null;
 
 	public Usuario() {
 		// Constructor vacío
 	}
-	
-	
 
 	public Usuario(String id, String nombre, String apellido, String correo, String usuario, String pass,
 			Timestamp fechaNac, Timestamp fechaAlt, int nivel, boolean esEntrenador) {
@@ -43,26 +41,24 @@ public class Usuario implements Serializable {
 		this.nivel = nivel;
 		this.esEntrenador = esEntrenador;
 	}
-	
+
 	// Constructor que recibe los valores crudos desde el documento
-		public Usuario(String id, String nombre, String apellido, String correo,String user, String pass, double nivel,
-				Timestamp fechaNac, Timestamp fechaAlt, boolean esEntrenador) {
-			this.id = id;
-			this.nombre = nombre;
-			this.apellido = apellido;
-			this.correo = correo;
-			this.usuario = user;
-			this.pass = pass;
+	public Usuario(String id, String nombre, String apellido, String correo, String user, String pass, double nivel,
+			Timestamp fechaNac, Timestamp fechaAlt, boolean esEntrenador) {
+		this.id = id;
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.correo = correo;
+		this.usuario = user;
+		this.pass = pass;
 
-			this.nivel = (int) nivel;
+		this.nivel = (int) nivel;
 
-			this.fechaNac = fechaNac;
-			this.fechaAlt = fechaAlt;
+		this.fechaNac = fechaNac;
+		this.fechaAlt = fechaAlt;
 
-			this.esEntrenador = esEntrenador;
-		}
-
-
+		this.esEntrenador = esEntrenador;
+	}
 
 	public String getId() {
 		return id;
@@ -136,15 +132,13 @@ public class Usuario implements Serializable {
 		this.nivel = nivel;
 	}
 
-	public boolean getIsEsEntrenador() {
+	public boolean isEsEntrenador() {
 		return esEntrenador;
 	}
 
 	public void setEsEntrenador(boolean esEntrenador) {
 		this.esEntrenador = esEntrenador;
 	}
-	
-	
 
 	public ArrayList<Historico> getHistoricos() {
 		return historicos;
