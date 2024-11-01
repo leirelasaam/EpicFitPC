@@ -43,7 +43,7 @@ public class GestorDeWorkouts {
 			workout.setId(documento.getId());
 			
 			ArrayList<Ejercicio> ejercicios = obtenerEjercicios(workout);
-			workout.setEjerciciosArray(ejercicios);
+			workout.setEjercicios(ejercicios);
 			
 			if (null == workouts)
 				workouts = new ArrayList<Workout>();
@@ -90,7 +90,7 @@ public class GestorDeWorkouts {
 			workout.setId(documento.getId());
 			
 			ArrayList<Ejercicio> ejercicios = obtenerEjercicios(workout);
-			workout.setEjerciciosArray(ejercicios);
+			workout.setEjercicios(ejercicios);
 			
 			if (null == workouts)
 				workouts = new ArrayList<Workout>();

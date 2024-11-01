@@ -28,7 +28,7 @@ public class PanelEjercicio extends JPanel {
 		setLayout(new BorderLayout(0, 0));
 		JPanel panelSuperior = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
-		JButtonPrimary btnCerrar = new JButtonPrimary("Cerrar");
+		JButtonPrimary btnCerrar = new JButtonPrimary("CERRAR");
 		btnCerrar.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		cerrarPanel();
@@ -49,7 +49,7 @@ public class PanelEjercicio extends JPanel {
         JPanel panelGrid = new JPanel(new GridLayout(1, 3));
         JLabel labelNombreWorkout = new JLabel("Workout: " + (workout != null ? workout.getNombre() : "No seleccionado"));
         JLabel labelCronometroGeneral = new JLabel("00:00");
-        JLabel labelEjercicioActual = new JLabel("Ejercicio actual: " + (workout != null ? workout.getEjerciciosArray().get(0).getNombre() : "No seleccionado"));
+        JLabel labelEjercicioActual = new JLabel("Ejercicio actual: " + (workout != null ? workout.getEjercicios().get(0).getNombre() : "No seleccionado"));
 
         panelGrid.add(labelNombreWorkout);
         panelGrid.add(labelCronometroGeneral);
@@ -74,12 +74,12 @@ public class PanelEjercicio extends JPanel {
 	
 	private void pausarWorkout() {
 		if (cronGeneral != null) {
-            if (btnPausar.getText().equals("Pausar")) {
+            if (btnPausar.getText().equalsIgnoreCase("PAUSAR")) {
                 cronGeneral.pausar();
-                btnPausar.setText("Reanudar");
+                btnPausar.setText("REANUDAR");
             } else {
                 cronGeneral.reanudar();
-                btnPausar.setText("Pausar");
+                btnPausar.setText("PAUSAR");
             }
         }
 	}
