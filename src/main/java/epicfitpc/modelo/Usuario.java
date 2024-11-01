@@ -1,6 +1,7 @@
 package epicfitpc.modelo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Objects;
 
 import com.google.cloud.Timestamp;
@@ -18,6 +19,9 @@ public class Usuario implements Serializable {
 	private Timestamp fechaAlt = null;
 	private int nivel = 0;
 	private boolean esEntrenador = false;
+	
+	// SUBCOLECCIÓN DE HISTÓRICOS
+	private ArrayList<Historico> historicos = null;
 
 	public Usuario() {
 		// Constructor vacío
@@ -102,10 +106,21 @@ public class Usuario implements Serializable {
 	public void setEsEntrenador(boolean esEntrenador) {
 		this.esEntrenador = esEntrenador;
 	}
+	
+	
+
+	public ArrayList<Historico> getHistoricos() {
+		return historicos;
+	}
+
+	public void setHistoricos(ArrayList<Historico> historicos) {
+		this.historicos = historicos;
+	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(apellido, correo, esEntrenador, fechaAlt, fechaNac, id, nivel, nombre, pass, usuario);
+		return Objects.hash(apellido, correo, esEntrenador, fechaAlt, fechaNac, historicos, id, nivel, nombre, pass,
+				usuario);
 	}
 
 	@Override
@@ -119,16 +134,16 @@ public class Usuario implements Serializable {
 		Usuario other = (Usuario) obj;
 		return Objects.equals(apellido, other.apellido) && Objects.equals(correo, other.correo)
 				&& esEntrenador == other.esEntrenador && Objects.equals(fechaAlt, other.fechaAlt)
-				&& Objects.equals(fechaNac, other.fechaNac) && Objects.equals(id, other.id) && nivel == other.nivel
-				&& Objects.equals(nombre, other.nombre) && Objects.equals(pass, other.pass)
-				&& Objects.equals(usuario, other.usuario);
+				&& Objects.equals(fechaNac, other.fechaNac) && Objects.equals(historicos, other.historicos)
+				&& Objects.equals(id, other.id) && nivel == other.nivel && Objects.equals(nombre, other.nombre)
+				&& Objects.equals(pass, other.pass) && Objects.equals(usuario, other.usuario);
 	}
 
 	@Override
 	public String toString() {
 		return "Usuario [id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", correo=" + correo
 				+ ", usuario=" + usuario + ", pass=" + pass + ", fechaNac=" + fechaNac + ", fechaAlt=" + fechaAlt
-				+ ", nivel=" + nivel + ", esEntrenador=" + esEntrenador + "]";
+				+ ", nivel=" + nivel + ", esEntrenador=" + esEntrenador + ", historicos=" + historicos + "]";
 	}
 
 }

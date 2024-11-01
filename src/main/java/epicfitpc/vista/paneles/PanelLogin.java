@@ -1,5 +1,6 @@
 package epicfitpc.vista.paneles;
 
+
 import javax.swing.JPanel;
 
 import epicfitpc.bbdd.GestorDeUsuarios;
@@ -19,7 +20,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 
 import java.awt.Font;
-import java.awt.HeadlessException;
 
 public class PanelLogin extends JPanel {
 	private static final long serialVersionUID = 3044079574914466193L;
@@ -61,11 +61,8 @@ public class PanelLogin extends JPanel {
                         MainFrame.getInstance().repaint();
 					} else {
 						// si usuario y login es correcto
-						JOptionPane.showMessageDialog(MainFrame.getInstance(), "El login y el password es incorrecto");
+						//JOptionPane.showMessageDialog(MainFrame.getInstance(), "El login y el password es incorrecto");
 					}
-				} catch (HeadlessException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

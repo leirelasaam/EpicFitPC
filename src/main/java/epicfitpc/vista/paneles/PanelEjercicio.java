@@ -49,7 +49,7 @@ public class PanelEjercicio extends JPanel {
         JPanel panelGrid = new JPanel(new GridLayout(1, 3));
         JLabel labelNombreWorkout = new JLabel("Workout: " + (workout != null ? workout.getNombre() : "No seleccionado"));
         JLabel labelCronometroGeneral = new JLabel("00:00");
-        JLabel labelEjercicioActual = new JLabel("Ejercicio actual: " + (workout != null ? workout.getEjerciciosArray().get(0).getNombre() : "No seleccionado"));
+        JLabel labelEjercicioActual = new JLabel("Ejercicio actual: " + (workout != null ? workout.getEjercicios().get(0).getNombre() : "No seleccionado"));
 
         panelGrid.add(labelNombreWorkout);
         panelGrid.add(labelCronometroGeneral);
