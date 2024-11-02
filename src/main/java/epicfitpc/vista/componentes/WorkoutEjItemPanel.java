@@ -41,17 +41,17 @@ public class WorkoutEjItemPanel extends JPanel {
 		setOpaque(false);
 		setBackground(Estilos.CARD_BACKGROUND);
 
-		JLabelTitle lblNombre = new JLabelTitle(ejercicio.getNombre());
-		JLabel lblSeries = new JLabel("<html><b>Series</b>: " + ejercicio.getSeries() + "</html>");
-		JLabel lblRepeticiones = new JLabel("<html><b>Repeticiones</b>: " + ejercicio.getRepeticiones() + "</html>");
+		JLabelTitle lblNombre = new JLabelTitle(ejercicio.getOrden() + ". " + ejercicio.getNombre());
+		JLabel lblSeries = new JLabel("<html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Series</b>: " + ejercicio.getSeries() + "</html>");
+		JLabel lblRepeticiones = new JLabel("<html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Repeticiones</b>: " + ejercicio.getRepeticiones() + "</html>");
 
 		// Obtener el tiempo en segundos
 		int tiempoEnSegundos = ejercicio.getTiempoSerie();
 ;
 		String tiempoFormateado = DateUtils.formatearTiempo(tiempoEnSegundos);
-		JLabel lblTiempo = new JLabel("<html><b>Tiempo por serie</b>: " + tiempoFormateado + "</html>");
+		JLabel lblTiempo = new JLabel("<html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Tiempo por serie</b>: " + tiempoFormateado + "</html>");
 
-		JLabel lblTiempoDescanso = new JLabel("<html><b>Tiempo descanso</b>: " + ejercicio.getDescanso() + "s" + "</html>");
+		JLabel lblTiempoDescanso = new JLabel("<html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Tiempo descanso</b>: " + ejercicio.getDescanso() + " s" + "</html>");
 
 		add(lblNombre);
 		add(lblSeries);

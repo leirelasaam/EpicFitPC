@@ -10,7 +10,7 @@ import com.google.cloud.Timestamp;
 import epicfitpc.modelo.Historico;
 import epicfitpc.utils.DateUtils;
 import epicfitpc.utils.Estilos;
-import epicfitpc.utils.Rutas;
+import epicfitpc.utils.ImageUtils;
 import epicfitpc.utils.WindowUtils;
 
 import java.awt.Graphics;
@@ -59,19 +59,7 @@ public class HistoricoItemPanel extends JPanel {
         gbc.weighty = 1.0;
         
         String tipo = historico.getWorkoutObj().getTipo();
-        String ruta = null;
-        switch (tipo){
-        	case "brazo":
-        		ruta = Rutas.IMG_BRAZO;
-        		break;
-        	case "pecho":
-        		ruta = Rutas.IMG_PECHO;
-        		break;
-        	case "default":
-        		ruta = Rutas.IMG_EJERCICIO;
-        		break;
-        }
-        
+        String ruta = ImageUtils.obtenerRutaImagen(tipo);
         ImageIcon img = WindowUtils.cargarImagen(ruta, 80, 80);
         JLabel labelImg = new JLabel(img);
         add(labelImg, gbc);
