@@ -25,6 +25,7 @@ import epicfitpc.modelo.Usuario;
 import epicfitpc.modelo.Workout;
 import epicfitpc.utils.Estilos;
 import epicfitpc.utils.GestorDeConexiones;
+import epicfitpc.utils.Rutas;
 import epicfitpc.utils.Conexion;
 import epicfitpc.utils.UsuarioLogueado;
 import epicfitpc.vista.componentes.JButtonPrimary;
@@ -57,8 +58,7 @@ public class PanelWorkouts extends JPanel {
 	private static final String NIVELES_NONE = "-- No hay workouts disponibles --";
 	private static final String SELECCIONA_WORKOUT = "Selecciona un workout";
 	private static final int PANELES_NECESARIOS = 4;
-	private static final String CARPETA_BACKUP = "src\\main\\java\\epicfitpc\\ficheros\\backup\\";
-	private static final String FICHERO_WORKOUTS = CARPETA_BACKUP + "workouts.dat";
+	private static final String FICHERO_WORKOUTS = Rutas.BACKUP_WORKOUTS;
 
 	/**
 	 * Constructor que inicializa el panel y recibe el listado de workouts.

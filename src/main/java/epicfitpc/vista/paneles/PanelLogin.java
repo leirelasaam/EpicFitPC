@@ -26,15 +26,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.GridLayout;
 
 public class PanelLogin extends JPanel {
 	private static final long serialVersionUID = 3044079574914466193L;
 	private JTextField txtIntroduceTuCorreo;
 	private JTextField txtIntroduceTuPass;
-	private static final String CARPETA_BACKUP = "src\\main\\java\\epicfitpc\\ficheros\\backup\\";
-	private static final String FICHERO_USUARIOS = CARPETA_BACKUP + "usuarios.dat";
+	private static final String FICHERO_USUARIOS = Rutas.BACKUP_USUARIOS;
 
 	public PanelLogin(MainFrame frame) {
 		initialize(frame);
@@ -43,6 +41,7 @@ public class PanelLogin extends JPanel {
 	private void initialize(MainFrame frame) {
 		setLayout(new GridLayout(1, 2));
 		setBounds(100, 100, 1200, 750);
+		setBackground(Estilos.DARK_BACKGROUND);
 		
 		JPanel panelIzquierda = new JPanel();
 		panelIzquierda.setBackground(Estilos.PRIMARY);

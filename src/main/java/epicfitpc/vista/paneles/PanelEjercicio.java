@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 
 import epicfitpc.hilos.CronometroGeneral;
 import epicfitpc.modelo.Workout;
+import epicfitpc.utils.Estilos;
 import epicfitpc.vista.componentes.JButtonPrimary;
 
 public class PanelEjercicio extends JPanel {
@@ -26,6 +27,7 @@ public class PanelEjercicio extends JPanel {
 
 	private void initialize() {
 		setLayout(new BorderLayout(0, 0));
+		setBackground(Estilos.DARK_BACKGROUND);
 		JPanel panelSuperior = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
 		JButtonPrimary btnCerrar = new JButtonPrimary("CERRAR");
