@@ -25,7 +25,7 @@ public class PanelHistorico extends JPanel {
 	private JPanel panelHInterior;
 	private ArrayList<Historico> historicos = null;
 	private Usuario usuario = null;
-	private static final int PANELES_NECESARIOS = 3;
+	private static final int PANELES_NECESARIOS = 4;
 
 	/**
 	 * Constructor que inicializa el panel y recibe el listado de workouts.

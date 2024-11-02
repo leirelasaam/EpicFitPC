@@ -1,5 +1,6 @@
 package epicfitpc.vista.componentes;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -21,7 +22,7 @@ public class WorkoutEjItemPanel extends JPanel {
 		this.ejercicio = ejercicio;
 		initialize();
 	}
-
+	
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -35,24 +36,26 @@ public class WorkoutEjItemPanel extends JPanel {
 	}
 
 	private void initialize() {
-		setLayout(new GridLayout(4, 1, 0, 0));
+		setLayout(new GridLayout(5, 1, 0, 0));
 		setBorder(new EmptyBorder(20, 20, 20, 20));
 		setOpaque(false);
 		setBackground(Estilos.CARD_BACKGROUND);
 
 		JLabelTitle lblNombre = new JLabelTitle(ejercicio.getNombre());
-		JLabelText lblSeries = new JLabelText("Series: " + ejercicio.getSeries());
+		JLabel lblSeries = new JLabel("<html><b>Series</b>: " + ejercicio.getSeries() + "</html>");
+		JLabel lblRepeticiones = new JLabel("<html><b>Repeticiones</b>: " + ejercicio.getRepeticiones() + "</html>");
 
 		// Obtener el tiempo en segundos
 		int tiempoEnSegundos = ejercicio.getTiempoSerie();
 ;
 		String tiempoFormateado = DateUtils.formatearTiempo(tiempoEnSegundos);
-		JLabelText lblTiempo = new JLabelText("Tiempo por serie: " + tiempoFormateado);
+		JLabel lblTiempo = new JLabel("<html><b>Tiempo por serie</b>: " + tiempoFormateado + "</html>");
 
-		JLabelText lblTiempoDescanso = new JLabelText("Tiempo descanso: " + ejercicio.getDescanso() + "s");
+		JLabel lblTiempoDescanso = new JLabel("<html><b>Tiempo descanso</b>: " + ejercicio.getDescanso() + "s" + "</html>");
 
 		add(lblNombre);
 		add(lblSeries);
+		add(lblRepeticiones);
 		add(lblTiempo);
 		add(lblTiempoDescanso);
 	}

@@ -28,7 +28,6 @@ import epicfitpc.utils.GestorDeConexiones;
 import epicfitpc.utils.Conexion;
 import epicfitpc.utils.UsuarioLogueado;
 import epicfitpc.vista.componentes.JButtonPrimary;
-import epicfitpc.vista.componentes.JLabelText;
 import epicfitpc.vista.componentes.WorkoutEjItemPanel;
 import epicfitpc.vista.componentes.WorkoutItemPanel;
 
@@ -46,7 +45,7 @@ public class PanelWorkouts extends JPanel {
 	private static final long serialVersionUID = 2651779404513169891L;
 	private JPanel panelWInterior;
 	private JPanel panelEj;
-	private JLabelText labelWorkout;
+	private JLabel labelWorkout;
 	private JComboBox<String> comboBox;
 	private ArrayList<Workout> workouts = null;
 	private Usuario usuario = null;
@@ -86,7 +85,6 @@ public class PanelWorkouts extends JPanel {
 		comboBox = new JComboBox<String>();
 		comboBox.setBackground(Estilos.PRIMARY);
 		comboBox.setForeground(Estilos.WHITE);
-		comboBox.setFont(Estilos.FONT_SMALL);
 		comboBox.setPreferredSize(new Dimension(comboBox.getPreferredSize().width, 30));
 		comboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -106,7 +104,8 @@ public class PanelWorkouts extends JPanel {
 		panelEjerciciosW.setBackground(Estilos.DARK_BACKGROUND);
 		add(panelEjerciciosW);
 
-		labelWorkout = new JLabelText(SELECCIONA_WORKOUT);
+		labelWorkout = new JLabel(SELECCIONA_WORKOUT);
+		labelWorkout.setFont(Estilos.FONT_SMALL_BOLD);
 		labelWorkout.setBackground(Estilos.WHITE);
 		labelWorkout.setOpaque(true);
 		labelWorkout.setPreferredSize(new Dimension(labelWorkout.getPreferredSize().width, 30));

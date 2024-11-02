@@ -26,6 +26,7 @@ import javax.swing.SpinnerModel;
 import com.google.cloud.Timestamp;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 //import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
@@ -208,9 +209,9 @@ public class PanelRegistro extends JPanel {
 					e1.printStackTrace();
 				}
 				if (guardadoCorrectamente == false) {
-					//JOptionPane.showMessageDialog(frame, "No se ha podido crear correctamente, vuelva a intentarlo más tarde.");
+					JOptionPane.showMessageDialog(frame, "No se ha podido crear correctamente, vuelva a intentarlo más tarde.");
 				} else {
-					//JOptionPane.showMessageDialog(frame, "Usuario creado correctamente");
+					JOptionPane.showMessageDialog(frame, "Usuario creado correctamente");
 					frame.getContentPane().removeAll();
 					frame.getContentPane().add(new PanelLogin(frame));
 					frame.revalidate();
@@ -241,19 +242,19 @@ public class PanelRegistro extends JPanel {
 					//JOptionPane.showMessageDialog(frame,"Fecha de nacimiento incorrecta. El usuario tiene que ser mayor de 14 años.");
 					validar = false;
 				} else if (!gestorDeUsuarios.validarNombre(usuario.getNombre())) {
-					//JOptionPane.showMessageDialog(frame, "Nombre incorrecto, esta vacio o es mayor de 50 carácteres.");
+					JOptionPane.showMessageDialog(frame, "Nombre incorrecto, esta vacio o es mayor de 50 carácteres.");
 					validar = false;
 				} else if (!gestorDeUsuarios.validarPassword(usuario.getPass())) {
-					//JOptionPane.showMessageDialog(frame, "Contraseña incorrecta, debe tener entre 8 y 20 caracteres, "+ "incluir al menos una letra minúscula, una mayúscula, un número y un carácter especial.");
+					JOptionPane.showMessageDialog(frame, "Contraseña incorrecta, debe tener entre 8 y 20 caracteres, "+ "incluir al menos una letra minúscula, una mayúscula, un número y un carácter especial.");
 					validar = false;
 				} else if (!pass1.equals(pass2)) {
-					//JOptionPane.showMessageDialog(frame, "Contraseñas distintas, vuelva a intentarlo.");
+					JOptionPane.showMessageDialog(frame, "Contraseñas distintas, vuelva a intentarlo.");
 					validar = false;
 				} else if (!gestorDeUsuarios.validarUsername(usuario.getUsuario())) {
-					//JOptionPane.showMessageDialog(frame, "Usuario incorrecta, vuelva a intentarlo incluyendo al menos una letra minúscula "+ "y una mayúscula.");
+					JOptionPane.showMessageDialog(frame, "Usuario incorrecta, vuelva a intentarlo incluyendo al menos una letra minúscula "+ "y una mayúscula.");
 					validar = false;
 				}else if (gestorDeUsuarios.comprobarSiExisteNombreUsuario(usuario.getUsuario())) {
-					//JOptionPane.showMessageDialog(frame, "El nombre de usuario ya existe.");
+					JOptionPane.showMessageDialog(frame, "El nombre de usuario ya existe.");
 				}
 
 				return validar;
