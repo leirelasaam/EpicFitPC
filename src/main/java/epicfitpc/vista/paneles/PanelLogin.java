@@ -7,10 +7,14 @@ import epicfitpc.controlador.Controlador;
 import epicfitpc.ficheros.GestorDeFicherosBinarios;
 import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.Conexion;
+import epicfitpc.utils.Estilos;
 import epicfitpc.utils.GestorDeConexiones;
+import epicfitpc.utils.Rutas;
 import epicfitpc.utils.UsuarioLogueado;
+import epicfitpc.utils.WindowUtils;
 import epicfitpc.vista.MainFrame;
 import epicfitpc.vista.componentes.JButtonPrimary;
+import epicfitpc.vista.componentes.JLabelTitle;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -21,7 +25,9 @@ import javax.swing.JTextField;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 
+import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 
 public class PanelLogin extends JPanel {
 	private static final long serialVersionUID = 3044079574914466193L;
@@ -35,13 +41,21 @@ public class PanelLogin extends JPanel {
 	}
 
 	private void initialize(MainFrame frame) {
-		setLayout(null);
+		setLayout(new GridLayout(1, 2));
 		setBounds(100, 100, 1200, 750);
-
-		JLabel lblNewLabel = new JLabel("¡Bienvenid@ a EpicFit!");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblNewLabel.setBounds(825, 110, 153, 31);
-		add(lblNewLabel);
+		
+		JPanel panelIzquierda = new JPanel();
+		panelIzquierda.setBackground(Estilos.PRIMARY);
+		panelIzquierda.setLayout(new BorderLayout());
+		add(panelIzquierda);
+		
+		JPanel panelDerecha = new JPanel();
+		panelDerecha.setLayout(null);
+		add(panelDerecha);
+		
+		JLabelTitle lblNewLabel = new JLabelTitle("¡Bienvenid@ a EpicFit!");
+		lblNewLabel.setBounds(180, 111, 300, 31);
+		panelDerecha.add(lblNewLabel);
 
 		JButtonPrimary btnNewButton = new JButtonPrimary("Iniciar sesión");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -85,27 +99,27 @@ public class PanelLogin extends JPanel {
 				}
 			}
 		});
-		btnNewButton.setBounds(772, 418, 241, 31);
-		add(btnNewButton);
+		btnNewButton.setBounds(180, 418, 241, 31);
+		panelDerecha.add(btnNewButton);
 
 		txtIntroduceTuCorreo = new JTextField();
 		txtIntroduceTuCorreo.setText("");
-		txtIntroduceTuCorreo.setBounds(772, 275, 241, 26);
-		add(txtIntroduceTuCorreo);
+		txtIntroduceTuCorreo.setBounds(180, 275, 241, 26);
+		panelDerecha.add(txtIntroduceTuCorreo);
 		txtIntroduceTuCorreo.setColumns(10);
 
 		JLabel lblNewLabel_1 = new JLabel("Usuario");
-		lblNewLabel_1.setBounds(772, 250, 46, 14);
-		add(lblNewLabel_1);
+		lblNewLabel_1.setBounds(180, 250, 100, 14);
+		panelDerecha.add(lblNewLabel_1);
 
 		txtIntroduceTuPass = new JTextField();
-		txtIntroduceTuPass.setBounds(772, 347, 241, 31);
-		add(txtIntroduceTuPass);
+		txtIntroduceTuPass.setBounds(180, 347, 241, 31);
+		panelDerecha.add(txtIntroduceTuPass);
 		txtIntroduceTuPass.setColumns(10);
 
 		JLabel lblNewLabel_2 = new JLabel("Contraseña");
-		lblNewLabel_2.setBounds(772, 322, 80, 14);
-		add(lblNewLabel_2);
+		lblNewLabel_2.setBounds(180, 322, 100, 14);
+		panelDerecha.add(lblNewLabel_2);
 
 		JButtonPrimary btnNewButton_1 = new JButtonPrimary("Registrarme");
 		btnNewButton_1.addActionListener(new ActionListener() {
@@ -116,22 +130,21 @@ public class PanelLogin extends JPanel {
 				MainFrame.getInstance().repaint();
 			}
 		});
-		btnNewButton_1.setBounds(772, 575, 241, 31);
-		add(btnNewButton_1);
-
-		// logo de la compania
-		JLabel lblNewLabel_3 = new JLabel("New label");
-		lblNewLabel_3.setIcon(new ImageIcon("C:\\Users\\in2dm3-v\\Downloads\\Logo.PNG"));
-		lblNewLabel_3.setBounds(0, -1, 602, 751);
-		add(lblNewLabel_3);
+		btnNewButton_1.setBounds(180, 575, 241, 31);
+		panelDerecha.add(btnNewButton_1);
 
 		// Persistencia de los datos si esta opción está seleccionada
 		JCheckBox chckbxNewCheckBox = new JCheckBox("Mantener sesión iniciada");
-		chckbxNewCheckBox.setBounds(772, 486, 183, 23);
-		add(chckbxNewCheckBox);
+		chckbxNewCheckBox.setBounds(180, 486, 183, 23);
+		panelDerecha.add(chckbxNewCheckBox);
 
 		JLabel lblNewLabel_2_1 = new JLabel("¿Todavia no tienes cuenta?");
-		lblNewLabel_2_1.setBounds(825, 550, 134, 14);
-		add(lblNewLabel_2_1);
+		lblNewLabel_2_1.setBounds(180, 550, 300, 20);
+		panelDerecha.add(lblNewLabel_2_1);
+		
+		// logo de la compania
+		ImageIcon img = WindowUtils.cargarImagen(Rutas.LOGO_EF, 500, 500);
+		JLabel lblNewLabel_3 = new JLabel(img);
+		panelIzquierda.add(lblNewLabel_3);
 	}
 }
