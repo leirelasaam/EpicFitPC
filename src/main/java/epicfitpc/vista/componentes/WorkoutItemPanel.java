@@ -4,7 +4,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import epicfitpc.modelo.Workout;
 import epicfitpc.utils.Estilos;
-import epicfitpc.utils.Rutas;
+import epicfitpc.utils.ImageUtils;
 import epicfitpc.utils.WindowUtils;
 import epicfitpc.utils.DateUtils;
 import java.awt.*;
@@ -45,18 +45,7 @@ public class WorkoutItemPanel extends JPanel {
         gbc.weighty = 1.0;
         
         String tipo = workout.getTipo();
-        String ruta = null;
-        switch (tipo){
-        	case "brazo":
-        		ruta = Rutas.IMG_BRAZO;
-        		break;
-        	case "pecho":
-        		ruta = Rutas.IMG_PECHO;
-        		break;
-        	case "default":
-        		ruta = Rutas.IMG_EJERCICIO;
-        		break;
-        }
+        String ruta = ImageUtils.obtenerRutaImagen(tipo);
         
         ImageIcon img = WindowUtils.cargarImagen(ruta, 80, 80);
         JLabel labelImg = new JLabel(img);

@@ -14,13 +14,12 @@ import com.google.cloud.firestore.QuerySnapshot;
 import epicfitpc.modelo.Historico;
 import epicfitpc.modelo.Usuario;
 import epicfitpc.modelo.Workout;
+import epicfitpc.utils.DBUtils;
 
 import com.google.cloud.firestore.Query;
 
 public class GestorDeHistoricos {
 	private Firestore db = null;
-	private static final String COLLECTION_HISTORICOS = "Historicos";
-	private static final String COLLECTION_USUARIOS = "Usuarios";
 
 	public GestorDeHistoricos(Firestore db) {
 		this.db = db;
@@ -31,7 +30,7 @@ public class GestorDeHistoricos {
 		ArrayList<Historico> historicos = null;
 		
 		String idUsuario = usuario.getId();
-		CollectionReference historicosDb = db.collection(COLLECTION_USUARIOS).document(idUsuario).collection(COLLECTION_HISTORICOS);
+		CollectionReference historicosDb = db.collection(DBUtils.USUARIOS).document(idUsuario).collection(DBUtils.HISTORICOS);
 		ApiFuture<QuerySnapshot> futureQuery = historicosDb.orderBy("fecha", Query.Direction.DESCENDING).get();
 		QuerySnapshot querySnapshot = null;
 

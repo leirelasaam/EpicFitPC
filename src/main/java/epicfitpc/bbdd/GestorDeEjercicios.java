@@ -7,17 +7,17 @@ import java.util.concurrent.ExecutionException;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 
 import epicfitpc.modelo.Ejercicio;
 import epicfitpc.modelo.Workout;
+import epicfitpc.utils.DBUtils;
 
 public class GestorDeEjercicios {
 
 	private Firestore db = null;
-	private static final String COLLECTION_EJERCICIOS = "Ejercicios";
-	private static final String COLLECTION_WORKOUTS = "Workouts";
 
 	public GestorDeEjercicios(Firestore db) {
 		this.db = db;
@@ -28,8 +28,8 @@ public class GestorDeEjercicios {
 		ArrayList<Ejercicio> ejercicios = null;
 		String idWorkout = workout.getId();
 
-		CollectionReference ejerciciosDb = db.collection(COLLECTION_WORKOUTS).document(idWorkout).collection(COLLECTION_EJERCICIOS);
-		ApiFuture<QuerySnapshot> futureQuery = ejerciciosDb.get();
+		CollectionReference ejerciciosDb = db.collection(DBUtils.WORKOUTS).document(idWorkout).collection(DBUtils.EJERCICIOS);
+		ApiFuture<QuerySnapshot> futureQuery = ejerciciosDb.orderBy("orden", Query.Direction.ASCENDING).get();
 		QuerySnapshot querySnapshot = null;
 
 		try {

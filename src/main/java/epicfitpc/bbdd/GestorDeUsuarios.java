@@ -21,6 +21,7 @@ import com.google.cloud.firestore.QuerySnapshot;
 
 import epicfitpc.modelo.Historico;
 import epicfitpc.modelo.Usuario;
+import epicfitpc.utils.DBUtils;
 
 public class GestorDeUsuarios {
 	
@@ -32,7 +33,7 @@ public class GestorDeUsuarios {
 
 	public ArrayList<Usuario> obtenerTodosLosUsuarios() throws InterruptedException, ExecutionException {
 		ArrayList<Usuario> usuarios = null;
-		CollectionReference usuariosDb = db.collection("Usuarios");
+		CollectionReference usuariosDb = db.collection(DBUtils.USUARIOS);
 		ApiFuture<QuerySnapshot> futureQuery = usuariosDb.get();
 		QuerySnapshot querySnapshot = null;
 		
@@ -68,7 +69,7 @@ public class GestorDeUsuarios {
 	// Para el backup
 	public ArrayList<Usuario> obtenerUsuariosConHistoricos() throws InterruptedException, ExecutionException {
 		ArrayList<Usuario> usuarios = null;
-		CollectionReference usuariosDb = db.collection("Usuarios");
+		CollectionReference usuariosDb = db.collection(DBUtils.USUARIOS);
 		ApiFuture<QuerySnapshot> futureQuery = usuariosDb.get();
 		QuerySnapshot querySnapshot = null;
 		
@@ -110,7 +111,7 @@ public class GestorDeUsuarios {
 		user.put("esEntrenador", usuario.isEsEntrenador());
 		user.put("nivel", usuario.getNivel());
 
-		CollectionReference usuarios = db.collection("Usuarios");
+		CollectionReference usuarios = db.collection(DBUtils.USUARIOS);
 		DocumentReference devolver = usuarios.add(user).get();
 		if (devolver.getId() != null)
 			return true;
