@@ -82,19 +82,17 @@ public class PanelLogin extends JPanel {
 					usuario = controlador.comprobarUsuario(usuarios, usuarioIntroducido, passIntroducido);
 					if (usuario != null) {
 						// si usuario y login es correcto
-						JOptionPane.showMessageDialog(frame, "Bienvenido a EpicFit");
+						WindowUtils.confirmationPane("Hola, " + usuario.getNombre() + ", ¡bienvenid@ a EpicFit!", "Acceso concedido");
 						UsuarioLogueado.getInstance().setUsuario(usuario);
 						MainFrame.getInstance().getContentPane().removeAll();
 						MainFrame.getInstance().getContentPane().add(new PanelMenu());
 						MainFrame.getInstance().revalidate();
 						MainFrame.getInstance().repaint();
 					} else {
-						// si usuario y login es correcto
-						JOptionPane.showMessageDialog(MainFrame.getInstance(), "El login y el password es incorrecto");
+						WindowUtils.errorPane("No se ha podido completar el inicio de sesión." , "Acceso denegado");
 					}
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					WindowUtils.errorPane("No se ha podido completar el inicio de sesión." , "Acceso denegado");
 				}
 			}
 		});

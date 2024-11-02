@@ -47,18 +47,18 @@ public class WindowUtils {
 	 * @param title   title of the JOptionPane
 	 */
 	public static void errorPane(String message, String title) {
-		UIManager.put("OptionPane.background", Color.BLACK);
-		UIManager.put("OptionPane.messagebackground", Color.BLACK);
-		UIManager.put("Panel.background", Color.BLACK);
+		UIManager.put("OptionPane.background", Estilos.DARK_BACKGROUND);
+		UIManager.put("OptionPane.messagebackground", Estilos.DARK_BACKGROUND);
+		UIManager.put("Panel.background", Estilos.DARK_BACKGROUND);
 		UIManager.put("Button.background", Color.WHITE);
 		UIManager.put("Button.foreground", Color.BLACK);
 
-		ImageIcon icon = new ImageIcon("img/icon/cross.png");
+		ImageIcon icon = new ImageIcon(Rutas.ICONO_CROSS);
 		Image img = icon.getImage();
-		Image resizedImg = img.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+		Image resizedImg = img.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 		icon.setImage(resizedImg);
 
-		JOptionPane.showMessageDialog(null, "<html><font color='white'>" + message + "</font></html>", title,
+		JOptionPane.showMessageDialog(null, "<html>" + message + "</html>", title,
 				JOptionPane.INFORMATION_MESSAGE, icon);
 	}
 
@@ -69,18 +69,18 @@ public class WindowUtils {
 	 * @param title   title of the JOptionPane
 	 */
 	public static void confirmationPane(String message, String title) {
-		UIManager.put("OptionPane.background", Color.BLACK);
-		UIManager.put("OptionPane.messagebackground", Color.BLACK);
-		UIManager.put("Panel.background", Color.BLACK);
+		UIManager.put("OptionPane.background", Estilos.DARK_BACKGROUND);
+		UIManager.put("OptionPane.messagebackground", Estilos.DARK_BACKGROUND);
+		UIManager.put("Panel.background", Estilos.DARK_BACKGROUND);
 		UIManager.put("Button.background", Color.WHITE);
 		UIManager.put("Button.foreground", Color.BLACK);
 
-		ImageIcon icon = new ImageIcon("img/icon/tick.png");
+		ImageIcon icon = new ImageIcon(Rutas.ICONO_TICK);
 		Image img = icon.getImage();
-		Image resizedImg = img.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+		Image resizedImg = img.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 		icon.setImage(resizedImg);
 
-		JOptionPane.showMessageDialog(null, "<html><font color='white'>" + message + "</font></html>", title,
+		JOptionPane.showMessageDialog(null, "<html>" + message + "</html>", title,
 				JOptionPane.INFORMATION_MESSAGE, icon);
 	}
 

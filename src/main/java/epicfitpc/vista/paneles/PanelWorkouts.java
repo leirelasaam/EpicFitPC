@@ -28,6 +28,7 @@ import epicfitpc.utils.GestorDeConexiones;
 import epicfitpc.utils.Rutas;
 import epicfitpc.utils.Conexion;
 import epicfitpc.utils.UsuarioLogueado;
+import epicfitpc.utils.WindowUtils;
 import epicfitpc.vista.componentes.JButtonPrimary;
 import epicfitpc.vista.componentes.WorkoutEjItemPanel;
 import epicfitpc.vista.componentes.WorkoutItemPanel;
@@ -277,22 +278,18 @@ public class PanelWorkouts extends JPanel {
 				GestorDeWorkouts gdw = new GestorDeWorkouts(db);
 				workouts = gdw.obtenerWorkoutsPorNivelUsuario(usuario.getNivel());
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				WindowUtils.errorPane("Error en la carga desde la base de datos.", "Error en la base de datos");
 			}
 		} else {
 			GestorDeFicherosBinarios<Workout> gdfb = new GestorDeFicherosBinarios<Workout>(FICHERO_WORKOUTS);
 			try {
 				workouts = gdfb.leer();
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				WindowUtils.errorPane("No se ha encontrado el fichero de carga para los workouts.", "Error en la carga");
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				WindowUtils.errorPane("No se ha encontrado la clase Workout.", "Error en la clase");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				WindowUtils.errorPane("No se ha podido realizar la lectura del fichero de carga.", "Error en la lectura");
 			}
 		}
 
