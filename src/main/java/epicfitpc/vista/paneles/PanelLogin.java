@@ -10,7 +10,6 @@ import epicfitpc.utils.Conexion;
 import epicfitpc.utils.GestorDeConexiones;
 import epicfitpc.utils.UsuarioLogueado;
 import epicfitpc.vista.MainFrame;
-import epicfitpc.vista.componentes.JButtonOutlined;
 import epicfitpc.vista.componentes.JButtonPrimary;
 
 import javax.swing.JLabel;
@@ -70,7 +69,7 @@ public class PanelLogin extends JPanel {
 					usuario = controlador.comprobarUsuario(usuarios, usuarioIntroducido, passIntroducido);
 					if (usuario != null) {
 						// si usuario y login es correcto
-						// JOptionPane.showMessageDialog(frame, "Bienvenido a EpicFit");
+						JOptionPane.showMessageDialog(frame, "Bienvenido a EpicFit");
 						UsuarioLogueado.getInstance().setUsuario(usuario);
 						MainFrame.getInstance().getContentPane().removeAll();
 						MainFrame.getInstance().getContentPane().add(new PanelMenu());
@@ -78,8 +77,7 @@ public class PanelLogin extends JPanel {
 						MainFrame.getInstance().repaint();
 					} else {
 						// si usuario y login es correcto
-						// JOptionPane.showMessageDialog(MainFrame.getInstance(), "El login y el
-						// password es incorrecto");
+						JOptionPane.showMessageDialog(MainFrame.getInstance(), "El login y el password es incorrecto");
 					}
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
@@ -109,7 +107,7 @@ public class PanelLogin extends JPanel {
 		lblNewLabel_2.setBounds(772, 322, 80, 14);
 		add(lblNewLabel_2);
 
-		JButtonOutlined btnNewButton_1 = new JButtonOutlined("Registrarme");
+		JButtonPrimary btnNewButton_1 = new JButtonPrimary("Registrarme");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				MainFrame.getInstance().getContentPane().removeAll();

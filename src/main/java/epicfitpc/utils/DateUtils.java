@@ -21,9 +21,12 @@ public class DateUtils {
 
         StringBuilder tiempoFormateado = new StringBuilder();
         if (horas > 0) {
-            tiempoFormateado.append(horas).append("h ");
+            tiempoFormateado.append(horas).append(" h ");
         }
-        tiempoFormateado.append(minutos).append("min ").append(segundos).append("s");
+        if (minutos > 0) {
+            tiempoFormateado.append(minutos).append(" min ");
+        }
+        tiempoFormateado.append(segundos).append(" s");
 
         return tiempoFormateado.toString();
     }
