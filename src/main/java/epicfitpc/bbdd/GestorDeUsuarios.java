@@ -128,7 +128,7 @@ public class GestorDeUsuarios {
 	
 
 	public boolean validarNombre(String nombre) {
-		return nombre != null && !nombre.isEmpty() && nombre.length() <= 50;
+		return nombre != null && !nombre.isEmpty() && nombre.length() <= 25;
 	}
 
 	public boolean validarApellido(String apellido) {

@@ -243,7 +243,7 @@ public class PanelRegistro extends JPanel {
 							"Fecha de nacimiento incorrecta. El usuario tiene que ser mayor de 14 años.");
 					validar = false;
 				} else if (!gestorDeUsuarios.validarNombre(usuario.getNombre())) {
-					JOptionPane.showMessageDialog(frame, "Nombre incorrecto, esta vacio o es mayor de 50 carácteres.");
+					JOptionPane.showMessageDialog(frame, "Nombre incorrecto, esta vacio o es mayor de 25 carácteres.");
 					validar = false;
 				} else if (!gestorDeUsuarios.validarPassword(usuario.getPass())) {
 					JOptionPane.showMessageDialog(frame, "Contraseña incorrecta, debe tener entre 8 y 20 caracteres, "
