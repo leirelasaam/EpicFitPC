@@ -10,12 +10,12 @@ import epicfitpc.bbdd.GestorDeUsuarios;
 import epicfitpc.bbdd.GestorDeWorkouts;
 import epicfitpc.modelo.Usuario;
 import epicfitpc.modelo.Workout;
+import epicfitpc.utils.Rutas;
 
 public class GestorDeBackups {
 	private Firestore db = null;
-	private static final String CARPETA_BACKUP = "src\\main\\java\\epicfitpc\\ficheros\\backup\\";
-	private static final String FICHERO_USUARIOS = CARPETA_BACKUP + "usuarios.dat";
-	private static final String FICHERO_WORKOUTS = CARPETA_BACKUP + "workouts.dat";
+	private static final String FICHERO_USUARIOS = Rutas.BACKUP_USUARIOS;
+	private static final String FICHERO_WORKOUTS = Rutas.BACKUP_WORKOUTS;
 
 	public GestorDeBackups(Firestore db) {
 		this.db = db;

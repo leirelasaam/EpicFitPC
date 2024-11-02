@@ -25,8 +25,10 @@ import epicfitpc.modelo.Usuario;
 import epicfitpc.modelo.Workout;
 import epicfitpc.utils.Estilos;
 import epicfitpc.utils.GestorDeConexiones;
+import epicfitpc.utils.Rutas;
 import epicfitpc.utils.Conexion;
 import epicfitpc.utils.UsuarioLogueado;
+import epicfitpc.utils.WindowUtils;
 import epicfitpc.vista.componentes.JButtonPrimary;
 import epicfitpc.vista.componentes.WorkoutEjItemPanel;
 import epicfitpc.vista.componentes.WorkoutItemPanel;
@@ -57,8 +59,7 @@ public class PanelWorkouts extends JPanel {
 	private static final String NIVELES_NONE = "-- No hay workouts disponibles --";
 	private static final String SELECCIONA_WORKOUT = "Selecciona un workout";
 	private static final int PANELES_NECESARIOS = 4;
-	private static final String CARPETA_BACKUP = "src\\main\\java\\epicfitpc\\ficheros\\backup\\";
-	private static final String FICHERO_WORKOUTS = CARPETA_BACKUP + "workouts.dat";
+	private static final String FICHERO_WORKOUTS = Rutas.BACKUP_WORKOUTS;
 
 	/**
 	 * Constructor que inicializa el panel y recibe el listado de workouts.
@@ -277,22 +278,18 @@ public class PanelWorkouts extends JPanel {
 				GestorDeWorkouts gdw = new GestorDeWorkouts(db);
 				workouts = gdw.obtenerWorkoutsPorNivelUsuario(usuario.getNivel());
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				WindowUtils.errorPane("Error en la carga desde la base de datos.", "Error en la base de datos");
 			}
 		} else {
 			GestorDeFicherosBinarios<Workout> gdfb = new GestorDeFicherosBinarios<Workout>(FICHERO_WORKOUTS);
 			try {
 				workouts = gdfb.leer();
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				WindowUtils.errorPane("No se ha encontrado el fichero de carga para los workouts.", "Error en la carga");
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				WindowUtils.errorPane("No se ha encontrado la clase Workout.", "Error en la clase");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				WindowUtils.errorPane("No se ha podido realizar la lectura del fichero de carga.", "Error en la lectura");
 			}
 		}
 

@@ -17,6 +17,7 @@ import epicfitpc.utils.Conexion;
 import epicfitpc.utils.Estilos;
 import epicfitpc.utils.GestorDeConexiones;
 import epicfitpc.utils.UsuarioLogueado;
+import epicfitpc.utils.WindowUtils;
 import epicfitpc.vista.componentes.HistoricoItemPanel;
 
 public class PanelHistorico extends JPanel {
@@ -108,8 +109,7 @@ public class PanelHistorico extends JPanel {
 				GestorDeHistoricos gdh = new GestorDeHistoricos(db);
 				historicos = gdh.obtenerTodosLosHistoricosPorUsuario(usuario);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				WindowUtils.errorPane("Error en la carga desde la base de datos.", "Error en la base de datos");
 			}
 		} else {
 			historicos = usuario.getHistoricos();

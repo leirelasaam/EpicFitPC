@@ -26,15 +26,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.GridLayout;
 
 public class PanelLogin extends JPanel {
 	private static final long serialVersionUID = 3044079574914466193L;
 	private JTextField txtIntroduceTuCorreo;
 	private JTextField txtIntroduceTuPass;
-	private static final String CARPETA_BACKUP = "src\\main\\java\\epicfitpc\\ficheros\\backup\\";
-	private static final String FICHERO_USUARIOS = CARPETA_BACKUP + "usuarios.dat";
+	private static final String FICHERO_USUARIOS = Rutas.BACKUP_USUARIOS;
 
 	public PanelLogin(MainFrame frame) {
 		initialize(frame);
@@ -43,6 +41,7 @@ public class PanelLogin extends JPanel {
 	private void initialize(MainFrame frame) {
 		setLayout(new GridLayout(1, 2));
 		setBounds(100, 100, 1200, 750);
+		setBackground(Estilos.DARK_BACKGROUND);
 		
 		JPanel panelIzquierda = new JPanel();
 		panelIzquierda.setBackground(Estilos.PRIMARY);
@@ -83,19 +82,17 @@ public class PanelLogin extends JPanel {
 					usuario = controlador.comprobarUsuario(usuarios, usuarioIntroducido, passIntroducido);
 					if (usuario != null) {
 						// si usuario y login es correcto
-						JOptionPane.showMessageDialog(frame, "Bienvenido a EpicFit");
+						WindowUtils.confirmationPane("Hola, " + usuario.getNombre() + ", ¡bienvenid@ a EpicFit!", "Acceso concedido");
 						UsuarioLogueado.getInstance().setUsuario(usuario);
 						MainFrame.getInstance().getContentPane().removeAll();
 						MainFrame.getInstance().getContentPane().add(new PanelMenu());
 						MainFrame.getInstance().revalidate();
 						MainFrame.getInstance().repaint();
 					} else {
-						// si usuario y login es correcto
-						JOptionPane.showMessageDialog(MainFrame.getInstance(), "El login y el password es incorrecto");
+						WindowUtils.errorPane("No se ha podido completar el inicio de sesión." , "Acceso denegado");
 					}
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					WindowUtils.errorPane("No se ha podido completar el inicio de sesión." , "Acceso denegado");
 				}
 			}
 		});
