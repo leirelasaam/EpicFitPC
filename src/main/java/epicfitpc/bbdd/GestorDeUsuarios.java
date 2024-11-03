@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -64,6 +65,36 @@ public class GestorDeUsuarios {
 		return usuarios;
 	}
 
+	public Usuario obtenerUsuarioPorId(String id) throws InterruptedException, ExecutionException {
+
+		DocumentReference docRef = db.collection("Usuarios").document(id);
+
+		// Se realiza la consulta asíncrona
+
+		ApiFuture<com.google.cloud.firestore.DocumentSnapshot> future = docRef.get();
+		com.google.cloud.firestore.DocumentSnapshot documento = future.get();
+
+		// Verifica si el documento existe
+		if (documento.exists()) {
+
+			String nombre = documento.getString("nombre");
+			String apellido = documento.getString("apellido");
+			String correo = documento.getString("correo");
+			double nivel = documento.getDouble("nivel");
+			Timestamp fechaNac = documento.getTimestamp("fechaNac");
+			Timestamp fechaAlt = documento.getTimestamp("fechaAlt");
+			boolean esEntrenador = documento.getBoolean("esEntrenador");
+			String user = documento.getString("usuario");
+			String pass = documento.getString("pass");
+
+			return new Usuario(id, nombre, apellido, correo, user, pass, nivel, fechaNac, fechaAlt, esEntrenador);
+		} else {
+			// Devuelve null si no se encuentra el usuario
+			System.out.println("No se encontró un usuario con el ID especificado: " + id);
+			return null;
+		}
+	}
+
 	public boolean guardarUsuarios(Usuario usuario)
 			throws InterruptedException, ExecutionException, FileNotFoundException, IOException {
 
@@ -86,33 +117,32 @@ public class GestorDeUsuarios {
 	}
 
 	public Usuario comprobarUsuario(String usuarioIntroducido, String contraseniaIntroducida) throws Exception {
-	    ;
-	    ArrayList<Usuario> usuarios = obtenerTodosLosUsuarios();
-	    
-	    // Recorremos los usuarios para buscar el usuario introducido
-	    for (Usuario usuario : usuarios) {
+		;
+		ArrayList<Usuario> usuarios = obtenerTodosLosUsuarios();
 
-	    	// Verificar que userName no sea null antes de comparar
-	        if (usuario.getUsuario() != null && usuario.getUsuario().equalsIgnoreCase(usuarioIntroducido)) {
-	            // Usuario encontrado, ahora verificamos la contraseña
-	            if (usuario.getPass() != null && usuario.getPass().equals(contraseniaIntroducida)) {
-	                // Usuario y contraseña correctos
-	                JOptionPane.showMessageDialog(null, "Acceso concedido.");
-	                return usuario; // Devuelve el usuario si ambas condiciones son correctas
-	            } else {
-	                // Si la contraseña no es correcta, lanzamos excepción genérica
-	                JOptionPane.showMessageDialog(null, "Datos introducidos incorrectos.");
-	                throw new Exception("Datos incorrectos.");
-	            }
-	        }
-	    }
-	    
-	    // Si no se encuentra el usuario en la base de datos, lanzamos otra excepción genérica
-	    JOptionPane.showMessageDialog(null, "Datos introducidos incorrectos.");
-	    throw new Exception("Datos incorrectos.");
+		// Recorremos los usuarios para buscar el usuario introducido
+		for (Usuario usuario : usuarios) {
+
+			// Verificar que userName no sea null antes de comparar
+			if (usuario.getUsuario() != null && usuario.getUsuario().equalsIgnoreCase(usuarioIntroducido)) {
+				// Usuario encontrado, ahora verificamos la contraseña
+				if (usuario.getPass() != null && usuario.getPass().equals(contraseniaIntroducida)) {
+					// Usuario y contraseña correctos
+					JOptionPane.showMessageDialog(null, "Acceso concedido.");
+					return usuario; // Devuelve el usuario si ambas condiciones son correctas
+				} else {
+					// Si la contraseña no es correcta, lanzamos excepción genérica
+					JOptionPane.showMessageDialog(null, "Datos introducidos incorrectos.");
+					throw new Exception("Datos incorrectos.");
+				}
+			}
+		}
+
+		// Si no se encuentra el usuario en la base de datos, lanzamos otra excepción
+		// genérica
+		JOptionPane.showMessageDialog(null, "Datos introducidos incorrectos.");
+		throw new Exception("Datos incorrectos.");
 	}
-
-	
 
 	public boolean comprobarSiExisteNombreUsuario(String usuarioIntroducido) throws Exception {
 		ArrayList<Usuario> usuarios = obtenerTodosLosUsuarios();
@@ -125,7 +155,6 @@ public class GestorDeUsuarios {
 		}
 		return false;
 	}
-	
 
 	public boolean validarNombre(String nombre) {
 		return nombre != null && !nombre.isEmpty() && nombre.length() <= 25;
@@ -153,9 +182,7 @@ public class GestorDeUsuarios {
 
 	public boolean validarFechaNacimiento(Timestamp fechaNac) {
 		LocalDate fechaMinima = LocalDate.now().minusYears(14);
-		LocalDate fechaNacLocal = fechaNac.toDate().toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
+		LocalDate fechaNacLocal = fechaNac.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		return fechaNac != null && fechaNacLocal.isBefore(fechaMinima);
 	}
 

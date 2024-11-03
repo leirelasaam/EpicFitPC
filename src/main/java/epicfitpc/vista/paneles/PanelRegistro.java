@@ -23,6 +23,10 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerModel;
 
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
+
 import com.google.cloud.Timestamp;
 
 import javax.swing.JLabel;
@@ -49,17 +53,17 @@ public class PanelRegistro extends JPanel {
 		add(textUsuario);
 		textUsuario.setColumns(10);
 
-		JLabel lblNewLabel = new JLabel("Contraseña:");
-		lblNewLabel.setBounds(94, 193, 102, 14);
-		add(lblNewLabel);
+		JLabel lblPass = new JLabel("Contraseña:");
+		lblPass.setBounds(94, 193, 102, 14);
+		add(lblPass);
 
-		JLabel lblNewLabel_1 = new JLabel("Nombre de Usuario:");
-		lblNewLabel_1.setBounds(94, 83, 130, 14);
-		add(lblNewLabel_1);
+		JLabel lblUsuario = new JLabel("Nombre de Usuario:");
+		lblUsuario.setBounds(94, 83, 130, 14);
+		add(lblUsuario);
 
-		JLabel lblNewLabel_2 = new JLabel("Repita la contraseña:");
-		lblNewLabel_2.setBounds(94, 296, 130, 14);
-		add(lblNewLabel_2);
+		JLabel lblPass2 = new JLabel("Repita la contraseña:");
+		lblPass2.setBounds(94, 296, 130, 14);
+		add(lblPass2);
 
 		passwordField = new JPasswordField();
 		passwordField.setBounds(94, 218, 130, 20);
@@ -69,17 +73,17 @@ public class PanelRegistro extends JPanel {
 		passwordField_2.setBounds(94, 314, 130, 20);
 		add(passwordField_2);
 
-		JLabel lblNewLabel_3 = new JLabel("Fecha de nacimiento:");
-		lblNewLabel_3.setBounds(303, 83, 130, 14);
-		add(lblNewLabel_3);
+		JLabel lblFechaNac = new JLabel("Fecha de nacimiento:");
+		lblFechaNac.setBounds(303, 83, 130, 14);
+		add(lblFechaNac);
 
-		JLabel lblNewLabel_4 = new JLabel("Nombre:");
-		lblNewLabel_4.setBounds(303, 193, 110, 14);
-		add(lblNewLabel_4);
+		JLabel lblNombre = new JLabel("Nombre:");
+		lblNombre.setBounds(303, 193, 110, 14);
+		add(lblNombre);
 
-		JLabel lblNewLabel_5 = new JLabel("Apellido:");
-		lblNewLabel_5.setBounds(303, 296, 130, 14);
-		add(lblNewLabel_5);
+		JLabel lblApellido = new JLabel("Apellido:");
+		lblApellido.setBounds(303, 296, 130, 14);
+		add(lblApellido);
 
 		textFechaNac = new JTextField();
 		textFechaNac.setBounds(303, 108, 130, 20);
@@ -101,13 +105,13 @@ public class PanelRegistro extends JPanel {
 		add(textApellido);
 		textApellido.setColumns(10);
 
-		JLabel lblNewLabel_6 = new JLabel("Correo electrónico: ");
-		lblNewLabel_6.setBounds(518, 83, 130, 14);
-		add(lblNewLabel_6);
+		JLabel lblCorreo = new JLabel("Correo electrónico: ");
+		lblCorreo.setBounds(518, 83, 130, 14);
+		add(lblCorreo);
 
-		JLabel lblNewLabel_7 = new JLabel("Elija el tipo de usuario: ");
-		lblNewLabel_7.setBounds(518, 193, 130, 14);
-		add(lblNewLabel_7);
+		JLabel lblTipoUsuario = new JLabel("Elija el tipo de usuario: ");
+		lblTipoUsuario.setBounds(518, 193, 130, 14);
+		add(lblTipoUsuario);
 
 		textEmail = new JTextField();
 		textEmail.setBounds(518, 108, 130, 20);
@@ -123,9 +127,9 @@ public class PanelRegistro extends JPanel {
 		spinnerTipoUsuario.setBounds(518, 218, 130, 20);
 		add(spinnerTipoUsuario);
 
-		JButton btnNewButton = new JButton("Registrarme");
-		btnNewButton.setBounds(303, 417, 179, 23);
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton btnRegistro = new JButton("Registrarme");
+		btnRegistro.setBounds(303, 417, 179, 23);
+		btnRegistro.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -279,10 +283,10 @@ public class PanelRegistro extends JPanel {
 			}
 
 		});
-		add(btnNewButton);
+		add(btnRegistro);
 
-		JButton btnNewButton_1 = new JButton("Volver");
-		btnNewButton_1.addActionListener(new ActionListener() {
+		JButton btnVolver = new JButton("Volver");
+		btnVolver.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.getContentPane().removeAll();
 				frame.getContentPane().add(new PanelLogin(frame));
@@ -290,8 +294,8 @@ public class PanelRegistro extends JPanel {
 				frame.repaint();
 			}
 		});
-		btnNewButton_1.setBounds(10, 531, 89, 23);
-		add(btnNewButton_1);
+		btnVolver.setBounds(10, 531, 89, 23);
+		add(btnVolver);
 
 	}
 

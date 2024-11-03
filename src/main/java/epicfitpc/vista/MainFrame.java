@@ -36,15 +36,16 @@ public class MainFrame extends JFrame {
 		getContentPane().add(panelLogin);
 		
 		/*PanelRegistro panelRegistro = new PanelRegistro(this);
-		getContentPane().add(panelRegistro);*/
+		 * getContentPane().add(panelRegistro);
+		 */
 		revalidate();
 		repaint();
 	}
-	
-    public static synchronized MainFrame getInstance() {
-        if (instance == null) {
-            instance = new MainFrame();
-        }
-        return instance;
-    }
+
+	public static synchronized MainFrame getInstance() {
+		if (instance == null) {
+			instance = new MainFrame();
+		}
+		return instance;
+	}
 }
