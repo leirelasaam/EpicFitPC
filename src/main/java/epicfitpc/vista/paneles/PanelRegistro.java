@@ -23,10 +23,6 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerModel;
 
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
-
 import com.google.cloud.Timestamp;
 
 import javax.swing.JLabel;
@@ -183,11 +179,9 @@ public class PanelRegistro extends JPanel {
 				
 				SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 	            Date parsedDate = null;
-	            String fecNac = textFechaNac.getText();
 				try {
 					parsedDate = dateFormat.parse(textFechaNac.getText());
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 	            return Timestamp.of(parsedDate);
@@ -247,7 +241,7 @@ public class PanelRegistro extends JPanel {
 							"Fecha de nacimiento incorrecta. El usuario tiene que ser mayor de 14 años.");
 					validar = false;
 				} else if (!gestorDeUsuarios.validarNombre(usuario.getNombre())) {
-					JOptionPane.showMessageDialog(frame, "Nombre incorrecto, esta vacio o es mayor de 25 carácteres.");
+					JOptionPane.showMessageDialog(frame, "Nombre incorrecto, esta vacio o es mayor de 50 carácteres.");
 					validar = false;
 				} else if (!gestorDeUsuarios.validarPassword(usuario.getPass())) {
 					JOptionPane.showMessageDialog(frame, "Contraseña incorrecta, debe tener entre 8 y 20 caracteres, "
