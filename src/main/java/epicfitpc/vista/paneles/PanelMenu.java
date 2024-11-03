@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.Estilos;
 
 public class PanelMenu extends JPanel {
@@ -28,7 +29,7 @@ public class PanelMenu extends JPanel {
 
 		PanelWorkouts panelWorkouts = new PanelWorkouts(this);
 		PanelHistorico panelHistorico = new PanelHistorico();
-		PanelPerfil panelPerfil = new PanelPerfil(null);
+		PanelPerfil panelPerfil = new PanelPerfil(this, new Usuario());
 
 		tabbedPane.addTab("Workouts", panelWorkouts);
 		tabbedPane.addTab("Histórico", panelHistorico);

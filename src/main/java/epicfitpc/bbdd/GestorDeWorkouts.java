@@ -42,8 +42,8 @@ public class GestorDeWorkouts {
 			Workout workout = documento.toObject(Workout.class);
 			workout.setId(documento.getId());
 			
-			ArrayList<Ejercicio> ejercicios = obtenerEjercicios(workout);
-			workout.setEjerciciosArray(ejercicios);
+			//ArrayList<Ejercicio> ejercicios = obtenerEjercicios(workout);
+			//workout.setEjerciciosArray(ejercicios);
 			
 			if (null == workouts)
 				workouts = new ArrayList<Workout>();

@@ -18,7 +18,9 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 
@@ -65,34 +67,42 @@ public class GestorDeUsuarios {
 		return usuarios;
 	}
 
-	public Usuario obtenerUsuarioPorId(String id) throws InterruptedException, ExecutionException {
+	public Usuario obtenerUsuarioPorNombreUsuario(String nombreUsuario)
+			throws InterruptedException, ExecutionException {
 
-		DocumentReference docRef = db.collection("Usuarios").document(id);
+		Usuario usuario = new Usuario();
+		
+		CollectionReference colRef = db.collection("Usuarios");
 
 		// Se realiza la consulta asíncrona
+		Query query = colRef.whereEqualTo("usuario", nombreUsuario);
 
-		ApiFuture<com.google.cloud.firestore.DocumentSnapshot> future = docRef.get();
-		com.google.cloud.firestore.DocumentSnapshot documento = future.get();
+		ApiFuture<QuerySnapshot> future = query.get();
+		QuerySnapshot querySnapshot = future.get();
 
 		// Verifica si el documento existe
-		if (documento.exists()) {
+		for (DocumentSnapshot documento : querySnapshot.getDocuments()) {
+			if (documento.exists()) {
 
-			String nombre = documento.getString("nombre");
-			String apellido = documento.getString("apellido");
-			String correo = documento.getString("correo");
-			double nivel = documento.getDouble("nivel");
-			Timestamp fechaNac = documento.getTimestamp("fechaNac");
-			Timestamp fechaAlt = documento.getTimestamp("fechaAlt");
-			boolean esEntrenador = documento.getBoolean("esEntrenador");
-			String user = documento.getString("usuario");
-			String pass = documento.getString("pass");
+				String nombre = documento.getString("nombre");
+				String apellido = documento.getString("apellido");
+				String correo = documento.getString("correo");
+				double nivel = documento.getDouble("nivel");
+				Timestamp fechaNac = documento.getTimestamp("fechaNac");
+				Timestamp fechaAlt = documento.getTimestamp("fechaAlt");
+				boolean esEntrenador = documento.getBoolean("esEntrenador");
+				String user = documento.getString("usuario");
+				String pass = documento.getString("pass");
 
-			return new Usuario(id, nombre, apellido, correo, user, pass, nivel, fechaNac, fechaAlt, esEntrenador);
-		} else {
-			// Devuelve null si no se encuentra el usuario
-			System.out.println("No se encontró un usuario con el ID especificado: " + id);
-			return null;
+				usuario = new Usuario(null, nombre, apellido, correo, user, pass, nivel, fechaNac, fechaAlt, esEntrenador);
+				System.out.println(usuario.toString());
+			} else {
+				// Devuelve null si no se encuentra el usuario
+				System.out.println("No se encontró un usuario con el nombre de usuario especificado: " + nombreUsuario);
+			}
+			
 		}
+		return usuario;
 	}
 
 	public boolean guardarUsuarios(Usuario usuario)
