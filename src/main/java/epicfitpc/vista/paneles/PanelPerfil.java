@@ -84,8 +84,7 @@ public class PanelPerfil extends JPanel {
 		JButtonOutlined btnVolver = new JButtonOutlined("VOLVER");
 		btnVolver.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				 
+
 			}
 		});
 		btnVolver.setForeground(new Color(0, 0, 0));
