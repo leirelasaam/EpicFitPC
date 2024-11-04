@@ -48,7 +48,8 @@ public class JButtonPrimary extends JButton implements MouseListener{
     }
     
     public void setBackgroundColor(Color color) {
-        backgroundColor = color; 
+        backgroundColor = color;
+        this.setBackground(color);
     }
     public void setHoverColor(Color color) {
         hoverColor = color; 

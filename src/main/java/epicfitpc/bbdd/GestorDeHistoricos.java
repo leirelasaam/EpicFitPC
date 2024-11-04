@@ -79,4 +79,20 @@ public class GestorDeHistoricos {
 
 		return w;
 	}
+	
+	public void guardarHistorico(Usuario usuario, Historico historico) throws InterruptedException, ExecutionException {
+        // Obtener la referencia de la colección 'historicos' para el usuario
+        String idUsuario = usuario.getId();
+        CollectionReference historicosDb = db.collection(DBUtils.USUARIOS).document(idUsuario).collection(DBUtils.HISTORICOS);
+
+        // Añadir el objeto Historico a la colección
+        ApiFuture<DocumentReference> future = historicosDb.add(historico);
+        try {
+            DocumentReference documentReference = future.get();
+            System.out.println("Historico agregado con ID: " + documentReference.getId());
+        } catch (InterruptedException | ExecutionException e) {
+            System.err.println("Error al agregar historico: " + e);
+            throw e;
+        }
+    }
 }
