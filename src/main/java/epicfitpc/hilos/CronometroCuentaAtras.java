@@ -6,18 +6,25 @@ public class CronometroCuentaAtras extends Thread {
 	private boolean enPausa = false;
 	private boolean ejecutando = true;
 	private int tiempo;
+	private String mensaje;
+	private CronometroListener listener;
 
-	public CronometroCuentaAtras(JLabel label, int tiempo) {
+	public CronometroCuentaAtras(String mensaje, JLabel label, int tiempo) {
+		this.mensaje = mensaje;
 		this.label = label;
 		this.tiempo = tiempo;
 	}
+	
+	 public void setCronometroListener(CronometroListener listener) {
+	        this.listener = listener;
+	    }
 
 	//Cronometro cuenta atrás hasta 0 y devuelve un true porque ha finalizado
 	public void run() {
 		while (ejecutando && tiempo > 0) {
 			if (!enPausa) {
 				tiempo--;
-				label.setText(formatearTiempo(tiempo));
+				label.setText(mensaje + formatearTiempo(tiempo));
 			}
 			try {
 				sleep(1000);
@@ -25,6 +32,10 @@ public class CronometroCuentaAtras extends Thread {
 				break;
 			}
 		}
+		// Notifica al listener cuando el tiempo finaliza
+        if (listener != null) {
+            listener.tiempoFinalizado();
+        }
 	}
 
 	public void pausar() {
