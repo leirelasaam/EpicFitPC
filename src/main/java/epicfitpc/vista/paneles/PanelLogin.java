@@ -56,7 +56,7 @@ public class PanelLogin extends JPanel {
 						// JOptionPane.showMessageDialog(frame, "Bienvenido a EpicFit");
 						UsuarioLogueado.getInstance().setUsuario(usuario);
                         MainFrame.getInstance().getContentPane().removeAll();
-                        MainFrame.getInstance().getContentPane().add(new PanelMenu());
+                        MainFrame.getInstance().getContentPane().add(new PanelMenu(usuario));
                         MainFrame.getInstance().revalidate();
                         MainFrame.getInstance().repaint();
 					} else {

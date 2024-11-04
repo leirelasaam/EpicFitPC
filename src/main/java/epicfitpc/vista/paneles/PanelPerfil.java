@@ -8,6 +8,7 @@ import com.google.cloud.Timestamp;
 import epicfitpc.bbdd.GestorDeUsuarios;
 import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.Conexion;
+import epicfitpc.vista.MainFrame;
 import epicfitpc.vista.componentes.JButtonOutlined;
 import epicfitpc.vista.componentes.JButtonPrimary;
 
@@ -21,7 +22,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.ExecutionException;
 import java.awt.event.ActionEvent;
 
 public class PanelPerfil extends JPanel {
@@ -37,20 +37,12 @@ public class PanelPerfil extends JPanel {
 	public PanelPerfil(PanelMenu panelMenu, Usuario usuario) {
 
 		GestorDeUsuarios gestorDeUsuarios = inicializarGestorDeUsuarios();
-		Usuario usuarioPrueba = new Usuario();
-		try {
-			usuarioPrueba = gestorDeUsuarios.obtenerUsuarioPorNombreUsuario("Vio23");
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		} catch (ExecutionException e1) {
-			e1.printStackTrace();
-		}
 
 		setLayout(null);
 
 		textNombre = new JTextField();
 		textNombre.setBounds(219, 139, 135, 20);
-		textNombre.setText(usuarioPrueba.getNombre());
+		textNombre.setText(usuario.getNombre());
 		add(textNombre);
 		textNombre.setColumns(10);
 
@@ -65,7 +57,7 @@ public class PanelPerfil extends JPanel {
 		textApellidos = new JTextField();
 		textApellidos.setColumns(10);
 		textApellidos.setBounds(219, 217, 135, 20);
-		textApellidos.setText(usuarioPrueba.getApellido());
+		textApellidos.setText(usuario.getApellido());
 		add(textApellidos);
 
 		JLabel lblFechaNac = new JLabel("Fecha de nacimiento");
@@ -75,7 +67,7 @@ public class PanelPerfil extends JPanel {
 		textFechaNac = new JTextField();
 		textFechaNac.setColumns(10);
 		textFechaNac.setBounds(219, 294, 135, 20);
-		textFechaNac.setText(parsearTimestampAString(usuarioPrueba.getFechaNac().toSqlTimestamp()));
+		textFechaNac.setText(parsearTimestampAString(usuario.getFechaNac().toSqlTimestamp()));
 		add(textFechaNac);
 
 		JLabel lblDatosCuenta = new JLabel("Datos de tu cuenta");
@@ -99,7 +91,7 @@ public class PanelPerfil extends JPanel {
 		textCorreo = new JTextField();
 		textCorreo.setColumns(10);
 		textCorreo.setBounds(476, 217, 135, 20);
-		textCorreo.setText(usuarioPrueba.getCorreo());
+		textCorreo.setText(usuario.getCorreo());
 		add(textCorreo);
 
 		JButtonPrimary btnguardarDatos = new JButtonPrimary("GUARDAR DATOS");
@@ -110,9 +102,15 @@ public class PanelPerfil extends JPanel {
 				boolean validar = false;
 				try {
 					usuarioModificado = crearObjetoUsuario();
-					validar = validacionesCamposCorrectos(panelMenu, usuarioModificado, gestorDeUsuarios);
+					validar = validacionesCamposCorrectos(panelMenu, usuarioModificado, usuario, gestorDeUsuarios);
 					if (validar) {
-						gestorDeUsuarios.modificarUsuario(usuarioModificado, "Vio23");
+						guardadoCorrectamente = gestorDeUsuarios.modificarUsuario(usuarioModificado, "Vio23");
+						
+						if(guardadoCorrectamente) {
+							JOptionPane.showMessageDialog(MainFrame.getInstance(), "Se han guardado correctamente las modificaciones");
+						}else {
+							JOptionPane.showMessageDialog(MainFrame.getInstance(), "No se han podido guardar las modificaciones. Pruebe mas tarde");
+						}
 					}
 					
 				} catch (Exception e2) {
@@ -129,7 +127,7 @@ public class PanelPerfil extends JPanel {
 		textUsuario = new JTextField();
 		textUsuario.setColumns(10);
 		textUsuario.setBounds(476, 139, 135, 20);
-		textUsuario.setText(usuarioPrueba.getUsuario());
+		textUsuario.setText(usuario.getUsuario());
 		add(textUsuario);
 
 		JButtonOutlined btnVolver = new JButtonOutlined("VOLVER");
@@ -153,7 +151,8 @@ public class PanelPerfil extends JPanel {
 		textNivel = new JTextField();
 		textNivel.setColumns(10);
 		textNivel.setBounds(476, 294, 135, 20);
-		textNivel.setText(String.valueOf(usuarioPrueba.getNivel()));
+		textNivel.setText(String.valueOf(usuario.getNivel()));
+		textNivel.setEditable(false);
 		add(textNivel);
 	}
 
@@ -184,29 +183,31 @@ public class PanelPerfil extends JPanel {
 	 * @param gestorDeUsuarios
 	 * @throws Exception
 	 */
-	public boolean validacionesCamposCorrectos(PanelMenu panelmenu, Usuario usuario, GestorDeUsuarios gestorDeUsuarios)
+	public boolean validacionesCamposCorrectos(PanelMenu panelmenu, Usuario usuarioModificado, Usuario usuario, GestorDeUsuarios gestorDeUsuarios)
 			throws Exception {
 		boolean validar = true;
+		String usuariomod = usuarioModificado.getUsuario();
+		String alias2 = usuario.getUsuario();
 
-		if (!gestorDeUsuarios.validarApellido(usuario.getApellido())) {
+		if (!gestorDeUsuarios.validarApellido(usuarioModificado.getApellido())) {
 			JOptionPane.showMessageDialog(panelmenu, "El apellido esta vacio o es mayor de 50 carácteres");
 			validar = false;
-		} else if (!gestorDeUsuarios.validarCorreo(usuario.getCorreo())) {
+		} else if (!gestorDeUsuarios.validarCorreo(usuarioModificado.getCorreo())) {
 			JOptionPane.showMessageDialog(panelmenu, "Correo incorrecto, vuelva a insertarlo.");
 			validar = false;
-		} else if (!gestorDeUsuarios.validarFechaNacimiento(usuario.getFechaNac())) {
+		} else if (!gestorDeUsuarios.validarFechaNacimiento(usuarioModificado.getFechaNac())) {
 			JOptionPane.showMessageDialog(panelmenu,
 					"Fecha de nacimiento incorrecta. El usuario tiene que ser mayor de 14 años.");
 			validar = false;
-		} else if (!gestorDeUsuarios.validarNombre(usuario.getNombre())) {
+		} else if (!gestorDeUsuarios.validarNombre(usuarioModificado.getNombre())) {
 			JOptionPane.showMessageDialog(panelmenu, "Nombre incorrecto, esta vacio o es mayor de 50 carácteres.");
 			validar = false;
-		} else if (!gestorDeUsuarios.validarUsername(usuario.getUsuario())) {
+		} else if (!gestorDeUsuarios.validarUsername(usuarioModificado.getUsuario())) {
 			JOptionPane.showMessageDialog(panelmenu,
 					"Usuario incorrecta, vuelva a intentarlo incluyendo al menos una letra minúscula "
 							+ "y una mayúscula.");
 			validar = false;
-		} else if (gestorDeUsuarios.comprobarSiExisteNombreUsuario(usuario.getUsuario())) {
+		} else if (gestorDeUsuarios.comprobarSiExisteNombreUsuario(usuarioModificado.getUsuario()) && !usuario.getUsuario().equals(usuarioModificado.getUsuario())) {
 			JOptionPane.showMessageDialog(panelmenu, "El nombre de usuario ya existe.");
 		}
 
