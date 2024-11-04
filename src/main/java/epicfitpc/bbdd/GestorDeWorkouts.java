@@ -46,6 +46,9 @@ public class GestorDeWorkouts {
 			ArrayList<Ejercicio> ejercicios = obtenerEjercicios(workout);
 			workout.setEjercicios(ejercicios);
 			
+			int tiempoTotal = agregarTiempoEstimadoWorkout(ejercicios);
+			workout.setTiempo(tiempoTotal);
+			
 			if (null == workouts)
 				workouts = new ArrayList<Workout>();
 			
@@ -70,6 +73,21 @@ public class GestorDeWorkouts {
 		return ejercicios;
 	}
 	
+	private int agregarTiempoEstimadoWorkout(ArrayList<Ejercicio> ejercicios) {
+		int tiempoTotal = 0;
+		if (ejercicios != null) {
+			for (Ejercicio ejercicio : ejercicios) {
+				int tiempo = ejercicio.getTiempoSerie();
+				int descanso = ejercicio.getDescanso();
+				int cuentaRegresiva = 5;
+				int series = ejercicio.getSeries();
+				
+				tiempoTotal += (tiempo * series) + (descanso * (series - 1) + (cuentaRegresiva * series));
+			}
+		}
+		return tiempoTotal;
+	}
+	
 	public ArrayList<Workout> obtenerWorkoutsPorNivelUsuario(int nivelUsuario) throws InterruptedException, ExecutionException {
 		ArrayList<Workout> workouts = null;
 
@@ -92,6 +110,9 @@ public class GestorDeWorkouts {
 			
 			ArrayList<Ejercicio> ejercicios = obtenerEjercicios(workout);
 			workout.setEjercicios(ejercicios);
+			
+			int tiempoTotal = agregarTiempoEstimadoWorkout(ejercicios);
+			workout.setTiempo(tiempoTotal);
 			
 			if (null == workouts)
 				workouts = new ArrayList<Workout>();

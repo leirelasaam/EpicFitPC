@@ -70,7 +70,7 @@ public class HistoricoItemPanel extends JPanel {
         gbc.weightx = 0.75;
 
 		JLabelTitle lblNombre = new JLabelTitle(historico.getWorkoutObj().getNombre());
-		JLabel lblNivel = new JLabel("<html><b>Nivel</b>:" + historico.getWorkoutObj().getNivel() + "</html>");
+		JLabel lblNivel = new JLabel("<html><b>Nivel</b>: " + historico.getWorkoutObj().getNivel() + "</html>");
 		
 		int tiempoPrevEnSegundos = historico.getWorkoutObj().getTiempo();
 		String tiempoPrevFormateado = DateUtils.formatearTiempo(tiempoPrevEnSegundos);
