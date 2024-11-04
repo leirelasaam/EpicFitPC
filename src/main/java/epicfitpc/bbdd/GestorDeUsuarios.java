@@ -1,6 +1,7 @@
 package epicfitpc.bbdd;
 
 import java.io.FileNotFoundException;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -12,7 +13,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
-import javax.swing.JComponent;
+
 import javax.swing.JOptionPane;
 
 import com.google.api.core.ApiFuture;

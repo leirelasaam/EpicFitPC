@@ -23,6 +23,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.awt.event.ActionEvent;
+import java.awt.GridLayout;
 
 public class PanelPerfil extends JPanel {
 
@@ -37,60 +38,60 @@ public class PanelPerfil extends JPanel {
 	public PanelPerfil(PanelMenu panelMenu, Usuario usuario) {
 
 		GestorDeUsuarios gestorDeUsuarios = inicializarGestorDeUsuarios();
+		setLayout(new GridLayout(0, 3, 0, 0));
 
-		setLayout(null);
+		JLabel lblDatosDeUsuario = new JLabel("Datos de usuario");
+		lblDatosDeUsuario.setForeground(new Color(255, 140, 0));
+		add(lblDatosDeUsuario);
+
+		JLabel label = new JLabel("");
+		add(label);
+
+		JLabel lblDatosCuenta = new JLabel("Datos de tu cuenta");
+		lblDatosCuenta.setForeground(new Color(255, 140, 0));
+		add(lblDatosCuenta);
+
+		JLabel lblNombre = new JLabel("Nombre");
+		add(lblNombre);
+
+		JLabel label_1 = new JLabel("");
+		add(label_1);
+
+		JLabel lblLogin = new JLabel("Usuario");
+		add(lblLogin);
 
 		textNombre = new JTextField();
-		textNombre.setBounds(219, 139, 135, 20);
 		textNombre.setText(usuario.getNombre());
 		add(textNombre);
 		textNombre.setColumns(10);
 
-		JLabel lblNombre = new JLabel("Nombre");
-		lblNombre.setBounds(219, 114, 71, 14);
-		add(lblNombre);
+		JLabel label_2 = new JLabel("");
+		add(label_2);
+
+		textUsuario = new JTextField();
+		textUsuario.setColumns(10);
+		textUsuario.setText(usuario.getUsuario());
+		add(textUsuario);
 
 		JLabel lblApellidos = new JLabel("Apellidos");
-		lblApellidos.setBounds(219, 192, 71, 14);
 		add(lblApellidos);
+
+		JLabel label_3 = new JLabel("");
+		add(label_3);
+
+		JLabel lblCorreo = new JLabel("Correo electrónico ");
+		add(lblCorreo);
 
 		textApellidos = new JTextField();
 		textApellidos.setColumns(10);
-		textApellidos.setBounds(219, 217, 135, 20);
 		textApellidos.setText(usuario.getApellido());
 		add(textApellidos);
 
-		JLabel lblFechaNac = new JLabel("Fecha de nacimiento");
-		lblFechaNac.setBounds(219, 269, 135, 14);
-		add(lblFechaNac);
-
-		textFechaNac = new JTextField();
-		textFechaNac.setColumns(10);
-		textFechaNac.setBounds(219, 294, 135, 20);
-		textFechaNac.setText(parsearTimestampAString(usuario.getFechaNac().toSqlTimestamp()));
-		add(textFechaNac);
-
-		JLabel lblDatosCuenta = new JLabel("Datos de tu cuenta");
-		lblDatosCuenta.setForeground(new Color(255, 140, 0));
-		lblDatosCuenta.setBounds(476, 75, 135, 14);
-		add(lblDatosCuenta);
-
-		JLabel lblDatosDeUsuario = new JLabel("Datos de usuario");
-		lblDatosDeUsuario.setForeground(new Color(255, 140, 0));
-		lblDatosDeUsuario.setBounds(219, 75, 135, 14);
-		add(lblDatosDeUsuario);
-
-		JLabel lblLogin = new JLabel("Usuario");
-		lblLogin.setBounds(476, 114, 52, 14);
-		add(lblLogin);
-
-		JLabel lblCorreo = new JLabel("Correo electrónico ");
-		lblCorreo.setBounds(476, 192, 135, 14);
-		add(lblCorreo);
+		JLabel label_4 = new JLabel("");
+		add(label_4);
 
 		textCorreo = new JTextField();
 		textCorreo.setColumns(10);
-		textCorreo.setBounds(476, 217, 135, 20);
 		textCorreo.setText(usuario.getCorreo());
 		add(textCorreo);
 
@@ -104,15 +105,17 @@ public class PanelPerfil extends JPanel {
 					usuarioModificado = crearObjetoUsuario();
 					validar = validacionesCamposCorrectos(panelMenu, usuarioModificado, usuario, gestorDeUsuarios);
 					if (validar) {
-						guardadoCorrectamente = gestorDeUsuarios.modificarUsuario(usuarioModificado, "Vio23");
-						
-						if(guardadoCorrectamente) {
-							JOptionPane.showMessageDialog(MainFrame.getInstance(), "Se han guardado correctamente las modificaciones");
-						}else {
-							JOptionPane.showMessageDialog(MainFrame.getInstance(), "No se han podido guardar las modificaciones. Pruebe mas tarde");
+						guardadoCorrectamente = gestorDeUsuarios.modificarUsuario(usuarioModificado, "");
+
+						if (guardadoCorrectamente) {
+							JOptionPane.showMessageDialog(MainFrame.getInstance(),
+									"Se han guardado correctamente las modificaciones");
+						} else {
+							JOptionPane.showMessageDialog(MainFrame.getInstance(),
+									"No se han podido guardar las modificaciones. Pruebe mas tarde");
 						}
 					}
-					
+
 				} catch (Exception e2) {
 					e2.printStackTrace();
 				}
@@ -120,40 +123,48 @@ public class PanelPerfil extends JPanel {
 			}
 		});
 
-		btnguardarDatos.setBackground(new Color(0, 0, 0));
-		btnguardarDatos.setBounds(598, 471, 138, 20);
-		add(btnguardarDatos);
+		JLabel lblFechaNac = new JLabel("Fecha de nacimiento");
+		add(lblFechaNac);
 
-		textUsuario = new JTextField();
-		textUsuario.setColumns(10);
-		textUsuario.setBounds(476, 139, 135, 20);
-		textUsuario.setText(usuario.getUsuario());
-		add(textUsuario);
-
-		JButtonOutlined btnVolver = new JButtonOutlined("VOLVER");
-		btnVolver.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				panelMenu.getRootPane().removeAll();
-				//panelMenu.getRootPane.add(new PanelWorkouts(panelMenu));
-				panelMenu.revalidate();
-				panelMenu.repaint();
-			}
-		});
-		btnVolver.setForeground(new Color(0, 0, 0));
-		btnVolver.setBackground(new Color(0, 0, 0));
-		btnVolver.setBounds(46, 471, 138, 20);
-		add(btnVolver);
+		JLabel label_5 = new JLabel("");
+		add(label_5);
 
 		JLabel lblNivel = new JLabel("Nivel");
-		lblNivel.setBounds(476, 269, 71, 14);
 		add(lblNivel);
+
+		textFechaNac = new JTextField();
+		textFechaNac.setColumns(10);
+		textFechaNac.setText(parsearTimestampAString(usuario.getFechaNac().toSqlTimestamp()));
+		add(textFechaNac);
+
+		JLabel label_6 = new JLabel("");
+		add(label_6);
 
 		textNivel = new JTextField();
 		textNivel.setColumns(10);
-		textNivel.setBounds(476, 294, 135, 20);
 		textNivel.setText(String.valueOf(usuario.getNivel()));
 		textNivel.setEditable(false);
 		add(textNivel);
+
+		JLabel label_7 = new JLabel("");
+		add(label_7);
+
+		btnguardarDatos.setBackground(new Color(0, 0, 0));
+		add(btnguardarDatos);
+
+		JLabel label_8 = new JLabel("");
+		add(label_8);
+
+		/* BORRAR BOTÓN, NO ES NECESARIO */
+		/*
+		 * JButtonOutlined btnVolver = new JButtonOutlined("VOLVER");
+		 * btnVolver.addActionListener(new ActionListener() { public void
+		 * actionPerformed(ActionEvent e) { panelMenu.getRootPane().removeAll();
+		 * //panelMenu.getRootPane.add(new PanelWorkouts(panelMenu));
+		 * panelMenu.revalidate(); panelMenu.repaint(); } });
+		 * btnVolver.setForeground(new Color(0, 0, 0)); btnVolver.setBackground(new
+		 * Color(0, 0, 0)); btnVolver.setBounds(46, 471, 138, 20); add(btnVolver);
+		 */
 	}
 
 	public static String parsearTimestampAString(java.sql.Timestamp timestamp) {
@@ -183,8 +194,8 @@ public class PanelPerfil extends JPanel {
 	 * @param gestorDeUsuarios
 	 * @throws Exception
 	 */
-	public boolean validacionesCamposCorrectos(PanelMenu panelmenu, Usuario usuarioModificado, Usuario usuario, GestorDeUsuarios gestorDeUsuarios)
-			throws Exception {
+	public boolean validacionesCamposCorrectos(PanelMenu panelmenu, Usuario usuarioModificado, Usuario usuario,
+			GestorDeUsuarios gestorDeUsuarios) throws Exception {
 		boolean validar = true;
 		String usuariomod = usuarioModificado.getUsuario();
 		String alias2 = usuario.getUsuario();
@@ -207,7 +218,8 @@ public class PanelPerfil extends JPanel {
 					"Usuario incorrecta, vuelva a intentarlo incluyendo al menos una letra minúscula "
 							+ "y una mayúscula.");
 			validar = false;
-		} else if (gestorDeUsuarios.comprobarSiExisteNombreUsuario(usuarioModificado.getUsuario()) && !usuario.getUsuario().equals(usuarioModificado.getUsuario())) {
+		} else if (gestorDeUsuarios.comprobarSiExisteNombreUsuario(usuarioModificado.getUsuario())
+				&& !usuario.getUsuario().equals(usuarioModificado.getUsuario())) {
 			JOptionPane.showMessageDialog(panelmenu, "El nombre de usuario ya existe.");
 		}
 
