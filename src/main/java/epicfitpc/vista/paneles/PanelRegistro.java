@@ -40,6 +40,7 @@ public class PanelRegistro extends JPanel {
 	private JTextField textNombre;
 	private JTextField textApellido;
 	private JTextField textEmail;
+	private JSpinner spinnerTipoUsuario;
 
 	public PanelRegistro(MainFrame frame) {
 		setLayout(null);
@@ -114,7 +115,7 @@ public class PanelRegistro extends JPanel {
 		add(textEmail);
 		textEmail.setColumns(10);
 
-		JSpinner spinnerTipoUsuario = new JSpinner();
+		spinnerTipoUsuario = new JSpinner();
 		List<String> tipoUsuario = new ArrayList<String>();
 		tipoUsuario.add("Cliente");
 		tipoUsuario.add("Entrenador");
@@ -129,7 +130,7 @@ public class PanelRegistro extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Usuario usuario = crearObjetoUsuario(spinnerTipoUsuario);
+				Usuario usuario = crearObjetoUsuario();
 
 				boolean guardadoCorrectamente = false;
 				GestorDeUsuarios gestorDeUsuarios = inicializarGestorDeUsuarios();
@@ -152,7 +153,7 @@ public class PanelRegistro extends JPanel {
 			 * @param spinnerTipoUsuario
 			 * @return
 			 */
-			public Usuario crearObjetoUsuario(JSpinner spinnerTipoUsuario) {
+			public Usuario crearObjetoUsuario() {
 				Usuario usuario = new Usuario();
 				usuario.setApellido(textApellido.getText());
 				usuario.setUsuario(textUsuario.getText());
