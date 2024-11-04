@@ -19,20 +19,25 @@ import javax.swing.border.EmptyBorder;
 import com.google.cloud.firestore.Firestore;
 
 import epicfitpc.bbdd.GestorDeWorkouts;
+import epicfitpc.ficheros.GestorDeFicherosBinarios;
 import epicfitpc.modelo.Ejercicio;
 import epicfitpc.modelo.Usuario;
 import epicfitpc.modelo.Workout;
 import epicfitpc.utils.Estilos;
+import epicfitpc.utils.GestorDeConexiones;
+import epicfitpc.utils.Rutas;
 import epicfitpc.utils.Conexion;
 import epicfitpc.utils.UsuarioLogueado;
+import epicfitpc.utils.WindowUtils;
 import epicfitpc.vista.componentes.JButtonPrimary;
-import epicfitpc.vista.componentes.JLabelText;
 import epicfitpc.vista.componentes.WorkoutEjItemPanel;
 import epicfitpc.vista.componentes.WorkoutItemPanel;
 
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.awt.event.ItemEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -42,18 +47,19 @@ public class PanelWorkouts extends JPanel {
 	private static final long serialVersionUID = 2651779404513169891L;
 	private JPanel panelWInterior;
 	private JPanel panelEj;
-	private JLabelText labelWorkout;
+	private JLabel labelWorkout;
 	private JComboBox<String> comboBox;
 	private ArrayList<Workout> workouts = null;
 	private Usuario usuario = null;
 	private JButtonPrimary playButton;
 	private PanelMenu panelMenu = null;
 	private Workout workoutSeleccionado = null;
-	
+
 	private static final String NIVELES_ALL = "-- Filtrar por nivel --";
 	private static final String NIVELES_NONE = "-- No hay workouts disponibles --";
 	private static final String SELECCIONA_WORKOUT = "Selecciona un workout";
 	private static final int PANELES_NECESARIOS = 4;
+	private static final String FICHERO_WORKOUTS = Rutas.BACKUP_WORKOUTS;
 
 	/**
 	 * Constructor que inicializa el panel y recibe el listado de workouts.
@@ -61,7 +67,7 @@ public class PanelWorkouts extends JPanel {
 	 * @param workouts ArrayList de Workouts
 	 */
 	public PanelWorkouts(PanelMenu panelMenu) {
-		this.usuario =  UsuarioLogueado.getInstance().getUsuario();
+		this.usuario = UsuarioLogueado.getInstance().getUsuario();
 		this.workouts = obtenerWorkouts();
 		this.panelMenu = panelMenu;
 		initialize();
@@ -80,7 +86,6 @@ public class PanelWorkouts extends JPanel {
 		comboBox = new JComboBox<String>();
 		comboBox.setBackground(Estilos.PRIMARY);
 		comboBox.setForeground(Estilos.WHITE);
-		comboBox.setFont(Estilos.FONT_SMALL);
 		comboBox.setPreferredSize(new Dimension(comboBox.getPreferredSize().width, 30));
 		comboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -100,7 +105,8 @@ public class PanelWorkouts extends JPanel {
 		panelEjerciciosW.setBackground(Estilos.DARK_BACKGROUND);
 		add(panelEjerciciosW);
 
-		labelWorkout = new JLabelText(SELECCIONA_WORKOUT);
+		labelWorkout = new JLabel(SELECCIONA_WORKOUT);
+		labelWorkout.setFont(Estilos.FONT_SMALL_BOLD);
 		labelWorkout.setBackground(Estilos.WHITE);
 		labelWorkout.setOpaque(true);
 		labelWorkout.setPreferredSize(new Dimension(labelWorkout.getPreferredSize().width, 30));
@@ -111,15 +117,15 @@ public class PanelWorkouts extends JPanel {
 		panelEj.setLayout(new GridLayout(0, 1, 10, 10));
 		panelEj.setBackground(Estilos.DARK_BACKGROUND);
 		panelEj.setBorder(new EmptyBorder(10, 10, 10, 10));
-		
-        playButton = new JButtonPrimary("Play");
-        playButton.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		iniciarWorkout();
-        	}
-        });
-        panelEjerciciosW.add(playButton, BorderLayout.SOUTH);
-        playButton.setVisible(false);
+
+		playButton = new JButtonPrimary("Play");
+		playButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				iniciarWorkout();
+			}
+		});
+		panelEjerciciosW.add(playButton, BorderLayout.SOUTH);
+		playButton.setVisible(false);
 
 		JScrollPane scrollPane = new JScrollPane(panelWInterior);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -191,7 +197,7 @@ public class PanelWorkouts extends JPanel {
 	private void agregarInfoEjercicios() {
 		if (workoutSeleccionado == null)
 			return;
-		
+
 		int numeroDePaneles = 0;
 		int panelesNecesarios = PANELES_NECESARIOS - 1;
 
@@ -200,7 +206,7 @@ public class PanelWorkouts extends JPanel {
 
 		panelEj.removeAll();
 
-		ArrayList<Ejercicio> ejercicios = workoutSeleccionado.getEjerciciosArray();
+		ArrayList<Ejercicio> ejercicios = workoutSeleccionado.getEjercicios();
 
 		if (null != ejercicios) {
 			for (Ejercicio ejercicio : ejercicios) {
@@ -260,46 +266,62 @@ public class PanelWorkouts extends JPanel {
 			panelWInterior.repaint();
 		}
 	}
-	
+
 	private ArrayList<Workout> obtenerWorkouts() {
 		ArrayList<Workout> workouts = null;
 		Firestore db;
-		try {
-			db = Conexion.getInstance().getConexion();
-			GestorDeWorkouts gdw = new GestorDeWorkouts(db);
-			workouts = gdw.obtenerWorkoutsPorNivelUsuario(usuario.getNivel());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		boolean hayConexion = GestorDeConexiones.getInstance().hayConexion();
 		
+		if (hayConexion) {
+			try {
+				db = Conexion.getInstance().getConexion();
+				GestorDeWorkouts gdw = new GestorDeWorkouts(db);
+				workouts = gdw.obtenerWorkoutsPorNivelUsuario(usuario.getNivel());
+			} catch (Exception e) {
+				WindowUtils.errorPane("Error en la carga desde la base de datos.", "Error en la base de datos");
+			}
+		} else {
+			GestorDeFicherosBinarios<Workout> gdfb = new GestorDeFicherosBinarios<Workout>(FICHERO_WORKOUTS);
+			try {
+				workouts = gdfb.leer();
+			} catch (FileNotFoundException e) {
+				WindowUtils.errorPane("No se ha encontrado el fichero de carga para los workouts.", "Error en la carga");
+			} catch (ClassNotFoundException e) {
+				WindowUtils.errorPane("No se ha encontrado la clase Workout.", "Error en la clase");
+			} catch (IOException e) {
+				WindowUtils.errorPane("No se ha podido realizar la lectura del fichero de carga.", "Error en la lectura");
+			}
+		}
+
 		return workouts;
 
 	}
-	
+
 	private void iniciarWorkout() {
 		PanelEjercicio panelEjercicio = new PanelEjercicio(workoutSeleccionado);
-        panelMenu.agregarNuevoTab("Ejercicio", panelEjercicio);
+		panelMenu.agregarNuevoTab("Ejercicio", panelEjercicio);
 	}
-	
-    private class ComboBoxRenderer extends JLabel implements ListCellRenderer<String> {
+
+	private class ComboBoxRenderer extends JLabel implements ListCellRenderer<String> {
 		private static final long serialVersionUID = -3995483244577557908L;
+
 		public ComboBoxRenderer() {
-            setOpaque(true);
-        }
+			setOpaque(true);
+		}
+
 		@Override
 		public Component getListCellRendererComponent(JList<? extends String> list, String value, int index,
 				boolean isSelected, boolean cellHasFocus) {
-            setText(value);
-            if (isSelected) {
-                setBackground(Estilos.PRIMARY_DARK);
-                setForeground(Estilos.WHITE);
-            } else {
-                setBackground(Estilos.PRIMARY);
-                setForeground(Estilos.WHITE);
-            }
-            return this;
+			setText(value);
+			if (isSelected) {
+				setBackground(Estilos.PRIMARY_DARK);
+				setForeground(Estilos.WHITE);
+			} else {
+				setBackground(Estilos.PRIMARY);
+				setForeground(Estilos.WHITE);
+			}
+			return this;
 		}
-    }
+	}
 
 }
