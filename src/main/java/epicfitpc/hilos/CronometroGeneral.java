@@ -44,5 +44,9 @@ public class CronometroGeneral extends Thread {
 		this.ejecutando = false;
 		this.interrupt();
 	}
+	
+	public int getTiempoTotal() {
+		return tiempoAcumulado;
+	}
 
 }

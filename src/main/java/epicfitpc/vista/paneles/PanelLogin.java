@@ -1,6 +1,7 @@
 package epicfitpc.vista.paneles;
 
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 
 import epicfitpc.bbdd.GestorDeUsuarios;
 import epicfitpc.controlador.Controlador;
@@ -23,7 +24,6 @@ import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.ImageIcon;
-import javax.swing.JCheckBox;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -109,7 +109,7 @@ public class PanelLogin extends JPanel {
 		lblNewLabel_1.setBounds(180, 250, 100, 14);
 		panelDerecha.add(lblNewLabel_1);
 
-		txtIntroduceTuPass = new JTextField();
+		txtIntroduceTuPass = new JPasswordField();
 		txtIntroduceTuPass.setBounds(180, 347, 241, 31);
 		panelDerecha.add(txtIntroduceTuPass);
 		txtIntroduceTuPass.setColumns(10);
@@ -129,11 +129,6 @@ public class PanelLogin extends JPanel {
 		});
 		btnNewButton_1.setBounds(180, 575, 241, 31);
 		panelDerecha.add(btnNewButton_1);
-
-		// Persistencia de los datos si esta opción está seleccionada
-		JCheckBox chckbxNewCheckBox = new JCheckBox("Mantener sesión iniciada");
-		chckbxNewCheckBox.setBounds(180, 486, 183, 23);
-		panelDerecha.add(chckbxNewCheckBox);
 
 		JLabel lblNewLabel_2_1 = new JLabel("¿Todavia no tienes cuenta?");
 		lblNewLabel_2_1.setBounds(180, 550, 300, 20);
