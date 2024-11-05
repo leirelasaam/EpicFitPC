@@ -1,6 +1,7 @@
 package epicfitpc.modelo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Objects;
 
 import com.google.cloud.Timestamp;
@@ -19,11 +20,12 @@ public class Usuario implements Serializable {
 	private int nivel = 0;
 	private boolean esEntrenador = false;
 
+	// SUBCOLECCIÓN DE HISTÓRICOS
+	private ArrayList<Historico> historicos = null;
+
 	public Usuario() {
 		// Constructor vacío
 	}
-	
-	
 
 	public Usuario(String id, String nombre, String apellido, String correo, String usuario, String pass,
 			Timestamp fechaNac, Timestamp fechaAlt, int nivel, boolean esEntrenador) {
@@ -39,26 +41,24 @@ public class Usuario implements Serializable {
 		this.nivel = nivel;
 		this.esEntrenador = esEntrenador;
 	}
-	
+
 	// Constructor que recibe los valores crudos desde el documento
-		public Usuario(String id, String nombre, String apellido, String correo,String user, String pass, double nivel,
-				Timestamp fechaNac, Timestamp fechaAlt, boolean esEntrenador) {
-			this.id = id;
-			this.nombre = nombre;
-			this.apellido = apellido;
-			this.correo = correo;
-			this.usuario = user;
-			this.pass = pass;
+	public Usuario(String id, String nombre, String apellido, String correo, String user, String pass, double nivel,
+			Timestamp fechaNac, Timestamp fechaAlt, boolean esEntrenador) {
+		this.id = id;
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.correo = correo;
+		this.usuario = user;
+		this.pass = pass;
 
-			this.nivel = (int) nivel;
+		this.nivel = (int) nivel;
 
-			this.fechaNac = fechaNac;
-			this.fechaAlt = fechaAlt;
+		this.fechaNac = fechaNac;
+		this.fechaAlt = fechaAlt;
 
-			this.esEntrenador = esEntrenador;
-		}
-
-
+		this.esEntrenador = esEntrenador;
+	}
 
 	public String getId() {
 		return id;
@@ -132,7 +132,7 @@ public class Usuario implements Serializable {
 		this.nivel = nivel;
 	}
 
-	public boolean getIsEsEntrenador() {
+	public boolean isEsEntrenador() {
 		return esEntrenador;
 	}
 
@@ -140,9 +140,18 @@ public class Usuario implements Serializable {
 		this.esEntrenador = esEntrenador;
 	}
 
+	public ArrayList<Historico> getHistoricos() {
+		return historicos;
+	}
+
+	public void setHistoricos(ArrayList<Historico> historicos) {
+		this.historicos = historicos;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(apellido, correo, esEntrenador, fechaAlt, fechaNac, id, nivel, nombre, pass, usuario);
+		return Objects.hash(apellido, correo, esEntrenador, fechaAlt, fechaNac, historicos, id, nivel, nombre, pass,
+				usuario);
 	}
 
 	@Override
@@ -156,16 +165,16 @@ public class Usuario implements Serializable {
 		Usuario other = (Usuario) obj;
 		return Objects.equals(apellido, other.apellido) && Objects.equals(correo, other.correo)
 				&& esEntrenador == other.esEntrenador && Objects.equals(fechaAlt, other.fechaAlt)
-				&& Objects.equals(fechaNac, other.fechaNac) && Objects.equals(id, other.id) && nivel == other.nivel
-				&& Objects.equals(nombre, other.nombre) && Objects.equals(pass, other.pass)
-				&& Objects.equals(usuario, other.usuario);
+				&& Objects.equals(fechaNac, other.fechaNac) && Objects.equals(historicos, other.historicos)
+				&& Objects.equals(id, other.id) && nivel == other.nivel && Objects.equals(nombre, other.nombre)
+				&& Objects.equals(pass, other.pass) && Objects.equals(usuario, other.usuario);
 	}
 
 	@Override
 	public String toString() {
 		return "Usuario [id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", correo=" + correo
 				+ ", usuario=" + usuario + ", pass=" + pass + ", fechaNac=" + fechaNac + ", fechaAlt=" + fechaAlt
-				+ ", nivel=" + nivel + ", esEntrenador=" + esEntrenador + "]";
+				+ ", nivel=" + nivel + ", esEntrenador=" + esEntrenador + ", historicos=" + historicos + "]";
 	}
 
 }

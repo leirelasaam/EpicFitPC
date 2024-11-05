@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
-
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
@@ -26,10 +26,12 @@ import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
 
+import epicfitpc.modelo.Historico;
 import epicfitpc.modelo.Usuario;
+import epicfitpc.utils.DBUtils;
 
 public class GestorDeUsuarios {
-
+	
 	private Firestore db = null;
 
 	public GestorDeUsuarios(Firestore db) {
@@ -38,9 +40,10 @@ public class GestorDeUsuarios {
 
 	public ArrayList<Usuario> obtenerTodosLosUsuarios() throws InterruptedException, ExecutionException {
 		ArrayList<Usuario> usuarios = null;
-		CollectionReference usuariosDb = db.collection("Usuarios");
+		CollectionReference usuariosDb = db.collection(DBUtils.USUARIOS);
 		ApiFuture<QuerySnapshot> futureQuery = usuariosDb.get();
 		QuerySnapshot querySnapshot = null;
+		
 		try {
 			querySnapshot = futureQuery.get();
 		} catch (InterruptedException e) {
@@ -48,6 +51,7 @@ public class GestorDeUsuarios {
 		} catch (ExecutionException e) {
 			throw e;
 		}
+
 		List<QueryDocumentSnapshot> documentos = querySnapshot.getDocuments();
 		for (QueryDocumentSnapshot documento : documentos) {
 			String id = documento.getId();
@@ -62,6 +66,37 @@ public class GestorDeUsuarios {
 			String pass = documento.getString("pass");
 			Usuario usuario = new Usuario(id, nombre, apellido, correo, user, pass, nivel, fechaNac, fechaAlt,
 					esEntrenador);
+			if (null == usuarios)
+				usuarios = new ArrayList<Usuario>();
+			usuarios.add(usuario);
+		}
+		return usuarios;
+	}
+	
+	// Para el backup
+	public ArrayList<Usuario> obtenerUsuariosConHistoricos() throws InterruptedException, ExecutionException {
+		ArrayList<Usuario> usuarios = null;
+		CollectionReference usuariosDb = db.collection(DBUtils.USUARIOS);
+		ApiFuture<QuerySnapshot> futureQuery = usuariosDb.get();
+		QuerySnapshot querySnapshot = null;
+		
+		try {
+			querySnapshot = futureQuery.get();
+		} catch (InterruptedException e) {
+			throw e;
+		} catch (ExecutionException e) {
+			throw e;
+		}
+		
+		GestorDeHistoricos gdh = new GestorDeHistoricos(db);
+		List<QueryDocumentSnapshot> documentos = querySnapshot.getDocuments();
+		for (QueryDocumentSnapshot documento : documentos) {
+			Usuario usuario = documento.toObject(Usuario.class);
+			usuario.setId(documento.getId());
+			
+			ArrayList<Historico> historicos = gdh.obtenerTodosLosHistoricosPorUsuario(usuario);
+			usuario.setHistoricos(historicos);
+
 			if (null == usuarios)
 				usuarios = new ArrayList<Usuario>();
 			usuarios.add(usuario);
@@ -118,10 +153,10 @@ public class GestorDeUsuarios {
 		user.put("correo", usuario.getCorreo());
 		user.put("fechaNac", usuario.getFechaNac());
 		user.put("fechaAlt", usuario.getFechaAlt());
-		user.put("esEntrenador", usuario.getIsEsEntrenador());
+		user.put("esEntrenador", usuario.isEsEntrenador());
 		user.put("nivel", usuario.getNivel());
 
-		CollectionReference usuarios = db.collection("Usuarios");
+		CollectionReference usuarios = db.collection(DBUtils.USUARIOS);
 		DocumentReference devolver = usuarios.add(user).get();
 		if (devolver.getId() != null)
 			return true;
@@ -155,6 +190,7 @@ public class GestorDeUsuarios {
 		JOptionPane.showMessageDialog(null, "Datos introducidos incorrectos.");
 		throw new Exception("Datos incorrectos.");
 	}
+
 
 	public boolean comprobarSiExisteNombreUsuario(String usuarioIntroducido) throws Exception {
 		ArrayList<Usuario> usuarios = obtenerTodosLosUsuarios();
@@ -248,7 +284,7 @@ public class GestorDeUsuarios {
 				updates.put("pass", usuario.getPass());
 				updates.put("fechaNac", usuarioActualizado.getFechaNac());
 				updates.put("fechaAlt", usuario.getFechaAlt());
-				updates.put("esEntrenador", usuario.getIsEsEntrenador());
+				updates.put("esEntrenador", usuario.isEsEntrenador());
 				updates.put("nivel", usuario.getNivel());
 
 				// Actualizar el documento en Firestore
@@ -272,4 +308,5 @@ public class GestorDeUsuarios {
 			return false;
 		}
 	}
+
 }

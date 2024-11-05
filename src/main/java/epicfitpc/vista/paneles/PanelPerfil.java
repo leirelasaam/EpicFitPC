@@ -9,7 +9,6 @@ import epicfitpc.bbdd.GestorDeUsuarios;
 import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.Conexion;
 import epicfitpc.vista.MainFrame;
-import epicfitpc.vista.componentes.JButtonOutlined;
 import epicfitpc.vista.componentes.JButtonPrimary;
 
 import javax.swing.JLabel;
@@ -105,14 +104,16 @@ public class PanelPerfil extends JPanel {
 					validar = validacionesCamposCorrectos(panelMenu, usuarioModificado, usuario, gestorDeUsuarios);
 					if (validar) {
 						guardadoCorrectamente = gestorDeUsuarios.modificarUsuario(usuarioModificado, "Vio23");
-						
-						if(guardadoCorrectamente) {
-							JOptionPane.showMessageDialog(MainFrame.getInstance(), "Se han guardado correctamente las modificaciones");
-						}else {
-							JOptionPane.showMessageDialog(MainFrame.getInstance(), "No se han podido guardar las modificaciones. Pruebe mas tarde");
+
+						if (guardadoCorrectamente) {
+							JOptionPane.showMessageDialog(MainFrame.getInstance(),
+									"Se han guardado correctamente las modificaciones");
+						} else {
+							JOptionPane.showMessageDialog(MainFrame.getInstance(),
+									"No se han podido guardar las modificaciones. Pruebe mas tarde");
 						}
 					}
-					
+
 				} catch (Exception e2) {
 					e2.printStackTrace();
 				}
@@ -129,20 +130,6 @@ public class PanelPerfil extends JPanel {
 		textUsuario.setBounds(476, 139, 135, 20);
 		textUsuario.setText(usuario.getUsuario());
 		add(textUsuario);
-
-		JButtonOutlined btnVolver = new JButtonOutlined("VOLVER");
-		btnVolver.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				panelMenu.getRootPane().removeAll();
-				//panelMenu.getRootPane.add(new PanelWorkouts(panelMenu));
-				panelMenu.revalidate();
-				panelMenu.repaint();
-			}
-		});
-		btnVolver.setForeground(new Color(0, 0, 0));
-		btnVolver.setBackground(new Color(0, 0, 0));
-		btnVolver.setBounds(46, 471, 138, 20);
-		add(btnVolver);
 
 		JLabel lblNivel = new JLabel("Nivel");
 		lblNivel.setBounds(476, 269, 71, 14);
@@ -183,8 +170,8 @@ public class PanelPerfil extends JPanel {
 	 * @param gestorDeUsuarios
 	 * @throws Exception
 	 */
-	public boolean validacionesCamposCorrectos(PanelMenu panelmenu, Usuario usuarioModificado, Usuario usuario, GestorDeUsuarios gestorDeUsuarios)
-			throws Exception {
+	public boolean validacionesCamposCorrectos(PanelMenu panelmenu, Usuario usuarioModificado, Usuario usuario,
+			GestorDeUsuarios gestorDeUsuarios) throws Exception {
 		boolean validar = true;
 		String usuariomod = usuarioModificado.getUsuario();
 		String alias2 = usuario.getUsuario();
@@ -207,7 +194,8 @@ public class PanelPerfil extends JPanel {
 					"Usuario incorrecta, vuelva a intentarlo incluyendo al menos una letra minúscula "
 							+ "y una mayúscula.");
 			validar = false;
-		} else if (gestorDeUsuarios.comprobarSiExisteNombreUsuario(usuarioModificado.getUsuario()) && !usuario.getUsuario().equals(usuarioModificado.getUsuario())) {
+		} else if (gestorDeUsuarios.comprobarSiExisteNombreUsuario(usuarioModificado.getUsuario())
+				&& !usuario.getUsuario().equals(usuarioModificado.getUsuario())) {
 			JOptionPane.showMessageDialog(panelmenu, "El nombre de usuario ya existe.");
 		}
 

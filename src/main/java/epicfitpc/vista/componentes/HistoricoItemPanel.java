@@ -1,5 +1,7 @@
 package epicfitpc.vista.componentes;
 
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -8,10 +10,14 @@ import com.google.cloud.Timestamp;
 import epicfitpc.modelo.Historico;
 import epicfitpc.utils.DateUtils;
 import epicfitpc.utils.Estilos;
+import epicfitpc.utils.ImageUtils;
+import epicfitpc.utils.WindowUtils;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.RenderingHints;
 
 public class HistoricoItemPanel extends JPanel {
@@ -37,33 +43,60 @@ public class HistoricoItemPanel extends JPanel {
 	}
 
 	private void initialize() {
-		setLayout(new GridLayout(6, 1, 0, 0));
+		setLayout(new GridBagLayout());
 		setBorder(new EmptyBorder(20, 20, 20, 20));
 		setOpaque(false);
 		setBackground(Estilos.CARD_BACKGROUND);
+		
+		GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(2, 2, 2, 2);
+        
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridheight = 6;
+        gbc.weightx = 0.25;
+        gbc.weighty = 1.0;
+        
+        String tipo = historico.getWorkoutObj().getTipo();
+        String ruta = ImageUtils.obtenerRutaImagen(tipo);
+        ImageIcon img = WindowUtils.cargarImagen(ruta, 80, 80);
+        JLabel labelImg = new JLabel(img);
+        add(labelImg, gbc);
+        
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.gridheight = 1;
+        gbc.weightx = 0.75;
 
 		JLabelTitle lblNombre = new JLabelTitle(historico.getWorkoutObj().getNombre());
-		JLabelText lblNivel = new JLabelText("Nivel: " + historico.getWorkoutObj().getNivel());
+		JLabel lblNivel = new JLabel("<html><b>Nivel</b>:" + historico.getWorkoutObj().getNivel() + "</html>");
 		
 		int tiempoPrevEnSegundos = historico.getWorkoutObj().getTiempo();
 		String tiempoPrevFormateado = DateUtils.formatearTiempo(tiempoPrevEnSegundos);
-		JLabelText lblTiempo = new JLabelText("Tiempo previsto: " + tiempoPrevFormateado);
+		JLabel lblTiempo = new JLabel("<html><b>Tiempo previsto</b>: " + tiempoPrevFormateado + "</html>");
 		
 		int tiempoEnSegundos = historico.getTiempo();
 		String tiempoFormateado = DateUtils.formatearTiempo(tiempoEnSegundos);
-		JLabelText lblTiempoReal = new JLabelText("Tiempo real: " + tiempoFormateado);
+		JLabel lblTiempoReal = new JLabel("<html><b>Tiempo real</b>: " + tiempoFormateado + "</html>");
 
 		Timestamp fecha = historico.getFecha();
 		String fechaFormateada = DateUtils.formatearTimestamp(fecha);
-		JLabelText lblFecha = new JLabelText(fechaFormateada);
+		JLabel lblFecha = new JLabel("<html><b>Fecha</b>: " +fechaFormateada+ "</html>");
 		
-		JLabelText lblPorcentaje = new JLabelText(historico.getPorcentaje() + "%");
+		JLabel lblPorcentaje = new JLabel("<html><b>Porcentaje de completado</b>: " + historico.getPorcentaje() + "%</html>");
 		
-		add(lblNombre);
-		add(lblNivel);
-		add(lblTiempo);
-		add(lblTiempoReal);
-		add(lblFecha);		
-		add(lblPorcentaje);
+		add(lblNombre, gbc);
+		gbc.gridy++;
+		add(lblNivel, gbc);
+		gbc.gridy++;
+		add(lblTiempoReal, gbc);
+		gbc.gridx = 2;
+		add(lblTiempo, gbc);
+		gbc.gridx = 1;
+		gbc.gridy++;
+		add(lblFecha, gbc);	
+		gbc.gridx = 2;
+		add(lblPorcentaje, gbc);
 	}
 }

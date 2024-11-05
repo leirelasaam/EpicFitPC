@@ -23,9 +23,6 @@ public class PanelMenu extends JPanel {
 		setBackground(Estilos.WHITE);
 
 		tabbedPane = new JTabbedPane();
-		
-		// Personalizar el tabbedPane
-        tabbedPane.setFont(Estilos.FONT_SMALL);
 
 		PanelWorkouts panelWorkouts = new PanelWorkouts(this);
 		PanelHistorico panelHistorico = new PanelHistorico();

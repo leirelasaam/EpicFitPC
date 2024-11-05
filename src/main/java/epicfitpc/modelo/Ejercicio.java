@@ -11,6 +11,7 @@ public class Ejercicio implements Serializable {
 	private int tiempoSerie = 0;
 	private int descanso = 0;
 	private int series = 0;
+	private int orden = 0;
 
 	public Ejercicio() {
 		// Constructor vacío
@@ -64,9 +65,17 @@ public class Ejercicio implements Serializable {
 		this.series = series;
 	}
 
+	public int getOrden() {
+		return orden;
+	}
+
+	public void setOrden(int orden) {
+		this.orden = orden;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(descanso, id, nombre, repeticiones, series, tiempoSerie);
+		return Objects.hash(descanso, id, nombre, orden, repeticiones, series, tiempoSerie);
 	}
 
 	@Override
@@ -79,13 +88,14 @@ public class Ejercicio implements Serializable {
 			return false;
 		Ejercicio other = (Ejercicio) obj;
 		return descanso == other.descanso && Objects.equals(id, other.id) && Objects.equals(nombre, other.nombre)
-				&& repeticiones == other.repeticiones && series == other.series && tiempoSerie == other.tiempoSerie;
+				&& orden == other.orden && repeticiones == other.repeticiones && series == other.series
+				&& tiempoSerie == other.tiempoSerie;
 	}
 
 	@Override
 	public String toString() {
 		return "Ejercicio [id=" + id + ", nombre=" + nombre + ", repeticiones=" + repeticiones + ", tiempoSerie="
-				+ tiempoSerie + ", descanso=" + descanso + ", series=" + series + "]";
+				+ tiempoSerie + ", descanso=" + descanso + ", series=" + series + ", orden=" + orden + "]";
 	}
 
 }
