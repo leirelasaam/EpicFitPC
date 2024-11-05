@@ -142,7 +142,7 @@ public class PanelRegistro extends JPanel {
 					e1.printStackTrace();
 				}
 				
-				if (validar) {
+				if(validar) {
 					
 					guardarUsuario(frame, usuario, guardadoCorrectamente, gestorDeUsuarios);
 				}
@@ -163,9 +163,14 @@ public class PanelRegistro extends JPanel {
 				} else {
 					usuario.setEsEntrenador(false);
 				}
-
-				Timestamp localDate = convertirStringToTimestamp();
-				usuario.setFechaNac(localDate);
+				
+				if(textFechaNac.getText() != null) {
+					Timestamp localDate = convertirStringToTimestamp();
+					usuario.setFechaNac(localDate);
+				}else {
+					JOptionPane.showMessageDialog(frame, "La fecha de nacimiento no puede estar vacía.");
+				}
+				
 
 				usuario.setFechaAlt(Timestamp.now());
 				usuario.setNombre(textNombre.getText());
@@ -231,13 +236,13 @@ public class PanelRegistro extends JPanel {
 				String pass2 =  new String(passwordField_2.getPassword());
 				
 				if (!gestorDeUsuarios.validarApellido(usuario.getApellido())) {
-					//JOptionPane.showMessageDialog(frame, "El apellido esta vacio o es mayor de 50 carácteres");
+					JOptionPane.showMessageDialog(frame, "El apellido esta vacio o es mayor de 50 carácteres");
 					validar = false;
 				} else if (!gestorDeUsuarios.validarCorreo(usuario.getCorreo())) {
-					//JOptionPane.showMessageDialog(frame, "Correo incorrecto, vuelva a insertarlo.");
+					JOptionPane.showMessageDialog(frame, "Correo incorrecto, vuelva a insertarlo.");
 					validar = false;
 				} else if (!gestorDeUsuarios.validarFechaNacimiento(usuario.getFechaNac())) {
-					//JOptionPane.showMessageDialog(frame,"Fecha de nacimiento incorrecta. El usuario tiene que ser mayor de 14 años.");
+					JOptionPane.showMessageDialog(frame,"Fecha de nacimiento incorrecta. El usuario tiene que ser mayor de 14 años.");
 					validar = false;
 				} else if (!gestorDeUsuarios.validarNombre(usuario.getNombre())) {
 					JOptionPane.showMessageDialog(frame, "Nombre incorrecto, esta vacio o es mayor de 50 carácteres.");
@@ -248,11 +253,9 @@ public class PanelRegistro extends JPanel {
 				} else if (!pass1.equals(pass2)) {
 					JOptionPane.showMessageDialog(frame, "Contraseñas distintas, vuelva a intentarlo.");
 					validar = false;
-				} else if (!gestorDeUsuarios.validarUsername(usuario.getUsuario())) {
-					JOptionPane.showMessageDialog(frame, "Usuario incorrecta, vuelva a intentarlo incluyendo al menos una letra minúscula "+ "y una mayúscula.");
-					validar = false;
-				}else if (gestorDeUsuarios.comprobarSiExisteNombreUsuario(usuario.getUsuario())) {
+				} else if (gestorDeUsuarios.comprobarSiExisteNombreUsuario(usuario.getUsuario())) {
 					JOptionPane.showMessageDialog(frame, "El nombre de usuario ya existe.");
+					validar = false;
 				}
 
 				return validar;

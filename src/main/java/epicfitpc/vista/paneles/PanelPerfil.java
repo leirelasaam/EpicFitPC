@@ -103,7 +103,7 @@ public class PanelPerfil extends JPanel {
 					usuarioModificado = crearObjetoUsuario();
 					validar = validacionesCamposCorrectos(panelMenu, usuarioModificado, usuario, gestorDeUsuarios);
 					if (validar) {
-						guardadoCorrectamente = gestorDeUsuarios.modificarUsuario(usuarioModificado, "Vio23");
+						guardadoCorrectamente = gestorDeUsuarios.modificarUsuario(usuarioModificado, usuario.getUsuario());
 
 						if (guardadoCorrectamente) {
 							JOptionPane.showMessageDialog(MainFrame.getInstance(),
@@ -189,14 +189,10 @@ public class PanelPerfil extends JPanel {
 		} else if (!gestorDeUsuarios.validarNombre(usuarioModificado.getNombre())) {
 			JOptionPane.showMessageDialog(panelmenu, "Nombre incorrecto, esta vacio o es mayor de 50 carácteres.");
 			validar = false;
-		} else if (!gestorDeUsuarios.validarUsername(usuarioModificado.getUsuario())) {
-			JOptionPane.showMessageDialog(panelmenu,
-					"Usuario incorrecta, vuelva a intentarlo incluyendo al menos una letra minúscula "
-							+ "y una mayúscula.");
-			validar = false;
 		} else if (gestorDeUsuarios.comprobarSiExisteNombreUsuario(usuarioModificado.getUsuario())
 				&& !usuario.getUsuario().equals(usuarioModificado.getUsuario())) {
 			JOptionPane.showMessageDialog(panelmenu, "El nombre de usuario ya existe.");
+			validar = false;
 		}
 
 		return validar;

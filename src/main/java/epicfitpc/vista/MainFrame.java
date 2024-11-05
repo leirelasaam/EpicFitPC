@@ -36,13 +36,6 @@ public class MainFrame extends JFrame {
 
 		PanelLogin panelLogin = new PanelLogin(this);
 		getContentPane().add(panelLogin);
-<<<<<<< HEAD
-		
-		/*PanelRegistro panelRegistro = new PanelRegistro(this);
-		 * getContentPane().add(panelRegistro);
-		 */
-=======
->>>>>>> main
 		revalidate();
 		repaint();
 	}
