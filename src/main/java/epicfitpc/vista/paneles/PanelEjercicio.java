@@ -13,9 +13,9 @@ import com.google.cloud.firestore.Firestore;
 
 import epicfitpc.bbdd.GestorDeHistoricos;
 import epicfitpc.bbdd.GestorDeUsuarios;
-import epicfitpc.hilos.CronometroCuentaAtras;
-import epicfitpc.hilos.CronometroGeneral;
-import epicfitpc.hilos.CronometroListener;
+import epicfitpc.hilos.Cronometro;
+import epicfitpc.hilos.CronometroRegresivo;
+import epicfitpc.modelo.Ejercicio;
 import epicfitpc.modelo.Historico;
 import epicfitpc.modelo.Usuario;
 import epicfitpc.modelo.Workout;
@@ -25,12 +25,12 @@ import epicfitpc.utils.UsuarioLogueado;
 import epicfitpc.vista.MainFrame;
 import epicfitpc.vista.componentes.JButtonPrimary;
 
-public class PanelEjercicio extends JPanel implements CronometroListener {
+public class PanelEjercicio extends JPanel {
     private static final long serialVersionUID = -8810446678745477313L;
     private Workout workout;
-    private CronometroGeneral cronGeneral;
-    private CronometroCuentaAtras cronSerie;
-    private CronometroCuentaAtras cronDescanso;
+    private Cronometro cronGeneral;
+    private Cronometro cronEjercicio;
+    private CronometroRegresivo cronSerie;
     private JButtonPrimary btnPausar;
     private JButtonPrimary btnIniciar;
     private JButtonPrimary btnSiguiente;
@@ -46,15 +46,13 @@ public class PanelEjercicio extends JPanel implements CronometroListener {
     private JLabel labelEjercicioActual;
     private boolean cronometroIniciado = false;
     int ejerciciosCompletados = 0;
-
-    @Override
-    public void tiempoFinalizado() {
-        System.out.println("El tiempo ha finalizado.");
-    }
+    private JLabel lblCronEjercicio;
+    private Ejercicio ejercicio;
     
     public PanelEjercicio(Workout workout) {
         this.usuario = UsuarioLogueado.getInstance().getUsuario();
         this.workout = workout;
+        this.ejercicio = workout.getEjercicios().getFirst();
         initialize();
     }
 
@@ -63,25 +61,31 @@ public class PanelEjercicio extends JPanel implements CronometroListener {
         setBackground(Estilos.DARK_BACKGROUND);
 
         // Panel Superior
-        JPanel panelSuperior = new JPanel(new GridLayout(1, 3));
+        JPanel panelSuperior = new JPanel(new GridLayout(2, 3));
         labelCronometroGeneral = new JLabel("00:00");
         JLabel labelNombreWorkout = new JLabel("Workout: " + (workout != null ? workout.getNombre() : "No seleccionado"));
-        labelEjercicioActual = new JLabel("Ejercicio actual: " + (workout != null ? workout.getEjercicios().get(ejercicioActual).getNombre() : "No seleccionado"));
+        panelSuperior.add(labelNombreWorkout);
 
         panelSuperior.add(labelCronometroGeneral);
-        panelSuperior.add(labelEjercicioActual);
-        panelSuperior.add(labelNombreWorkout);
 
         add(panelSuperior, BorderLayout.NORTH);
 
-        cronGeneral = new CronometroGeneral(labelCronometroGeneral);
+        cronGeneral = new Cronometro(labelCronometroGeneral);
+        labelEjercicioActual = new JLabel("Ejercicio actual: " + (workout != null ? workout.getEjercicios().get(ejercicioActual).getNombre() : "No seleccionado"));
+        panelSuperior.add(labelEjercicioActual);
+        
+        lblCronEjercicio = new JLabel("00:00");
+        panelSuperior.add(lblCronEjercicio);
+        cronEjercicio = new Cronometro(lblCronEjercicio);
 
         // Panel Central
         JPanel panelCentral = new JPanel(new GridLayout(1, 3));
-        labelNumeroSerie = new JLabel("Serie: 1");
-        labelTiempoSerie = new JLabel("Tiempo serie: 00:00");
-        labelTiempoDescanso = new JLabel("Tiempo descanso: 00:00");
+        labelNumeroSerie = new JLabel("Serie: " + ejercicio.getOrden());
+        labelTiempoSerie = new JLabel("00:00");
+        labelTiempoDescanso = new JLabel("00:00");
         labelTiempoDescanso.setVisible(false);
+        
+        cronSerie = new CronometroRegresivo(labelTiempoSerie, ejercicio.getTiempoSerie());
 
         panelCentral.add(labelTiempoSerie);
         panelCentral.add(labelTiempoDescanso);
@@ -91,9 +95,9 @@ public class PanelEjercicio extends JPanel implements CronometroListener {
 
         // Panel Inferior con botones
         btnSalir = new JButtonPrimary("SALIR");
-        btnIniciar = new JButtonPrimary("Iniciar");
-        btnSiguiente = new JButtonPrimary("Siguiente");
-        btnPausar = new JButtonPrimary("Pausar");
+        btnIniciar = new JButtonPrimary("INICIAR");
+        btnSiguiente = new JButtonPrimary("SIGUIENTE");
+        btnPausar = new JButtonPrimary("PAUSAR");
 
         JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         panelInferior.add(btnSiguiente);
@@ -111,8 +115,10 @@ public class PanelEjercicio extends JPanel implements CronometroListener {
     private void configurarBotones() {
         // Botón Iniciar
     	btnIniciar.addActionListener(e -> {
-    	    if (!cronometroIniciado) { //solo se inicia una vez el cronometro general
+    	    if (!cronometroIniciado) {
     	        cronGeneral.start();
+    	        cronEjercicio.start();
+    	        cronSerie.start();
     	        cronometroIniciado = true;
     	    }
     	    iniciarSerie();
@@ -123,16 +129,16 @@ public class PanelEjercicio extends JPanel implements CronometroListener {
 
         // Botón Pausar/Reanudar
         btnPausar.addActionListener(e -> {
-            if (btnPausar.getText().equalsIgnoreCase("Pausar")) {
+            if (btnPausar.getText().equalsIgnoreCase("PAUSAR")) {
                 cronGeneral.pausar();
+                cronEjercicio.pausar();
                 cronSerie.pausar();
-                cronDescanso.pausar();
-                btnPausar.setText("Reanudar");
+                btnPausar.setText("REANUDAR");
             } else {
                 cronGeneral.reanudar();
+                cronEjercicio.reanudar();
                 cronSerie.reanudar();
-                cronDescanso.reanudar();
-                btnPausar.setText("Pausar");
+                btnPausar.setText("PAUSAR");
             }
         });
 
@@ -149,51 +155,7 @@ public class PanelEjercicio extends JPanel implements CronometroListener {
         labelTiempoSerie.setVisible(true);
         labelTiempoDescanso.setVisible(false);
         btnPausar.setVisible(true);
-        
-        cronSerie = new CronometroCuentaAtras("Tiempo serie", labelTiempoSerie, tiempoSerie);
-        cronSerie.setCronometroListener(new CronometroListener() {
-            @Override
-            public void tiempoFinalizado() {
-                // Aquí se llama a iniciarDescanso() cuando el tiempo de la serie finaliza
-                iniciarDescanso();
-            }
-        });
-        cronSerie.start();
     }
-
-
-
-    private void iniciarDescanso() {
-        int tiempoDescanso = workout.getEjercicios().get(ejercicioActual).getDescanso();
-        labelTiempoSerie.setVisible(false);
-        labelTiempoDescanso.setVisible(true);
-        btnPausar.setVisible(false);
-        cronDescanso = new CronometroCuentaAtras("Tiempo descanso", labelTiempoDescanso, tiempoDescanso);
-        
-        // Establecer el listener para el cronómetro de descanso
-        cronDescanso.setCronometroListener(new CronometroListener() {
-            @Override
-            public void tiempoFinalizado() {
-                serieActual++;
-                
-                btnIniciar.setVisible(true);
-                
-                if (serieActual < workout.getEjercicios().get(ejercicioActual).getSeries()) {
-                    labelNumeroSerie.setText("Serie: " + (serieActual + 1) + " de " + workout.getEjercicios().get(ejercicioActual).getSeries());
-                } else {
-                    serieActual = 0; // Reiniciamos serie para el siguiente ejercicio
-                    btnIniciar.setVisible(false);
-                    btnSiguiente.setVisible(true);
-					ejerciciosCompletados++;
-                }
-            }
-        });
-        
-        cronDescanso.start();
-    }
-
-
-
 
     private void cambiarEjercicio() {
         if (ejercicioActual < workout.getEjercicios().size() - 1) {
@@ -203,7 +165,7 @@ public class PanelEjercicio extends JPanel implements CronometroListener {
             btnSiguiente.setVisible(false);
             btnIniciar.setVisible(true);
         } else {
-            salir(); // Finalizar si es el último ejercicio
+            salir();
         }
     }
 

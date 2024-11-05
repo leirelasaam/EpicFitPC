@@ -2,13 +2,13 @@ package epicfitpc.hilos;
 
 import javax.swing.JLabel;
 
-public class CronometroGeneral extends Thread {
+public class Cronometro extends Thread {
 	private JLabel label;
 	private boolean enPausa = false;
 	private int tiempoAcumulado = 0;
 	private boolean ejecutando = true;
 
-	public CronometroGeneral(JLabel label) {
+	public Cronometro(JLabel label) {
 		this.label = label;
 	}
 
@@ -16,6 +16,7 @@ public class CronometroGeneral extends Thread {
 		while (ejecutando) {
 			if (!enPausa) {
 				tiempoAcumulado++;
+				System.out.println("Tiempo: " + tiempoAcumulado);
 				label.setText(formatearTiempo(tiempoAcumulado));
 			}
 			try {
