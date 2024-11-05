@@ -1,13 +1,12 @@
 package epicfitpc;
 
-import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.UIManager;
-import javax.swing.plaf.ColorUIResource;
 
 import epicfitpc.ficheros.GestorDeBackups;
 import epicfitpc.utils.Conexion;
@@ -20,52 +19,50 @@ import com.google.cloud.firestore.Firestore;
 public class EpicFitPC {
 
 	public static void main(String[] args) {
-		Firestore db;
-		GestorDeBackups gdb = null;
+		/*
+		 * PARA EL BACKUP Firestore db; GestorDeBackups gdb = null; try { db =
+		 * Conexion.getInstance().getConexion(); gdb = new GestorDeBackups(db);
+		 * 
+		 * boolean conectado = GestorDeConexiones.getInstance().hayConexion(); if
+		 * (conectado) { System.out.println("Hay conexión a Internet");
+		 * gdb.realizarBackup(); gdb.cargarBackup(); } else { gdb.cargarBackup();
+		 * System.out.println("No hay conexión a Internet"); }
+		 * 
+		 * } catch (FileNotFoundException e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); } catch (IOException e) { // TODO Auto-generated catch
+		 * block e.printStackTrace(); } catch (InterruptedException e) { // TODO
+		 * Auto-generated catch block e.printStackTrace(); } catch (ExecutionException
+		 * e) { // TODO Auto-generated catch block e.printStackTrace(); } catch
+		 * (ClassNotFoundException e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); }
+		 */
+
 		try {
-			db = Conexion.getInstance().getConexion();
-			gdb = new GestorDeBackups(db);
-			
-			boolean conectado = GestorDeConexiones.getInstance().hayConexion();
-			if (conectado) {
-				System.out.println("Hay conexión a Internet");
-				gdb.realizarBackup();
-				gdb.cargarBackup();
-			} else {
-				gdb.cargarBackup();
-				System.out.println("No hay conexión a Internet");
-			}
-			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
+			// Establecer tema según sistema operativo
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			// Colores comboBox
+			UIManager.put("ComboBox.selectionBackground", Estilos.PRIMARY_DARK);
+			UIManager.put("ComboBox.selectionForeground", Estilos.WHITE);
+			UIManager.put("ComboBox.font", Estilos.FONT_SMALL_BOLD);
+
+			// Configuración de colores para el JTabbedPane
+			UIManager.put("TabbedPane.selectedBackground", Estilos.DARK_BACKGROUND);
+			UIManager.put("TabbedPane.selectedForeground", Estilos.PRIMARY);
+			UIManager.put("TabbedPane.font", Estilos.FONT_SMALL_BOLD);
+
+			// Configurar fuente
+			UIManager.put("Label.font", Estilos.FONT_SMALL);
+			UIManager.put("Button.font", Estilos.FONT_SMALL_BOLD);
+			UIManager.put("TextField.font", Estilos.FONT_SMALL);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		// Colores comboBox
-		UIManager.put("ComboBox.selectionBackground", Estilos.PRIMARY_DARK);
-		UIManager.put("ComboBox.selectionForeground", Estilos.WHITE);
-		
-        // Configuración de colores para el JTabbedPane
-        UIManager.put("TabbedPane.selectedBackground", Estilos.DARK_BACKGROUND);
-        UIManager.put("TabbedPane.selectedForeground", Estilos.WHITE);
-		
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					MainFrame frame = MainFrame.getInstance();
-                    frame.setVisible(true);
+					frame.setVisible(true);
 				} catch (Exception e) {
 					System.out.println("Error: " + e.getMessage());
 				}

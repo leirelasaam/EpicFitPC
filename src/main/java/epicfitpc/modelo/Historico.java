@@ -13,9 +13,7 @@ public class Historico implements Serializable {
 	private Timestamp fecha = null;
 	private int porcentaje = 0;
 	private int tiempo = 0;
-	private transient DocumentReference usuario = null;
 	private transient DocumentReference workout = null;
-	private Usuario usuarioObj = null;
 	private Workout workoutObj = null;
 
 	public Historico() {
@@ -54,28 +52,12 @@ public class Historico implements Serializable {
 		this.tiempo = tiempo;
 	}
 
-	public DocumentReference getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(DocumentReference usuario) {
-		this.usuario = usuario;
-	}
-
 	public DocumentReference getWorkout() {
 		return workout;
 	}
 
 	public void setWorkout(DocumentReference workout) {
 		this.workout = workout;
-	}
-
-	public Usuario getUsuarioObj() {
-		return usuarioObj;
-	}
-
-	public void setUsuarioObj(Usuario usuarioObj) {
-		this.usuarioObj = usuarioObj;
 	}
 
 	public Workout getWorkoutObj() {
@@ -88,7 +70,7 @@ public class Historico implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(fecha, id, porcentaje, tiempo, usuario, usuarioObj, workout, workoutObj);
+		return Objects.hash(fecha, id, porcentaje, tiempo, workoutObj);
 	}
 
 	@Override
@@ -101,16 +83,13 @@ public class Historico implements Serializable {
 			return false;
 		Historico other = (Historico) obj;
 		return Objects.equals(fecha, other.fecha) && Objects.equals(id, other.id) && porcentaje == other.porcentaje
-				&& tiempo == other.tiempo && Objects.equals(usuario, other.usuario)
-				&& Objects.equals(usuarioObj, other.usuarioObj) && Objects.equals(workout, other.workout)
-				&& Objects.equals(workoutObj, other.workoutObj);
+				&& tiempo == other.tiempo && Objects.equals(workoutObj, other.workoutObj);
 	}
 
 	@Override
 	public String toString() {
 		return "Historico [id=" + id + ", fecha=" + fecha + ", porcentaje=" + porcentaje + ", tiempo=" + tiempo
-				+ ", usuario=" + usuario + ", workout=" + workout + ", usuarioObj=" + usuarioObj + ", workoutObj="
-				+ workoutObj + "]";
+				+ ", workoutObj=" + workoutObj + "]";
 	}
 
 }

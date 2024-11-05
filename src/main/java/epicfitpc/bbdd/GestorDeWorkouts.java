@@ -7,16 +7,17 @@ import java.util.concurrent.ExecutionException;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 
 import epicfitpc.modelo.Ejercicio;
 import epicfitpc.modelo.Workout;
+import epicfitpc.utils.DBUtils;
 
 public class GestorDeWorkouts {
 
 	private Firestore db = null;
-	private static final String COLLECTION = "Workouts";
 
 	public GestorDeWorkouts(Firestore db) {
 		this.db = db;
@@ -25,7 +26,7 @@ public class GestorDeWorkouts {
 	public ArrayList<Workout> obtenerTodosLosWorkouts() throws InterruptedException, ExecutionException {
 		ArrayList<Workout> workouts = null;
 
-		CollectionReference workoutsDb = db.collection(COLLECTION);
+		CollectionReference workoutsDb = db.collection(DBUtils.WORKOUTS);
 		ApiFuture<QuerySnapshot> futureQuery = workoutsDb.get();
 		QuerySnapshot querySnapshot = null;
 
@@ -43,7 +44,7 @@ public class GestorDeWorkouts {
 			workout.setId(documento.getId());
 			
 			ArrayList<Ejercicio> ejercicios = obtenerEjercicios(workout);
-			workout.setEjerciciosArray(ejercicios);
+			workout.setEjercicios(ejercicios);
 			
 			if (null == workouts)
 				workouts = new ArrayList<Workout>();
@@ -72,8 +73,8 @@ public class GestorDeWorkouts {
 	public ArrayList<Workout> obtenerWorkoutsPorNivelUsuario(int nivelUsuario) throws InterruptedException, ExecutionException {
 		ArrayList<Workout> workouts = null;
 
-		CollectionReference workoutsDb = db.collection(COLLECTION);
-		ApiFuture<QuerySnapshot> futureQuery = workoutsDb.whereLessThanOrEqualTo("nivel", nivelUsuario).get();
+		CollectionReference workoutsDb = db.collection(DBUtils.WORKOUTS);
+		ApiFuture<QuerySnapshot> futureQuery = workoutsDb.whereLessThanOrEqualTo("nivel", nivelUsuario).orderBy("nivel", Query.Direction.DESCENDING).get();
 		QuerySnapshot querySnapshot = null;
 
 		try {
@@ -90,7 +91,7 @@ public class GestorDeWorkouts {
 			workout.setId(documento.getId());
 			
 			ArrayList<Ejercicio> ejercicios = obtenerEjercicios(workout);
-			workout.setEjerciciosArray(ejercicios);
+			workout.setEjercicios(ejercicios);
 			
 			if (null == workouts)
 				workouts = new ArrayList<Workout>();

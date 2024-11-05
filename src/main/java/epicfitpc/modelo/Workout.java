@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import com.google.cloud.firestore.DocumentReference;
-
 public class Workout implements Serializable {
 
 	private static final long serialVersionUID = -1761854948300958014L;
@@ -15,8 +13,9 @@ public class Workout implements Serializable {
 	private int tiempo = 0;
 	private String video = null;
 	private String tipo = null;
-	private transient ArrayList<DocumentReference> ejercicios = null;
-	private ArrayList<Ejercicio> ejerciciosArray = null;
+	
+	// SUBCOLECCIÓN DE EJERCICIOS
+	private ArrayList<Ejercicio> ejercicios = null;
 
 	public Workout() {
 
@@ -62,20 +61,12 @@ public class Workout implements Serializable {
 		this.video = video;
 	}
 
-	public ArrayList<DocumentReference> getEjercicios() {
+	public ArrayList<Ejercicio> getEjercicios() {
 		return ejercicios;
 	}
 
-	public void setEjercicios(ArrayList<DocumentReference> ejercicios) {
-		this.ejercicios = ejercicios;
-	}
-
-	public ArrayList<Ejercicio> getEjerciciosArray() {
-		return ejerciciosArray;
-	}
-
-	public void setEjerciciosArray(ArrayList<Ejercicio> ejerciciosArray) {
-		this.ejerciciosArray = ejerciciosArray;
+	public void setEjercicios(ArrayList<Ejercicio> ejerciciosArray) {
+		this.ejercicios = ejerciciosArray;
 	}
 
 	public String getTipo() {
@@ -88,7 +79,7 @@ public class Workout implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(ejercicios, ejerciciosArray, id, nivel, nombre, tiempo, tipo, video);
+		return Objects.hash(ejercicios, id, nivel, nombre, tiempo, tipo, video);
 	}
 
 	@Override
@@ -100,16 +91,14 @@ public class Workout implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Workout other = (Workout) obj;
-		return Objects.equals(ejercicios, other.ejercicios) && Objects.equals(ejerciciosArray, other.ejerciciosArray)
-				&& Objects.equals(id, other.id) && nivel == other.nivel && Objects.equals(nombre, other.nombre)
-				&& tiempo == other.tiempo && Objects.equals(tipo, other.tipo) && Objects.equals(video, other.video);
+		return Objects.equals(ejercicios, other.ejercicios) && Objects.equals(id, other.id)
+				&& nivel == other.nivel && Objects.equals(nombre, other.nombre) && tiempo == other.tiempo
+				&& Objects.equals(tipo, other.tipo) && Objects.equals(video, other.video);
 	}
 
 	@Override
 	public String toString() {
 		return "Workout [id=" + id + ", nombre=" + nombre + ", nivel=" + nivel + ", tiempo=" + tiempo + ", video="
-				+ video + ", tipo=" + tipo + ", ejercicios=" + ejercicios + ", ejerciciosArray=" + ejerciciosArray
-				+ "]";
+				+ video + ", tipo=" + tipo + ", ejerciciosArray=" + ejercicios + "]";
 	}
-
 }

@@ -1,10 +1,12 @@
 package epicfitpc.vista;
 
 import java.awt.BorderLayout;
+import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 
 import epicfitpc.utils.Estilos;
+import epicfitpc.utils.Rutas;
 import epicfitpc.vista.paneles.PanelLogin;
 
 /**
@@ -27,11 +29,12 @@ public class MainFrame extends JFrame {
 		setBounds(100, 100, 1200, 750);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
-		setResizable(false);
+		setResizable(true);
 		getContentPane().setLayout(new BorderLayout());
 		setBackground(Estilos.DARK_BACKGROUND);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Rutas.LOGO_EF));
 
-		PanelLogin panelLogin = new PanelLogin();
+		PanelLogin panelLogin = new PanelLogin(this);
 		getContentPane().add(panelLogin);
 		revalidate();
 		repaint();

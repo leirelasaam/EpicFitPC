@@ -12,7 +12,7 @@ import epicfitpc.utils.Estilos;
 public class JButtonPrimary extends JButton implements MouseListener{
 
 	private static final long serialVersionUID = 7471587497181334610L;
-	Font defaultFont = Estilos.FONT_SMALL;
+	Font defaultFont = Estilos.FONT_SMALL_BOLD;
     Color textColor = Color.decode("#ffffff");
     Color backgroundColor = Estilos.PRIMARY;
     Color hoverColor = Estilos.PRIMARY_DARK;
@@ -41,6 +41,9 @@ public class JButtonPrimary extends JButton implements MouseListener{
         this.setBackground(backgroundColor);
         this.setFont(defaultFont);
         this.setOpaque(true);
+        setMinimumSize(buttonSize);
+        setPreferredSize(buttonSize);
+        setMaximumSize(buttonSize);
         addMouseListener(this);
     }
     
