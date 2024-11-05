@@ -27,7 +27,6 @@ import com.google.cloud.Timestamp;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-//import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 
@@ -41,6 +40,7 @@ public class PanelRegistro extends JPanel {
 	private JTextField textNombre;
 	private JTextField textApellido;
 	private JTextField textEmail;
+	private JSpinner spinnerTipoUsuario;
 
 	public PanelRegistro(MainFrame frame) {
 		setLayout(null);
@@ -50,17 +50,17 @@ public class PanelRegistro extends JPanel {
 		add(textUsuario);
 		textUsuario.setColumns(10);
 
-		JLabel lblNewLabel = new JLabel("Contraseña:");
-		lblNewLabel.setBounds(94, 193, 102, 14);
-		add(lblNewLabel);
+		JLabel lblPass = new JLabel("Contraseña:");
+		lblPass.setBounds(94, 193, 102, 14);
+		add(lblPass);
 
-		JLabel lblNewLabel_1 = new JLabel("Nombre de Usuario:");
-		lblNewLabel_1.setBounds(94, 83, 130, 14);
-		add(lblNewLabel_1);
+		JLabel lblUsuario = new JLabel("Nombre de Usuario:");
+		lblUsuario.setBounds(94, 83, 130, 14);
+		add(lblUsuario);
 
-		JLabel lblNewLabel_2 = new JLabel("Repita la contraseña:");
-		lblNewLabel_2.setBounds(94, 296, 130, 14);
-		add(lblNewLabel_2);
+		JLabel lblPass2 = new JLabel("Repita la contraseña:");
+		lblPass2.setBounds(94, 296, 130, 14);
+		add(lblPass2);
 
 		passwordField = new JPasswordField();
 		passwordField.setBounds(94, 218, 130, 20);
@@ -70,17 +70,17 @@ public class PanelRegistro extends JPanel {
 		passwordField_2.setBounds(94, 314, 130, 20);
 		add(passwordField_2);
 
-		JLabel lblNewLabel_3 = new JLabel("Fecha de nacimiento:");
-		lblNewLabel_3.setBounds(303, 83, 130, 14);
-		add(lblNewLabel_3);
+		JLabel lblFechaNac = new JLabel("Fecha de nacimiento:");
+		lblFechaNac.setBounds(303, 83, 130, 14);
+		add(lblFechaNac);
 
-		JLabel lblNewLabel_4 = new JLabel("Nombre:");
-		lblNewLabel_4.setBounds(303, 193, 110, 14);
-		add(lblNewLabel_4);
+		JLabel lblNombre = new JLabel("Nombre:");
+		lblNombre.setBounds(303, 193, 110, 14);
+		add(lblNombre);
 
-		JLabel lblNewLabel_5 = new JLabel("Apellido:");
-		lblNewLabel_5.setBounds(303, 296, 130, 14);
-		add(lblNewLabel_5);
+		JLabel lblApellido = new JLabel("Apellido:");
+		lblApellido.setBounds(303, 296, 130, 14);
+		add(lblApellido);
 
 		textFechaNac = new JTextField();
 		textFechaNac.setBounds(303, 108, 130, 20);
@@ -102,20 +102,20 @@ public class PanelRegistro extends JPanel {
 		add(textApellido);
 		textApellido.setColumns(10);
 
-		JLabel lblNewLabel_6 = new JLabel("Correo electrónico: ");
-		lblNewLabel_6.setBounds(518, 83, 130, 14);
-		add(lblNewLabel_6);
+		JLabel lblCorreo = new JLabel("Correo electrónico: ");
+		lblCorreo.setBounds(518, 83, 130, 14);
+		add(lblCorreo);
 
-		JLabel lblNewLabel_7 = new JLabel("Elija el tipo de usuario: ");
-		lblNewLabel_7.setBounds(518, 193, 130, 14);
-		add(lblNewLabel_7);
+		JLabel lblTipoUsuario = new JLabel("Elija el tipo de usuario: ");
+		lblTipoUsuario.setBounds(518, 193, 130, 14);
+		add(lblTipoUsuario);
 
 		textEmail = new JTextField();
 		textEmail.setBounds(518, 108, 130, 20);
 		add(textEmail);
 		textEmail.setColumns(10);
 
-		JSpinner spinnerTipoUsuario = new JSpinner();
+		spinnerTipoUsuario = new JSpinner();
 		List<String> tipoUsuario = new ArrayList<String>();
 		tipoUsuario.add("Cliente");
 		tipoUsuario.add("Entrenador");
@@ -124,13 +124,13 @@ public class PanelRegistro extends JPanel {
 		spinnerTipoUsuario.setBounds(518, 218, 130, 20);
 		add(spinnerTipoUsuario);
 
-		JButton btnNewButton = new JButton("Registrarme");
-		btnNewButton.setBounds(303, 417, 179, 23);
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton btnRegistro = new JButton("Registrarme");
+		btnRegistro.setBounds(303, 417, 179, 23);
+		btnRegistro.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Usuario usuario = crearObjetoUsuario(spinnerTipoUsuario);
+				Usuario usuario = crearObjetoUsuario();
 
 				boolean guardadoCorrectamente = false;
 				GestorDeUsuarios gestorDeUsuarios = inicializarGestorDeUsuarios();
@@ -142,7 +142,7 @@ public class PanelRegistro extends JPanel {
 					e1.printStackTrace();
 				}
 				
-				if (validar) {
+				if(validar) {
 					
 					guardarUsuario(frame, usuario, guardadoCorrectamente, gestorDeUsuarios);
 				}
@@ -153,7 +153,7 @@ public class PanelRegistro extends JPanel {
 			 * @param spinnerTipoUsuario
 			 * @return
 			 */
-			public Usuario crearObjetoUsuario(JSpinner spinnerTipoUsuario) {
+			public Usuario crearObjetoUsuario() {
 				Usuario usuario = new Usuario();
 				usuario.setApellido(textApellido.getText());
 				usuario.setUsuario(textUsuario.getText());
@@ -163,9 +163,14 @@ public class PanelRegistro extends JPanel {
 				} else {
 					usuario.setEsEntrenador(false);
 				}
-
-				Timestamp localDate = convertirStringToTimestamp();
-				usuario.setFechaNac(localDate);
+				
+				if(textFechaNac.getText() != null) {
+					Timestamp localDate = convertirStringToTimestamp();
+					usuario.setFechaNac(localDate);
+				}else {
+					JOptionPane.showMessageDialog(frame, "La fecha de nacimiento no puede estar vacía.");
+				}
+				
 
 				usuario.setFechaAlt(Timestamp.now());
 				usuario.setNombre(textNombre.getText());
@@ -180,11 +185,9 @@ public class PanelRegistro extends JPanel {
 				
 				SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 	            Date parsedDate = null;
-	            String fecNac = textFechaNac.getText();
 				try {
 					parsedDate = dateFormat.parse(textFechaNac.getText());
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 	            return Timestamp.of(parsedDate);
@@ -233,13 +236,13 @@ public class PanelRegistro extends JPanel {
 				String pass2 =  new String(passwordField_2.getPassword());
 				
 				if (!gestorDeUsuarios.validarApellido(usuario.getApellido())) {
-					//JOptionPane.showMessageDialog(frame, "El apellido esta vacio o es mayor de 50 carácteres");
+					JOptionPane.showMessageDialog(frame, "El apellido esta vacio o es mayor de 50 carácteres");
 					validar = false;
 				} else if (!gestorDeUsuarios.validarCorreo(usuario.getCorreo())) {
-					//JOptionPane.showMessageDialog(frame, "Correo incorrecto, vuelva a insertarlo.");
+					JOptionPane.showMessageDialog(frame, "Correo incorrecto, vuelva a insertarlo.");
 					validar = false;
 				} else if (!gestorDeUsuarios.validarFechaNacimiento(usuario.getFechaNac())) {
-					//JOptionPane.showMessageDialog(frame,"Fecha de nacimiento incorrecta. El usuario tiene que ser mayor de 14 años.");
+					JOptionPane.showMessageDialog(frame,"Fecha de nacimiento incorrecta. El usuario tiene que ser mayor de 14 años.");
 					validar = false;
 				} else if (!gestorDeUsuarios.validarNombre(usuario.getNombre())) {
 					JOptionPane.showMessageDialog(frame, "Nombre incorrecto, esta vacio o es mayor de 50 carácteres.");
@@ -250,11 +253,9 @@ public class PanelRegistro extends JPanel {
 				} else if (!pass1.equals(pass2)) {
 					JOptionPane.showMessageDialog(frame, "Contraseñas distintas, vuelva a intentarlo.");
 					validar = false;
-				} else if (!gestorDeUsuarios.validarUsername(usuario.getUsuario())) {
-					JOptionPane.showMessageDialog(frame, "Usuario incorrecta, vuelva a intentarlo incluyendo al menos una letra minúscula "+ "y una mayúscula.");
-					validar = false;
-				}else if (gestorDeUsuarios.comprobarSiExisteNombreUsuario(usuario.getUsuario())) {
+				} else if (gestorDeUsuarios.comprobarSiExisteNombreUsuario(usuario.getUsuario())) {
 					JOptionPane.showMessageDialog(frame, "El nombre de usuario ya existe.");
+					validar = false;
 				}
 
 				return validar;
@@ -276,10 +277,10 @@ public class PanelRegistro extends JPanel {
 			}
 
 		});
-		add(btnNewButton);
+		add(btnRegistro);
 
-		JButton btnNewButton_1 = new JButton("Volver");
-		btnNewButton_1.addActionListener(new ActionListener() {
+		JButton btnVolver = new JButton("Volver");
+		btnVolver.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.getContentPane().removeAll();
 				frame.getContentPane().add(new PanelLogin(frame));
@@ -287,8 +288,8 @@ public class PanelRegistro extends JPanel {
 				frame.repaint();
 			}
 		});
-		btnNewButton_1.setBounds(10, 531, 89, 23);
-		add(btnNewButton_1);
+		btnVolver.setBounds(10, 531, 89, 23);
+		add(btnVolver);
 
 	}
 

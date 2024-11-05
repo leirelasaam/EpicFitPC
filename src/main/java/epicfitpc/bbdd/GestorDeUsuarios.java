@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
+
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
@@ -17,6 +19,7 @@ import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
@@ -99,6 +102,44 @@ public class GestorDeUsuarios {
 		return usuarios;
 	}
 
+	public Usuario obtenerUsuarioPorNombreUsuario(String nombreUsuario)
+			throws InterruptedException, ExecutionException {
+
+		Usuario usuario = new Usuario();
+
+		CollectionReference colRef = db.collection("Usuarios");
+
+		// Se realiza la consulta asíncrona
+		Query query = colRef.whereEqualTo("usuario", nombreUsuario);
+
+		ApiFuture<QuerySnapshot> future = query.get();
+		QuerySnapshot querySnapshot = future.get();
+
+		for (DocumentSnapshot documento : querySnapshot.getDocuments()) {
+			if (documento.exists()) {
+
+				String nombre = documento.getString("nombre");
+				String apellido = documento.getString("apellido");
+				String correo = documento.getString("correo");
+				double nivel = documento.getDouble("nivel");
+				Timestamp fechaNac = documento.getTimestamp("fechaNac");
+				Timestamp fechaAlt = documento.getTimestamp("fechaAlt");
+				boolean esEntrenador = documento.getBoolean("esEntrenador");
+				String user = documento.getString("usuario");
+				String pass = documento.getString("pass");
+
+				usuario = new Usuario(null, nombre, apellido, correo, user, pass, nivel, fechaNac, fechaAlt,
+						esEntrenador);
+				System.out.println(usuario.toString());
+			} else {
+				// Devuelve null si no se encuentra el usuario
+				System.out.println("No se encontró un usuario con el nombre de usuario especificado: " + nombreUsuario);
+			}
+
+		}
+		return usuario;
+	}
+
 	public boolean guardarUsuarios(Usuario usuario)
 			throws InterruptedException, ExecutionException, FileNotFoundException, IOException {
 
@@ -137,6 +178,34 @@ public class GestorDeUsuarios {
 	    return result != null;
 	}
 
+	public Usuario comprobarUsuario(String usuarioIntroducido, String contraseniaIntroducida) throws Exception {
+		;
+		ArrayList<Usuario> usuarios = obtenerTodosLosUsuarios();
+
+		// Recorremos los usuarios para buscar el usuario introducido
+		for (Usuario usuario : usuarios) {
+
+			// Verificar que userName no sea null antes de comparar
+			if (usuario.getUsuario() != null && usuario.getUsuario().equalsIgnoreCase(usuarioIntroducido)) {
+				// Usuario encontrado, ahora verificamos la contraseña
+				if (usuario.getPass() != null && usuario.getPass().equals(contraseniaIntroducida)) {
+					// Usuario y contraseña correctos
+					JOptionPane.showMessageDialog(null, "Acceso concedido.");
+					return usuario; // Devuelve el usuario si ambas condiciones son correctas
+				} else {
+					// Si la contraseña no es correcta, lanzamos excepción genérica
+					JOptionPane.showMessageDialog(null, "Datos introducidos incorrectos.");
+					throw new Exception("Datos incorrectos.");
+				}
+			}
+		}
+
+		// Si no se encuentra el usuario en la base de datos, lanzamos otra excepción
+		// genérica
+		JOptionPane.showMessageDialog(null, "Datos introducidos incorrectos.");
+		throw new Exception("Datos incorrectos.");
+	}
+
 	public boolean comprobarSiExisteNombreUsuario(String usuarioIntroducido) throws Exception {
 		ArrayList<Usuario> usuarios = obtenerTodosLosUsuarios();
 
@@ -150,7 +219,7 @@ public class GestorDeUsuarios {
 	}
 
 	public boolean validarNombre(String nombre) {
-		return nombre != null && !nombre.isEmpty() && nombre.length() <= 50;
+		return nombre != null && !nombre.isEmpty() && nombre.length() <= 25;
 	}
 
 	public boolean validarApellido(String apellido) {
@@ -178,4 +247,80 @@ public class GestorDeUsuarios {
 		LocalDate fechaNacLocal = fechaNac.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		return fechaNac != null && fechaNacLocal.isBefore(fechaMinima);
 	}
+
+	// Prueba para comprobar que se conecta a la firebase e imprime todos los
+	// usuarios -> ID: zoVUUYKznIh8KDXOxjUc, Nombre: Leire, Usuario: 1234
+	public void imprimirTodosLosUsuarios() throws Exception {
+		// Obtenemos todos los usuarios
+		ArrayList<Usuario> usuarios = obtenerTodosLosUsuarios();
+
+		// Si hay usuarios en la lista, los imprime
+		if (usuarios != null && !usuarios.isEmpty()) {
+			System.out.println("Usuarios encontrados:");
+			for (Usuario usuario : usuarios) {
+				System.out.println("ID: " + usuario.getId() + ", Nombre: " + usuario.getNombre() + ", Usuario: "
+						+ usuario.getUsuario());
+			}
+		} else {
+			System.out.println("No se encontraron usuarios.");
+		}
+	}
+
+	public boolean modificarUsuario(Usuario usuarioActualizado, String nombreUsuarioOriginal) {
+
+		Usuario usuario = null;
+		try {
+			usuario = obtenerUsuarioPorNombreUsuario(nombreUsuarioOriginal);
+
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
+
+		CollectionReference usuarioDocRef = db.collection("Usuarios");
+
+		Query query = usuarioDocRef.whereEqualTo("usuario", nombreUsuarioOriginal);
+		ApiFuture<QuerySnapshot> querySnapshotFuture = query.get();
+
+		try {
+
+			QuerySnapshot querySnapshot = querySnapshotFuture.get();
+
+			if (!querySnapshot.isEmpty()) {
+				// Obtener el primer documento coincidente
+				DocumentSnapshot document = querySnapshot.getDocuments().get(0);
+
+				// Mapear los campos del usuario para actualizar
+				Map<String, Object> updates = new HashMap<>();
+				updates.put("nombre", usuarioActualizado.getNombre());
+				updates.put("apellido", usuarioActualizado.getApellido());
+				updates.put("correo", usuarioActualizado.getCorreo());
+				updates.put("usuario", usuarioActualizado.getUsuario());
+				updates.put("pass", usuario.getPass());
+				updates.put("fechaNac", usuarioActualizado.getFechaNac());
+				updates.put("fechaAlt", usuario.getFechaAlt());
+				updates.put("esEntrenador", usuario.isEsEntrenador());
+				updates.put("nivel", usuario.getNivel());
+
+				// Actualizar el documento en Firestore
+
+				ApiFuture<WriteResult> writeResult = document.getReference().update(updates);
+				writeResult.get(); // Esperar a que se complete la actualización
+
+				// Comprobar si la actualización fue exitosa
+				writeResult.get(); // Se bloquea hasta que la actualización se complete
+				System.out.println("Datos de usuario actualizados correctamente.");
+				return true;
+
+			} else {
+
+				System.out.println("No se encontró el nombre de usuario especificado.");
+				return false;
+			}
+
+		} catch (InterruptedException | ExecutionException e) {
+			System.err.println("Error al actualizar el usuario: " + e.getMessage());
+			return false;
+		}
+	}
+
 }

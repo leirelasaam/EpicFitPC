@@ -39,11 +39,11 @@ public class MainFrame extends JFrame {
 		revalidate();
 		repaint();
 	}
-	
-    public static synchronized MainFrame getInstance() {
-        if (instance == null) {
-            instance = new MainFrame();
-        }
-        return instance;
-    }
+
+	public static synchronized MainFrame getInstance() {
+		if (instance == null) {
+			instance = new MainFrame();
+		}
+		return instance;
+	}
 }
