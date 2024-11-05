@@ -29,7 +29,7 @@ import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.DBUtils;
 
 public class GestorDeUsuarios {
-	
+
 	private Firestore db = null;
 
 	public GestorDeUsuarios(Firestore db) {
@@ -41,7 +41,7 @@ public class GestorDeUsuarios {
 		CollectionReference usuariosDb = db.collection(DBUtils.USUARIOS);
 		ApiFuture<QuerySnapshot> futureQuery = usuariosDb.get();
 		QuerySnapshot querySnapshot = null;
-		
+
 		try {
 			querySnapshot = futureQuery.get();
 		} catch (InterruptedException e) {
@@ -70,14 +70,14 @@ public class GestorDeUsuarios {
 		}
 		return usuarios;
 	}
-	
+
 	// Para el backup
 	public ArrayList<Usuario> obtenerUsuariosConHistoricos() throws InterruptedException, ExecutionException {
 		ArrayList<Usuario> usuarios = null;
 		CollectionReference usuariosDb = db.collection(DBUtils.USUARIOS);
 		ApiFuture<QuerySnapshot> futureQuery = usuariosDb.get();
 		QuerySnapshot querySnapshot = null;
-		
+
 		try {
 			querySnapshot = futureQuery.get();
 		} catch (InterruptedException e) {
@@ -85,13 +85,13 @@ public class GestorDeUsuarios {
 		} catch (ExecutionException e) {
 			throw e;
 		}
-		
+
 		GestorDeHistoricos gdh = new GestorDeHistoricos(db);
 		List<QueryDocumentSnapshot> documentos = querySnapshot.getDocuments();
 		for (QueryDocumentSnapshot documento : documentos) {
 			Usuario usuario = documento.toObject(Usuario.class);
 			usuario.setId(documento.getId());
-			
+
 			ArrayList<Historico> historicos = gdh.obtenerTodosLosHistoricosPorUsuario(usuario);
 			usuario.setHistoricos(historicos);
 
@@ -161,6 +161,23 @@ public class GestorDeUsuarios {
 		return false;
 	}
 
+	public boolean actualizarNivelUsuario(String usuarioId, int nuevoNivel)
+			throws InterruptedException, ExecutionException {
+		/*
+		Map<String, Object> updates = new HashMap<>();
+		updates.put("nivel", nuevoNivel);
+		DocumentReference usuarioRef = db.collection(DBUtils.USUARIOS).document(usuarioId);
+		ApiFuture<WriteResult> future = usuarioRef.update(updates);
+		return future.get() != null;
+		*/
+		
+		//Así lo propone firebase
+	    DocumentReference docRef = db.collection(DBUtils.USUARIOS).document(usuarioId);
+	    ApiFuture<WriteResult> future = docRef.update("nivel", nuevoNivel);
+	    WriteResult result = future.get();
+	    return result != null;
+	}
+
 	public Usuario comprobarUsuario(String usuarioIntroducido, String contraseniaIntroducida) throws Exception {
 		;
 		ArrayList<Usuario> usuarios = obtenerTodosLosUsuarios();
@@ -188,7 +205,6 @@ public class GestorDeUsuarios {
 		JOptionPane.showMessageDialog(null, "Datos introducidos incorrectos.");
 		throw new Exception("Datos incorrectos.");
 	}
-
 
 	public boolean comprobarSiExisteNombreUsuario(String usuarioIntroducido) throws Exception {
 		ArrayList<Usuario> usuarios = obtenerTodosLosUsuarios();
