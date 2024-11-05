@@ -26,7 +26,7 @@ import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.DBUtils;
 
 public class GestorDeUsuarios {
-	
+
 	private Firestore db = null;
 
 	public GestorDeUsuarios(Firestore db) {
@@ -38,7 +38,7 @@ public class GestorDeUsuarios {
 		CollectionReference usuariosDb = db.collection(DBUtils.USUARIOS);
 		ApiFuture<QuerySnapshot> futureQuery = usuariosDb.get();
 		QuerySnapshot querySnapshot = null;
-		
+
 		try {
 			querySnapshot = futureQuery.get();
 		} catch (InterruptedException e) {
@@ -67,14 +67,14 @@ public class GestorDeUsuarios {
 		}
 		return usuarios;
 	}
-	
+
 	// Para el backup
 	public ArrayList<Usuario> obtenerUsuariosConHistoricos() throws InterruptedException, ExecutionException {
 		ArrayList<Usuario> usuarios = null;
 		CollectionReference usuariosDb = db.collection(DBUtils.USUARIOS);
 		ApiFuture<QuerySnapshot> futureQuery = usuariosDb.get();
 		QuerySnapshot querySnapshot = null;
-		
+
 		try {
 			querySnapshot = futureQuery.get();
 		} catch (InterruptedException e) {
@@ -82,13 +82,13 @@ public class GestorDeUsuarios {
 		} catch (ExecutionException e) {
 			throw e;
 		}
-		
+
 		GestorDeHistoricos gdh = new GestorDeHistoricos(db);
 		List<QueryDocumentSnapshot> documentos = querySnapshot.getDocuments();
 		for (QueryDocumentSnapshot documento : documentos) {
 			Usuario usuario = documento.toObject(Usuario.class);
 			usuario.setId(documento.getId());
-			
+
 			ArrayList<Historico> historicos = gdh.obtenerTodosLosHistoricosPorUsuario(usuario);
 			usuario.setHistoricos(historicos);
 
@@ -119,21 +119,23 @@ public class GestorDeUsuarios {
 			return true;
 		return false;
 	}
-	
-	public boolean actualizarNivelUsuario(String usuarioId, int nuevoNivel) throws InterruptedException, ExecutionException {
-	    DocumentReference usuarioRef = db.collection(DBUtils.USUARIOS).document(usuarioId);
-	    ApiFuture<DocumentSnapshot> future = usuarioRef.get();
-	    DocumentSnapshot document = future.get();
-	    
-	    if (document.exists()) {
-	        ApiFuture<WriteResult> writeResult = usuarioRef.update("nivel", nuevoNivel);
-	        return writeResult.get() != null;
-	    }
-	    return false; 
+
+	public boolean actualizarNivelUsuario(String usuarioId, int nuevoNivel)
+			throws InterruptedException, ExecutionException {
+		/*
+		Map<String, Object> updates = new HashMap<>();
+		updates.put("nivel", nuevoNivel);
+		DocumentReference usuarioRef = db.collection(DBUtils.USUARIOS).document(usuarioId);
+		ApiFuture<WriteResult> future = usuarioRef.update(updates);
+		return future.get() != null;
+		*/
+		
+		//Así lo propone firebase
+	    DocumentReference docRef = db.collection(DBUtils.USUARIOS).document(usuarioId);
+	    ApiFuture<WriteResult> future = docRef.update("nivel", nuevoNivel);
+	    WriteResult result = future.get();
+	    return result != null;
 	}
-
-
-	
 
 	public boolean comprobarSiExisteNombreUsuario(String usuarioIntroducido) throws Exception {
 		ArrayList<Usuario> usuarios = obtenerTodosLosUsuarios();
@@ -146,7 +148,6 @@ public class GestorDeUsuarios {
 		}
 		return false;
 	}
-	
 
 	public boolean validarNombre(String nombre) {
 		return nombre != null && !nombre.isEmpty() && nombre.length() <= 50;
@@ -174,9 +175,7 @@ public class GestorDeUsuarios {
 
 	public boolean validarFechaNacimiento(Timestamp fechaNac) {
 		LocalDate fechaMinima = LocalDate.now().minusYears(14);
-		LocalDate fechaNacLocal = fechaNac.toDate().toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
+		LocalDate fechaNacLocal = fechaNac.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		return fechaNac != null && fechaNacLocal.isBefore(fechaMinima);
 	}
 }

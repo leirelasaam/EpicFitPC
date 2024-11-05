@@ -1,7 +1,9 @@
 package epicfitpc.bbdd;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import com.google.api.core.ApiFuture;
@@ -28,9 +30,10 @@ public class GestorDeHistoricos {
 	public ArrayList<Historico> obtenerTodosLosHistoricosPorUsuario(Usuario usuario)
 			throws InterruptedException, ExecutionException {
 		ArrayList<Historico> historicos = null;
-		
+
 		String idUsuario = usuario.getId();
-		CollectionReference historicosDb = db.collection(DBUtils.USUARIOS).document(idUsuario).collection(DBUtils.HISTORICOS);
+		CollectionReference historicosDb = db.collection(DBUtils.USUARIOS).document(idUsuario)
+				.collection(DBUtils.HISTORICOS);
 		ApiFuture<QuerySnapshot> futureQuery = historicosDb.orderBy("fecha", Query.Direction.DESCENDING).get();
 		QuerySnapshot querySnapshot = null;
 
@@ -79,20 +82,22 @@ public class GestorDeHistoricos {
 
 		return w;
 	}
-	
-	public void guardarHistorico(Usuario usuario, Historico historico) throws InterruptedException, ExecutionException {
-        // Obtener la referencia de la colección 'historicos' para el usuario
-        String idUsuario = usuario.getId();
-        CollectionReference historicosDb = db.collection(DBUtils.USUARIOS).document(idUsuario).collection(DBUtils.HISTORICOS);
 
-        // Añadir el objeto Historico a la colección
-        ApiFuture<DocumentReference> future = historicosDb.add(historico);
-        try {
-            DocumentReference documentReference = future.get();
-            System.out.println("Historico agregado con ID: " + documentReference.getId());
-        } catch (InterruptedException | ExecutionException e) {
-            System.err.println("Error al agregar historico: " + e);
-            throw e;
-        }
-    }
+	public boolean guardarHistorico(Usuario usuario, Historico historico)
+			throws InterruptedException, ExecutionException {
+		// Obtener la referencia de la colección 'historicos' para el usuario
+		String idUsuario = usuario.getId();
+		CollectionReference historicosDb = db.collection(DBUtils.USUARIOS).document(idUsuario)
+				.collection(DBUtils.HISTORICOS);
+
+		// Añadir el objeto Historico a la colección
+		Map<String, Object> historicoMap = new HashMap<>();
+		historicoMap.put("tiempo", historico.getTiempo());
+		historicoMap.put("fecha", historico.getFecha());
+		historicoMap.put("workout", historico.getWorkout());
+		historicoMap.put("porcentaje", historico.getPorcentaje());
+
+		DocumentReference devolver = historicosDb.add(historicoMap).get();
+		return devolver.getId() != null;
+	}
 }
