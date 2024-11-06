@@ -27,6 +27,7 @@ public class GestorDeHistoricos {
 
 	public ArrayList<Historico> obtenerTodosLosHistoricosPorUsuario(Usuario usuario)
 			throws InterruptedException, ExecutionException {
+		System.out.println("BBDD: obtenerTodosLosHistoricosPorUsuario");
 		ArrayList<Historico> historicos = null;
 		
 		String idUsuario = usuario.getId();
@@ -81,6 +82,7 @@ public class GestorDeHistoricos {
 	}
 	
 	public void guardarHistorico(Usuario usuario, Historico historico) throws InterruptedException, ExecutionException {
+		System.out.println("BBDD: guardarHistorico");
         // Obtener la referencia de la colección 'historicos' para el usuario
         String idUsuario = usuario.getId();
         CollectionReference historicosDb = db.collection(DBUtils.USUARIOS).document(idUsuario).collection(DBUtils.HISTORICOS);

@@ -5,31 +5,20 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.concurrent.ExecutionException;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.Firestore;
-
-import epicfitpc.bbdd.GestorDeHistoricos;
-import epicfitpc.bbdd.GestorDeUsuarios;
 import epicfitpc.hilos.ControladorCronometros;
 import epicfitpc.hilos.CronometroProgresivo;
-import epicfitpc.hilos.CronometroRegresivo;
 import epicfitpc.hilos.CronometroSeries;
 import epicfitpc.modelo.Ejercicio;
-import epicfitpc.modelo.Historico;
 import epicfitpc.modelo.Usuario;
 import epicfitpc.modelo.Workout;
-import epicfitpc.utils.Conexion;
 import epicfitpc.utils.Estilos;
 import epicfitpc.utils.UsuarioLogueado;
 import epicfitpc.utils.WindowUtils;
-import epicfitpc.vista.MainFrame;
 import epicfitpc.vista.componentes.JButtonPrimary;
 
 public class PanelEjercicio extends JPanel {
@@ -74,7 +63,7 @@ public class PanelEjercicio extends JPanel {
 		JPanel panelSuperior = new JPanel(new GridLayout(2, 3));
 		labelCronometroGeneral = new JLabel("00:00");
 		JLabel labelNombreWorkout = new JLabel(
-				"Workout: " + (workout != null ? workout.getNombre() : "No seleccionado"));
+				"<html><b>Workout</b>: " + (workout != null ? workout.getNombre() : "No seleccionado") + "</html>");
 		panelSuperior.add(labelNombreWorkout);
 
 		panelSuperior.add(labelCronometroGeneral);
@@ -82,7 +71,7 @@ public class PanelEjercicio extends JPanel {
 		add(panelSuperior, BorderLayout.NORTH);
 
 		cronGeneral = new CronometroProgresivo("Cronómetro del workout", labelCronometroGeneral, controladorCron);
-		labelEjercicioActual = new JLabel("Ejercicio: " + (workout != null ? workout.getEjercicios().get(ejercicioActualIndex).getNombre() : "No seleccionado"));
+		labelEjercicioActual = new JLabel("<html><b>Ejercicio</b>: " + (workout != null ? workout.getEjercicios().get(ejercicioActualIndex).getNombre() : "No seleccionado") + "</html>");
 		panelSuperior.add(labelEjercicioActual);
 
 		lblCronEjercicio = new JLabel("00:00");
@@ -169,7 +158,7 @@ public class PanelEjercicio extends JPanel {
 	private void iniciarEjercicio() {
 		if (ejercicioActualIndex < workout.getEjercicios().size()) {
             Ejercicio ejercicioActual = workout.getEjercicios().get(ejercicioActualIndex);
-            labelEjercicioActual.setText(ejercicioActual.getNombre());
+            labelEjercicioActual.setText("<html><b>Ejercicio</b>: " + ejercicioActual.getNombre() + "</html>");
             cronEjercicio = new CronometroProgresivo("Ejercicio - " + ejercicioActual.getOrden(), lblCronEjercicio, controladorCron);
             cronEjercicio.start();
 

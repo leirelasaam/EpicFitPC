@@ -268,6 +268,7 @@ public class PanelWorkouts extends JPanel {
 	}
 
 	private ArrayList<Workout> obtenerWorkouts() {
+		System.out.println("Obteniendo workouts en Workout");
 		ArrayList<Workout> workouts = null;
 		Firestore db;
 		boolean hayConexion = GestorDeConexiones.getInstance().hayConexion();

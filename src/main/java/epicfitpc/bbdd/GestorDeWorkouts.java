@@ -24,6 +24,7 @@ public class GestorDeWorkouts {
 	}
 
 	public ArrayList<Workout> obtenerTodosLosWorkouts() throws InterruptedException, ExecutionException {
+		System.out.println("BBDD: obtenerTodosLosWorkouts");
 		ArrayList<Workout> workouts = null;
 
 		CollectionReference workoutsDb = db.collection(DBUtils.WORKOUTS);
@@ -89,6 +90,7 @@ public class GestorDeWorkouts {
 	}
 	
 	public ArrayList<Workout> obtenerWorkoutsPorNivelUsuario(int nivelUsuario) throws InterruptedException, ExecutionException {
+		System.out.println("BBDD: obtenerWorkoutsPorNivelUsuario");
 		ArrayList<Workout> workouts = null;
 
 		CollectionReference workoutsDb = db.collection(DBUtils.WORKOUTS);

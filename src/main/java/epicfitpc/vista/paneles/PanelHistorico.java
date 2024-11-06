@@ -99,6 +99,7 @@ public class PanelHistorico extends JPanel {
 	}
 
 	private ArrayList<Historico> obtenerHistoricos() {
+		System.out.println("Obteniendo históricos en Histórico");
 		ArrayList<Historico> historicos = null;
 		Firestore db;
 		boolean hayConexion = GestorDeConexiones.getInstance().hayConexion();

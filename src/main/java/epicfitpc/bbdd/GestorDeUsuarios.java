@@ -34,6 +34,7 @@ public class GestorDeUsuarios {
 	}
 
 	public ArrayList<Usuario> obtenerTodosLosUsuarios() throws InterruptedException, ExecutionException {
+		System.out.println("BBDD: obtenerTodosLosUsuarios");
 		ArrayList<Usuario> usuarios = null;
 		CollectionReference usuariosDb = db.collection(DBUtils.USUARIOS);
 		ApiFuture<QuerySnapshot> futureQuery = usuariosDb.get();
@@ -70,6 +71,7 @@ public class GestorDeUsuarios {
 	
 	// Para el backup
 	public ArrayList<Usuario> obtenerUsuariosConHistoricos() throws InterruptedException, ExecutionException {
+		System.out.println("BBDD: obtenerUsuariosConHistoricos");
 		ArrayList<Usuario> usuarios = null;
 		CollectionReference usuariosDb = db.collection(DBUtils.USUARIOS);
 		ApiFuture<QuerySnapshot> futureQuery = usuariosDb.get();
@@ -101,6 +103,7 @@ public class GestorDeUsuarios {
 
 	public boolean guardarUsuarios(Usuario usuario)
 			throws InterruptedException, ExecutionException, FileNotFoundException, IOException {
+		System.out.println("BBDD: guardarUsuarios");
 
 		Map<String, Object> user = new HashMap<String, Object>();
 		user.put("usuario", usuario.getUsuario());
@@ -121,6 +124,7 @@ public class GestorDeUsuarios {
 	}
 	
 	public boolean actualizarNivelUsuario(String usuarioId, int nuevoNivel) throws InterruptedException, ExecutionException {
+		System.out.println("BBDD: actualizarNivelUsuario");
 	    DocumentReference usuarioRef = db.collection(DBUtils.USUARIOS).document(usuarioId);
 	    ApiFuture<DocumentSnapshot> future = usuarioRef.get();
 	    DocumentSnapshot document = future.get();
