@@ -62,7 +62,7 @@ public class PanelLogin extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					// Obtener los datos introducidos
-					String usuarioIntroducido = txtIntroduceTuCorreo.getText();
+					String usuarioIntroducido = txtIntroduceTuCorreo.getText().toLowerCase();
 					String passIntroducido = txtIntroduceTuPass.getText();
 
 					boolean hayConexion = GestorDeConexiones.getInstance().hayConexion();
