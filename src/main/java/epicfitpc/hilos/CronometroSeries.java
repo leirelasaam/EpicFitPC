@@ -17,9 +17,12 @@ public class CronometroSeries extends Thread {
 	private int serie;
 	private JButton btnAvanzar;
 	private JButton btnSiguiente;
+	private CronometroRegresivo cronSerie;
+	private CronometroRegresivo cronRegresivo;
 
-	public CronometroSeries(Ejercicio ejercicio, JLabel lblSerie, JLabel lblTiempoSerie, JLabel labelTiempoDescanso, JLabel labelCuentaAtras,
-			ControladorCronometros controladorCron, CronometroProgresivo cronEjercicio, int serie, JButton btnAvanzar, JButton btnSiguiente) {
+	public CronometroSeries(Ejercicio ejercicio, JLabel lblSerie, JLabel lblTiempoSerie, JLabel labelTiempoDescanso,
+			JLabel labelCuentaAtras, ControladorCronometros controladorCron, CronometroProgresivo cronEjercicio,
+			int serie, JButton btnAvanzar, JButton btnSiguiente) {
 		this.ejercicio = ejercicio;
 		this.lblSerie = lblSerie;
 		this.lblTiempoSerie = lblTiempoSerie;
@@ -33,34 +36,39 @@ public class CronometroSeries extends Thread {
 	}
 
 	public void run() {
-		lblSerie.setText("Serie: " + serie + " de " + ejercicio.getSeries());
-		System.out.println("  Serie " + serie + " de " + ejercicio.getSeries());
-		CronometroRegresivo cronSerie = new CronometroRegresivo("Serie " + serie, lblTiempoSerie,
-				ejercicio.getTiempoSerie(), false, controladorCron);
-		CronometroRegresivo cronRegresivo = new CronometroRegresivo("Cuenta atrás", labelCuentaAtras, 5, true,
-				controladorCron);
-		cronRegresivo.start();
 		try {
+			lblSerie.setText("Serie: " + serie + " de " + ejercicio.getSeries());
+			System.out.println("  Serie " + serie + " de " + ejercicio.getSeries());
+			cronSerie = new CronometroRegresivo("Serie " + serie, lblTiempoSerie, ejercicio.getTiempoSerie(), false,
+					controladorCron);
+			cronRegresivo = new CronometroRegresivo("Cuenta atrás", labelCuentaAtras, 5, true, controladorCron);
+			cronRegresivo.start();
+
 			cronRegresivo.join();
-		} catch (InterruptedException e) {
 
-		}
+			labelCuentaAtras.setText("GO");
+			cronSerie.start();
 
-		labelCuentaAtras.setText("");
-		cronSerie.start();
-
-		try {
 			cronSerie.join();
+
+			if (serie == ejercicio.getSeries()) {
+				cronEjercicio.terminar();
+				btnSiguiente.setVisible(true);
+			} else {
+				btnAvanzar.setVisible(true);
+			}
 		} catch (InterruptedException e) {
 
 		}
+	}
 
-		if (serie == ejercicio.getSeries()) {
-			cronEjercicio.terminar();
-			btnSiguiente.setVisible(true);
-		} else {
-            btnAvanzar.setVisible(true);
-		}
+	public void terminar() {
+		if (cronSerie.isAlive())
+			cronSerie.terminar();
+		if (cronRegresivo.isAlive())
+			cronRegresivo.terminar();
+
+		this.interrupt();
 	}
 
 }

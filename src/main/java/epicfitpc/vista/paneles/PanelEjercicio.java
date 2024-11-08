@@ -54,6 +54,7 @@ public class PanelEjercicio extends JPanel {
 	private ControladorCronometros controladorCron = null;
 	private CronometroProgresivo cronGeneral;
 	private CronometroProgresivo cronEjercicio;
+	private CronometroSeries cronSeries;
 
 	private JButtonPrimary btnPausar;
 	private JButtonPrimary btnIniciar;
@@ -275,7 +276,7 @@ public class PanelEjercicio extends JPanel {
 
 	private void iniciarSerie() {
 		Ejercicio ejercicioActual = workout.getEjercicios().get(ejercicioActualIndex);
-		CronometroSeries cronSeries = new CronometroSeries(ejercicioActual, labelNumeroSerie, labelTiempoSerie,
+		cronSeries = new CronometroSeries(ejercicioActual, labelNumeroSerie, labelTiempoSerie,
 				labelTiempoDescanso, labelCuentaAtras, controladorCron, cronEjercicio, serieActual, btnAvanzar, btnSiguiente);
 		cronSeries.start();
 	}
@@ -315,8 +316,13 @@ public class PanelEjercicio extends JPanel {
 	}
 	
 	private void salir() {
+		if (cronSeries.isAlive())
+			cronSeries.terminar();
 		if (cronGeneral.isAlive())
 			cronGeneral.terminar();
+		if (cronEjercicio.isAlive())
+			cronEjercicio.terminar();
+		
 		if (cronGeneral.getTiempo() == 0 || ejerciciosCompletados == 0) {
 			this.setVisible(false);
 			this.getParent().remove(this);
