@@ -19,7 +19,6 @@ import epicfitpc.vista.componentes.JButtonPrimary;
 import epicfitpc.vista.componentes.JLabelTitle;
 
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;

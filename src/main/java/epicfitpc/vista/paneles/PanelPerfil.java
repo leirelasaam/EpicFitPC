@@ -173,8 +173,6 @@ public class PanelPerfil extends JPanel {
 	public boolean validacionesCamposCorrectos(PanelMenu panelmenu, Usuario usuarioModificado, Usuario usuario,
 			GestorDeUsuarios gestorDeUsuarios) throws Exception {
 		boolean validar = true;
-		String usuariomod = usuarioModificado.getUsuario();
-		String alias2 = usuario.getUsuario();
 
 		if (!gestorDeUsuarios.validarApellido(usuarioModificado.getApellido())) {
 			JOptionPane.showMessageDialog(panelmenu, "El apellido esta vacio o es mayor de 50 carácteres");

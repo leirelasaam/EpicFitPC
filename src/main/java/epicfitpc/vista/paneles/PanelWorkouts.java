@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -129,9 +130,11 @@ public class PanelWorkouts extends JPanel {
 
 		JScrollPane scrollPane = new JScrollPane(panelWInterior);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		panelContenidoWorkout.add(scrollPane);
 
 		JScrollPane scrollPaneEj = new JScrollPane(panelEj);
+		scrollPaneEj.setBorder(BorderFactory.createEmptyBorder());
 		scrollPaneEj.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		panelEjerciciosW.add(scrollPaneEj, BorderLayout.CENTER);
 

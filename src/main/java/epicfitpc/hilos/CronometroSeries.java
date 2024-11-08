@@ -1,9 +1,12 @@
 package epicfitpc.hilos;
 
+import java.util.ArrayList;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import epicfitpc.modelo.Ejercicio;
+import epicfitpc.modelo.TiempoEjercicio;
 import epicfitpc.vista.paneles.PanelEjercicio;
 
 public class CronometroSeries extends Thread {
@@ -53,13 +56,28 @@ public class CronometroSeries extends Thread {
 			cronSerie.start();
 
 			cronSerie.join();
-			labelCuentaAtras.setText("PULSA AVANZAR");
+			
 
 			if (serie == ejercicio.getSeries()) {
+				labelCuentaAtras.setText("FINISH");
 				cronEjercicio.terminar();
+				
+				// Gestionar guardado del tiempo del ejercicio completado
 				panelEjercicio.setEjerciciosCompletados(panelEjercicio.getEjerciciosCompletados() + 1);
+				ArrayList<TiempoEjercicio> tiempoEjercicios = panelEjercicio.getTiempoEjercicios();
+				if (tiempoEjercicios == null) {
+					panelEjercicio.setTiempoEjercicio(new ArrayList<TiempoEjercicio>());
+				}
+					
+				TiempoEjercicio tiempoEjercicio = new TiempoEjercicio();
+				tiempoEjercicio.setEjercicio(ejercicio);
+				tiempoEjercicio.setTiempo(cronEjercicio.getTiempo());
+				
+				panelEjercicio.addTiempoEjercicio(tiempoEjercicio);
+				
 				btnSiguiente.setVisible(true);
 			} else {
+				labelCuentaAtras.setText("CONTINUE");
 				btnAvanzar.setVisible(true);
 			}
 		} catch (InterruptedException e) {

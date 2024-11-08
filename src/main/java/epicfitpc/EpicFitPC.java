@@ -1,19 +1,11 @@
 package epicfitpc;
 
 import java.awt.EventQueue;
-import java.awt.Font;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
 
 import javax.swing.UIManager;
 
-import epicfitpc.ficheros.GestorDeBackups;
-import epicfitpc.utils.Conexion;
 import epicfitpc.utils.Estilos;
-import epicfitpc.utils.GestorDeConexiones;
 import epicfitpc.vista.MainFrame;
-import com.google.cloud.firestore.Firestore;
 
 // Esta clase debe lanzar la aplicación
 public class EpicFitPC {

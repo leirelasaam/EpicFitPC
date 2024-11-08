@@ -235,16 +235,17 @@ public class PanelEjercicio extends JPanel {
 		});
 
 		JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		panelInferior.add(btnIniciar);
-		panelInferior.add(btnPausar);
-		panelInferior.add(btnSiguiente);
-		panelInferior.add(btnAvanzar);
-		panelInferior.add(btnSalir);
 		add(panelInferior, BorderLayout.SOUTH);
 
+		panelInferior.add(btnIniciar);
+		panelInferior.add(btnSiguiente);
+		panelInferior.add(btnAvanzar);
+		panelInferior.add(btnPausar);
+		panelInferior.add(btnSalir);
+		
+		btnPausar.setVisible(false);
 		btnAvanzar.setVisible(false);
 		btnSiguiente.setVisible(false);
-		btnPausar.setVisible(false);
 
 		cronGeneral = new CronometroProgresivo("Cronómetro del workout", labelCronometroGeneral, controladorCron);
 	}
@@ -305,16 +306,6 @@ public class PanelEjercicio extends JPanel {
 	}
 
 	private void siguienteEjercicio() {
-		if (tiempoEjercicios == null)
-			tiempoEjercicios = new ArrayList<TiempoEjercicio>();
-		Ejercicio ejercicioActual = workout.getEjercicios().get(ejercicioActualIndex);
-
-		TiempoEjercicio tiempoEjercicio = new TiempoEjercicio();
-		tiempoEjercicio.setEjercicio(ejercicioActual);
-		tiempoEjercicio.setTiempo(cronEjercicio.getTiempo());
-		tiempoEjercicios.add(tiempoEjercicio);
-		System.out.println("Tiempos: " + tiempoEjercicios.toString());
-
 		if (ejercicioActualIndex < workout.getEjercicios().size() - 1) {
 			ejercicioActualIndex++;
 			serieActual = 1;
@@ -325,6 +316,18 @@ public class PanelEjercicio extends JPanel {
 				cronGeneral.terminar();
 			salir();
 		}
+	}
+	
+	public ArrayList<TiempoEjercicio> getTiempoEjercicios(){
+		return this.tiempoEjercicios;
+	}
+	
+	public void setTiempoEjercicio(ArrayList<TiempoEjercicio> tiempoEjercicios) {
+		this.tiempoEjercicios = tiempoEjercicios;
+	}
+	
+	public void addTiempoEjercicio(TiempoEjercicio tiempoEjercicio) {
+		this.tiempoEjercicios.add(tiempoEjercicio);
 	}
 
 	private void salir() {
