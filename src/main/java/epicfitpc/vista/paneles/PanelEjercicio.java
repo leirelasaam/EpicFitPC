@@ -1,14 +1,20 @@
 package epicfitpc.vista.paneles;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collections;
 import java.util.Comparator;
+
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 import epicfitpc.hilos.ControladorCronometros;
 import epicfitpc.hilos.CronometroProgresivo;
@@ -17,9 +23,11 @@ import epicfitpc.modelo.Ejercicio;
 import epicfitpc.modelo.Usuario;
 import epicfitpc.modelo.Workout;
 import epicfitpc.utils.Estilos;
+import epicfitpc.utils.ImageUtils;
 import epicfitpc.utils.UsuarioLogueado;
 import epicfitpc.utils.WindowUtils;
 import epicfitpc.vista.componentes.JButtonPrimary;
+import epicfitpc.vista.componentes.RoundedPanel;
 
 public class PanelEjercicio extends JPanel {
 	private static final long serialVersionUID = -8810446678745477313L;
@@ -42,6 +50,7 @@ public class PanelEjercicio extends JPanel {
 	private JLabel labelCronometroGeneral;
 	private JLabel labelEjercicioActual;
 	private JLabel lblCronEjercicio;
+	private JLabel labelCuentaAtras;
 
 	private boolean cronometroIniciado = false;
 	private int ejercicioActualIndex = 0;
@@ -57,38 +66,109 @@ public class PanelEjercicio extends JPanel {
 
 	private void initialize() {
 		setLayout(new BorderLayout(0, 0));
+		setBorder(new EmptyBorder(20, 40, 20, 40));
 		setBackground(Estilos.DARK_BACKGROUND);
 
 		// Panel Superior
-		JPanel panelSuperior = new JPanel(new GridLayout(2, 3));
-		labelCronometroGeneral = new JLabel("00:00");
-		JLabel labelNombreWorkout = new JLabel(
-				"<html><b>Workout</b>: " + (workout != null ? workout.getNombre() : "No seleccionado") + "</html>");
-		panelSuperior.add(labelNombreWorkout);
-
-		panelSuperior.add(labelCronometroGeneral);
-
+		JPanel panelSuperior = new JPanel(new GridLayout(1, 0, 20, 10));
+		panelSuperior.setBorder(new EmptyBorder(0, 0, 20, 0));
+		panelSuperior.setMinimumSize(new Dimension(panelSuperior.getWidth(), 80));
 		add(panelSuperior, BorderLayout.NORTH);
 
-		cronGeneral = new CronometroProgresivo("Cronómetro del workout", labelCronometroGeneral, controladorCron);
-		labelEjercicioActual = new JLabel("<html><b>Ejercicio</b>: " + (workout != null ? workout.getEjercicios().get(ejercicioActualIndex).getNombre() : "No seleccionado") + "</html>");
-		panelSuperior.add(labelEjercicioActual);
+		// Panel Workout: contiene el cronómetro general y el nombre del workout
+		RoundedPanel panelWorkout = new RoundedPanel(new GridLayout(1, 0));
+		panelWorkout.setBackground(Estilos.CARD_BACKGROUND);
+		panelSuperior.add(panelWorkout);
+		
+		JPanel panelImagen = new JPanel(new BorderLayout(0, 0));
+		panelImagen.setOpaque(false);
+		panelWorkout.add(panelImagen);
+
+		String tipo = workout.getTipo();
+		String ruta = ImageUtils.obtenerRutaImagen(tipo);
+		ImageIcon img = WindowUtils.cargarImagen(ruta, 100, 100);
+		JLabel labelImg = new JLabel(img);
+		panelImagen.add(labelImg, BorderLayout.CENTER);
+		
+		JPanel panelInfoWorkout = new JPanel(new GridLayout(0, 1));
+		panelInfoWorkout.setOpaque(false);
+		panelWorkout.add(panelInfoWorkout);
+
+		JLabel labelWorkout = new JLabel("WORKOUT");
+		labelWorkout.setHorizontalAlignment(SwingConstants.CENTER);
+		labelWorkout.setFont(new Font("Noto Sans", Font.BOLD, 14));
+		labelWorkout.setForeground(Estilos.PRIMARY_DARK);
+		panelInfoWorkout.add(labelWorkout);
+
+		JLabel labelNombreWorkout = new JLabel(workout != null ? workout.getNombre() : "No seleccionado");
+		labelNombreWorkout.setHorizontalAlignment(SwingConstants.CENTER);
+		labelNombreWorkout.setFont(new Font("Noto Sans", Font.BOLD, 18));
+		panelInfoWorkout.add(labelNombreWorkout);
+
+		labelCronometroGeneral = new JLabel("00:00");
+		labelCronometroGeneral.setHorizontalAlignment(SwingConstants.CENTER);
+		labelCronometroGeneral.setFont(new Font("Noto Sans", Font.PLAIN, 25));
+		panelInfoWorkout.add(labelCronometroGeneral);
+
+		// Panel Ejercicio: contiene el cronómetro del ejercicio y el nombre
+		RoundedPanel panelEjercicio = new RoundedPanel(new GridLayout(0, 1));
+		panelEjercicio.setBackground(Estilos.CARD_BACKGROUND);
+		panelSuperior.add(panelEjercicio);
+
+		JLabel labelEjercicio = new JLabel("EJERCICIO");
+		labelEjercicio.setHorizontalAlignment(SwingConstants.CENTER);
+		labelEjercicio.setFont(new Font("Noto Sans", Font.BOLD, 14));
+		labelEjercicio.setForeground(Estilos.PRIMARY_DARK);
+		panelEjercicio.add(labelEjercicio);
+
+		labelEjercicioActual = new JLabel(
+				workout != null ? workout.getEjercicios().get(ejercicioActualIndex).getNombre() : "No seleccionado");
+		labelEjercicioActual.setHorizontalAlignment(SwingConstants.CENTER);
+		labelEjercicioActual.setFont(new Font("Noto Sans", Font.BOLD, 18));
+		panelEjercicio.add(labelEjercicioActual);
 
 		lblCronEjercicio = new JLabel("00:00");
-		panelSuperior.add(lblCronEjercicio);
+		lblCronEjercicio.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCronEjercicio.setFont(new Font("Noto Sans", Font.PLAIN, 25));
+		panelEjercicio.add(lblCronEjercicio);
 
 		// Panel Central
-		JPanel panelCentral = new JPanel(new GridLayout(1, 3));
-		labelNumeroSerie = new JLabel("Serie 1 de " + (workout != null ? workout.getEjercicios().get(ejercicioActualIndex).getSeries() : "X"));
-		labelTiempoSerie = new JLabel("00:00");
-		labelTiempoDescanso = new JLabel("");
-		labelTiempoDescanso.setVisible(true);
+		JPanel panelContenedor = new JPanel(new BorderLayout(0,0));
+		panelContenedor.setBorder(new EmptyBorder(0, 0, 20, 0));
+		add(panelContenedor, BorderLayout.CENTER);
+		
+		RoundedPanel panelCentral = new RoundedPanel(new GridLayout(0, 1));
+		panelContenedor.add(panelCentral, BorderLayout.CENTER);
 
-		panelCentral.add(labelTiempoSerie);
-		panelCentral.add(labelTiempoDescanso);
+		labelCuentaAtras = new JLabel("");
+		labelCuentaAtras.setPreferredSize(new Dimension(200, labelCuentaAtras.getHeight()));
+		labelCuentaAtras.setHorizontalAlignment(SwingConstants.CENTER);
+		labelCuentaAtras.setFont(new Font("Noto Sans", Font.BOLD, 75));
+		labelCuentaAtras.setForeground(Estilos.PRIMARY_DARK);
+		panelCentral.add(labelCuentaAtras);
+
+		labelNumeroSerie = new JLabel("Serie: 1 de "
+				+ (workout != null ? workout.getEjercicios().get(ejercicioActualIndex).getSeries() : "X"));
+		labelNumeroSerie.setHorizontalAlignment(SwingConstants.CENTER);
+		labelNumeroSerie.setFont(new Font("Noto Sans", Font.BOLD, 18));
 		panelCentral.add(labelNumeroSerie);
 
-		add(panelCentral, BorderLayout.CENTER);
+		labelTiempoSerie = new JLabel("00:00");
+		labelTiempoSerie.setHorizontalAlignment(SwingConstants.CENTER);
+		labelTiempoSerie.setFont(new Font("Noto Sans", Font.PLAIN, 25));
+		panelCentral.add(labelTiempoSerie);
+
+		JLabel labelDescansoEstipulado = new JLabel("Descanso de "
+				+ (workout != null ? workout.getEjercicios().get(ejercicioActualIndex).getDescanso() : "0") + " s");
+		labelDescansoEstipulado.setHorizontalAlignment(SwingConstants.CENTER);
+		labelDescansoEstipulado.setFont(new Font("Noto Sans", Font.BOLD, 18));
+		panelCentral.add(labelDescansoEstipulado);
+
+		labelTiempoDescanso = new JLabel("00:00");
+		labelTiempoDescanso.setHorizontalAlignment(SwingConstants.CENTER);
+		labelTiempoDescanso.setFont(new Font("Noto Sans", Font.PLAIN, 25));
+		labelTiempoDescanso.setVisible(true);
+		panelCentral.add(labelTiempoDescanso);
 
 		// Panel Inferior con botones
 		btnSalir = new JButtonPrimary("SALIR");
@@ -108,13 +188,13 @@ public class PanelEjercicio extends JPanel {
 				pausarCronometros();
 			}
 		});
-		
+
 		btnSiguiente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				siguienteEjercicio();
 			}
 		});
-		
+
 		btnAvanzar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				avanzarSerie();
@@ -132,6 +212,8 @@ public class PanelEjercicio extends JPanel {
 		btnAvanzar.setVisible(false);
 		btnSiguiente.setVisible(false);
 		btnPausar.setVisible(false);
+
+		cronGeneral = new CronometroProgresivo("Cronómetro del workout", labelCronometroGeneral, controladorCron);
 	}
 
 	private void iniciarCronometros() {
@@ -157,42 +239,44 @@ public class PanelEjercicio extends JPanel {
 
 	private void iniciarEjercicio() {
 		if (ejercicioActualIndex < workout.getEjercicios().size()) {
-            Ejercicio ejercicioActual = workout.getEjercicios().get(ejercicioActualIndex);
-            labelEjercicioActual.setText("<html><b>Ejercicio</b>: " + ejercicioActual.getNombre() + "</html>");
-            cronEjercicio = new CronometroProgresivo("Ejercicio - " + ejercicioActual.getOrden(), lblCronEjercicio, controladorCron);
-            cronEjercicio.start();
-
-            System.out.println("Iniciando ejercicio: " + ejercicioActual.getNombre());
-            iniciarSerie();
-        }
-	}
-	
-	private void iniciarSerie() {
 			Ejercicio ejercicioActual = workout.getEjercicios().get(ejercicioActualIndex);
-            CronometroSeries cronSeries = new CronometroSeries(ejercicioActual, labelNumeroSerie, labelTiempoSerie, labelTiempoDescanso, controladorCron, cronEjercicio, serieActual, btnAvanzar, btnSiguiente);
-            cronSeries.start();
+			labelEjercicioActual.setText(ejercicioActual.getNombre());
+			cronEjercicio = new CronometroProgresivo("Ejercicio - " + ejercicioActual.getOrden(), lblCronEjercicio,
+					controladorCron);
+			cronEjercicio.start();
+
+			System.out.println("Iniciando ejercicio: " + ejercicioActual.getNombre());
+			iniciarSerie();
+		}
 	}
-	
-    private void avanzarSerie() {
-    	btnAvanzar.setVisible(false);
-    	Ejercicio ejercicioActual = workout.getEjercicios().get(ejercicioActualIndex);
-        
-        if (serieActual < ejercicioActual.getSeries()) {
-            serieActual++;
-            iniciarSerie();
-        }
-    }
-	
-    private void siguienteEjercicio() {
-        if (ejercicioActualIndex < workout.getEjercicios().size() - 1) {
-            ejercicioActualIndex++;
-            serieActual = 1;
-            btnSiguiente.setVisible(false);
-            iniciarEjercicio();
-        } else {
-        	if(cronGeneral.isAlive())
-        		cronGeneral.terminar();
-        	WindowUtils.confirmationPane("Workout finalizado", "Fin");
-        }
-    }
+
+	private void iniciarSerie() {
+		Ejercicio ejercicioActual = workout.getEjercicios().get(ejercicioActualIndex);
+		CronometroSeries cronSeries = new CronometroSeries(ejercicioActual, labelNumeroSerie, labelTiempoSerie,
+				labelTiempoDescanso, labelCuentaAtras, controladorCron, cronEjercicio, serieActual, btnAvanzar, btnSiguiente);
+		cronSeries.start();
+	}
+
+	private void avanzarSerie() {
+		btnAvanzar.setVisible(false);
+		Ejercicio ejercicioActual = workout.getEjercicios().get(ejercicioActualIndex);
+
+		if (serieActual < ejercicioActual.getSeries()) {
+			serieActual++;
+			iniciarSerie();
+		}
+	}
+
+	private void siguienteEjercicio() {
+		if (ejercicioActualIndex < workout.getEjercicios().size() - 1) {
+			ejercicioActualIndex++;
+			serieActual = 1;
+			btnSiguiente.setVisible(false);
+			iniciarEjercicio();
+		} else {
+			if (cronGeneral.isAlive())
+				cronGeneral.terminar();
+			WindowUtils.confirmationPane("Workout finalizado", "Fin");
+		}
+	}
 }

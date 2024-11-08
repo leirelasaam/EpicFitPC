@@ -11,13 +11,14 @@ public class CronometroSeries extends Thread {
 	private JLabel lblSerie;
 	private JLabel lblTiempoSerie;
 	private JLabel labelTiempoDescanso;
+	private JLabel labelCuentaAtras;
 	private ControladorCronometros controladorCron;
 	private CronometroProgresivo cronEjercicio;
 	private int serie;
 	private JButton btnAvanzar;
 	private JButton btnSiguiente;
 
-	public CronometroSeries(Ejercicio ejercicio, JLabel lblSerie, JLabel lblTiempoSerie, JLabel labelTiempoDescanso,
+	public CronometroSeries(Ejercicio ejercicio, JLabel lblSerie, JLabel lblTiempoSerie, JLabel labelTiempoDescanso, JLabel labelCuentaAtras,
 			ControladorCronometros controladorCron, CronometroProgresivo cronEjercicio, int serie, JButton btnAvanzar, JButton btnSiguiente) {
 		this.ejercicio = ejercicio;
 		this.lblSerie = lblSerie;
@@ -25,6 +26,7 @@ public class CronometroSeries extends Thread {
 		this.controladorCron = controladorCron;
 		this.cronEjercicio = cronEjercicio;
 		this.labelTiempoDescanso = labelTiempoDescanso;
+		this.labelCuentaAtras = labelCuentaAtras;
 		this.serie = serie;
 		this.btnAvanzar = btnAvanzar;
 		this.btnSiguiente = btnSiguiente;
@@ -35,7 +37,7 @@ public class CronometroSeries extends Thread {
 		System.out.println("  Serie " + serie + " de " + ejercicio.getSeries());
 		CronometroRegresivo cronSerie = new CronometroRegresivo("Serie " + serie, lblTiempoSerie,
 				ejercicio.getTiempoSerie(), false, controladorCron);
-		CronometroRegresivo cronRegresivo = new CronometroRegresivo("Cuenta atrás", labelTiempoDescanso, 5, true,
+		CronometroRegresivo cronRegresivo = new CronometroRegresivo("Cuenta atrás", labelCuentaAtras, 5, true,
 				controladorCron);
 		cronRegresivo.start();
 		try {
@@ -44,7 +46,7 @@ public class CronometroSeries extends Thread {
 
 		}
 
-		labelTiempoDescanso.setText("");
+		labelCuentaAtras.setText("");
 		cronSerie.start();
 
 		try {
