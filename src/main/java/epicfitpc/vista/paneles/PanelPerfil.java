@@ -8,6 +8,7 @@ import com.google.cloud.Timestamp;
 import epicfitpc.bbdd.GestorDeUsuarios;
 import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.Conexion;
+import epicfitpc.utils.GestorDeConexiones;
 import epicfitpc.vista.MainFrame;
 import epicfitpc.vista.componentes.JButtonPrimary;
 
@@ -124,6 +125,10 @@ public class PanelPerfil extends JPanel {
 		btnguardarDatos.setBackground(new Color(0, 0, 0));
 		btnguardarDatos.setBounds(598, 471, 138, 20);
 		add(btnguardarDatos);
+		
+		boolean hayConexion = GestorDeConexiones.getInstance().hayConexion();
+		if (!hayConexion)
+			btnguardarDatos.setVisible(false);
 
 		textUsuario = new JTextField();
 		textUsuario.setColumns(10);
