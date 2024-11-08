@@ -1,6 +1,7 @@
 package epicfitpc.vista.paneles;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -48,7 +49,7 @@ public class PanelEjercicio extends JPanel {
 	private Usuario usuario;
 	private Historico historico;
 	private ArrayList<TiempoEjercicio> tiempoEjercicios = null;
-	
+
 	private PanelMenu panelMenu;
 
 	private ControladorCronometros controladorCron = null;
@@ -69,6 +70,7 @@ public class PanelEjercicio extends JPanel {
 	private JLabel labelEjercicioActual;
 	private JLabel lblCronEjercicio;
 	private JLabel labelCuentaAtras;
+	private JLabel labelRepeticiones;
 
 	private int ejercicioActualIndex = 0;
 	private int serieActual = 1;
@@ -98,7 +100,7 @@ public class PanelEjercicio extends JPanel {
 		RoundedPanel panelWorkout = new RoundedPanel(new GridLayout(1, 0));
 		panelWorkout.setBackground(Estilos.CARD_BACKGROUND);
 		panelSuperior.add(panelWorkout);
-		
+
 		JPanel panelImagen = new JPanel(new BorderLayout(0, 0));
 		panelImagen.setOpaque(false);
 		panelWorkout.add(panelImagen);
@@ -108,7 +110,7 @@ public class PanelEjercicio extends JPanel {
 		ImageIcon img = WindowUtils.cargarImagen(ruta, 100, 100);
 		JLabel labelImg = new JLabel(img);
 		panelImagen.add(labelImg, BorderLayout.CENTER);
-		
+
 		JPanel panelInfoWorkout = new JPanel(new GridLayout(0, 1));
 		panelInfoWorkout.setOpaque(false);
 		panelWorkout.add(panelInfoWorkout);
@@ -152,10 +154,10 @@ public class PanelEjercicio extends JPanel {
 		panelEjercicio.add(lblCronEjercicio);
 
 		// Panel Central
-		JPanel panelContenedor = new JPanel(new BorderLayout(0,0));
+		JPanel panelContenedor = new JPanel(new BorderLayout(0, 0));
 		panelContenedor.setBorder(new EmptyBorder(0, 0, 20, 0));
 		add(panelContenedor, BorderLayout.CENTER);
-		
+
 		RoundedPanel panelCentral = new RoundedPanel(new GridLayout(0, 1));
 		panelContenedor.add(panelCentral, BorderLayout.CENTER);
 
@@ -171,6 +173,12 @@ public class PanelEjercicio extends JPanel {
 		labelNumeroSerie.setHorizontalAlignment(SwingConstants.CENTER);
 		labelNumeroSerie.setFont(new Font("Noto Sans", Font.BOLD, 18));
 		panelCentral.add(labelNumeroSerie);
+
+		labelRepeticiones = new JLabel("Repeticiones: "
+				+ (workout != null ? workout.getEjercicios().get(ejercicioActualIndex).getRepeticiones() : "X"));
+		labelRepeticiones.setHorizontalAlignment(SwingConstants.CENTER);
+		labelRepeticiones.setFont(new Font("Noto Sans", Font.BOLD, 20));
+		panelCentral.add(labelRepeticiones);
 
 		labelTiempoSerie = new JLabel("00:00");
 		labelTiempoSerie.setHorizontalAlignment(SwingConstants.CENTER);
@@ -219,17 +227,17 @@ public class PanelEjercicio extends JPanel {
 				avanzarSerie();
 			}
 		});
-		
-	    btnSalir.addActionListener(new ActionListener() {
-	        public void actionPerformed(ActionEvent e) {
-	            salir();
-	        }
-	    });
+
+		btnSalir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				salir();
+			}
+		});
 
 		JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		panelInferior.add(btnSiguiente);
 		panelInferior.add(btnIniciar);
 		panelInferior.add(btnPausar);
+		panelInferior.add(btnSiguiente);
 		panelInferior.add(btnAvanzar);
 		panelInferior.add(btnSalir);
 		add(panelInferior, BorderLayout.SOUTH);
@@ -255,9 +263,13 @@ public class PanelEjercicio extends JPanel {
 		if (btnPausar.getText().equalsIgnoreCase("PAUSAR")) {
 			controladorCron.pausarTodos();
 			btnPausar.setText("REANUDAR");
+			btnPausar.setBackgroundColor(Estilos.BLACK);
+			btnPausar.setHoverColor(Color.DARK_GRAY);
 		} else {
 			controladorCron.reanudarTodos();
 			btnPausar.setText("PAUSAR");
+			btnPausar.setBackgroundColor(Estilos.PRIMARY);
+			btnPausar.setHoverColor(Estilos.PRIMARY_DARK);
 		}
 	}
 
@@ -265,6 +277,7 @@ public class PanelEjercicio extends JPanel {
 		if (ejercicioActualIndex < workout.getEjercicios().size()) {
 			Ejercicio ejercicioActual = workout.getEjercicios().get(ejercicioActualIndex);
 			labelEjercicioActual.setText(ejercicioActual.getNombre());
+			labelRepeticiones.setText("Repeticiones: " + ejercicioActual.getRepeticiones());
 			cronEjercicio = new CronometroProgresivo("Ejercicio - " + ejercicioActual.getOrden(), lblCronEjercicio,
 					controladorCron);
 			cronEjercicio.start();
@@ -276,8 +289,8 @@ public class PanelEjercicio extends JPanel {
 
 	private void iniciarSerie() {
 		Ejercicio ejercicioActual = workout.getEjercicios().get(ejercicioActualIndex);
-		cronSeries = new CronometroSeries(ejercicioActual, labelNumeroSerie, labelTiempoSerie,
-				labelTiempoDescanso, labelCuentaAtras, controladorCron, cronEjercicio, serieActual, btnAvanzar, btnSiguiente);
+		cronSeries = new CronometroSeries(ejercicioActual, labelNumeroSerie, labelTiempoSerie, labelTiempoDescanso,
+				labelCuentaAtras, controladorCron, cronEjercicio, serieActual, btnAvanzar, btnSiguiente, this);
 		cronSeries.start();
 	}
 
@@ -295,14 +308,13 @@ public class PanelEjercicio extends JPanel {
 		if (tiempoEjercicios == null)
 			tiempoEjercicios = new ArrayList<TiempoEjercicio>();
 		Ejercicio ejercicioActual = workout.getEjercicios().get(ejercicioActualIndex);
-		
+
 		TiempoEjercicio tiempoEjercicio = new TiempoEjercicio();
 		tiempoEjercicio.setEjercicio(ejercicioActual);
 		tiempoEjercicio.setTiempo(cronEjercicio.getTiempo());
 		tiempoEjercicios.add(tiempoEjercicio);
 		System.out.println("Tiempos: " + tiempoEjercicios.toString());
-		ejerciciosCompletados++;
-		
+
 		if (ejercicioActualIndex < workout.getEjercicios().size() - 1) {
 			ejercicioActualIndex++;
 			serieActual = 1;
@@ -314,15 +326,15 @@ public class PanelEjercicio extends JPanel {
 			salir();
 		}
 	}
-	
+
 	private void salir() {
-		if (cronSeries.isAlive())
+		if (cronSeries != null && cronSeries.isAlive())
 			cronSeries.terminar();
-		if (cronGeneral.isAlive())
+		if (cronGeneral != null && cronGeneral.isAlive())
 			cronGeneral.terminar();
-		if (cronEjercicio.isAlive())
+		if (cronEjercicio != null && cronEjercicio.isAlive())
 			cronEjercicio.terminar();
-		
+
 		if (cronGeneral.getTiempo() == 0 || ejerciciosCompletados == 0) {
 			this.setVisible(false);
 			this.getParent().remove(this);
@@ -331,7 +343,7 @@ public class PanelEjercicio extends JPanel {
 			panelMenu.seleccionarPrimerTab();
 			return;
 		}
-			
+
 		try {
 			Firestore db = Conexion.getInstance().getConexion();
 			historico = new Historico();
@@ -349,8 +361,8 @@ public class PanelEjercicio extends JPanel {
 			String idUsuario = usuario.getId();
 
 			if (nivelUsuario == workout.getNivel() && historico.getPorcentaje() == 100) {
-				int nuevoNivel = nivelUsuario+1;
-				
+				int nuevoNivel = nivelUsuario + 1;
+
 				usuario.setNivel(nuevoNivel);
 				gdu.actualizarNivelUsuario(idUsuario, nuevoNivel);
 			}
@@ -369,12 +381,20 @@ public class PanelEjercicio extends JPanel {
 	private int calcularPorcentaje() {
 		return (ejerciciosCompletados * 100) / (workout.getEjercicios().size());
 	}
-	
+
 	private void cerrarPanel() {
 		MainFrame.getInstance().getContentPane().removeAll();
-		JPanel panelResumen = new PanelResumen(historico);
+		JPanel panelResumen = new PanelResumen(historico, tiempoEjercicios);
 		MainFrame.getInstance().getContentPane().add(panelResumen);
 		MainFrame.getInstance().revalidate();
 		MainFrame.getInstance().repaint();
+	}
+	
+	public void setEjerciciosCompletados(int completados) {
+		this.ejerciciosCompletados = completados;
+	}
+	
+	public int getEjerciciosCompletados() {
+		return this.ejerciciosCompletados;
 	}
 }

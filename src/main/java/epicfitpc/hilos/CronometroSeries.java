@@ -4,6 +4,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import epicfitpc.modelo.Ejercicio;
+import epicfitpc.vista.paneles.PanelEjercicio;
 
 public class CronometroSeries extends Thread {
 
@@ -19,10 +20,11 @@ public class CronometroSeries extends Thread {
 	private JButton btnSiguiente;
 	private CronometroRegresivo cronSerie;
 	private CronometroRegresivo cronRegresivo;
+	private PanelEjercicio panelEjercicio;
 
 	public CronometroSeries(Ejercicio ejercicio, JLabel lblSerie, JLabel lblTiempoSerie, JLabel labelTiempoDescanso,
 			JLabel labelCuentaAtras, ControladorCronometros controladorCron, CronometroProgresivo cronEjercicio,
-			int serie, JButton btnAvanzar, JButton btnSiguiente) {
+			int serie, JButton btnAvanzar, JButton btnSiguiente, PanelEjercicio panelEjercicio) {
 		this.ejercicio = ejercicio;
 		this.lblSerie = lblSerie;
 		this.lblTiempoSerie = lblTiempoSerie;
@@ -33,6 +35,7 @@ public class CronometroSeries extends Thread {
 		this.serie = serie;
 		this.btnAvanzar = btnAvanzar;
 		this.btnSiguiente = btnSiguiente;
+		this.panelEjercicio = panelEjercicio;
 	}
 
 	public void run() {
@@ -50,9 +53,11 @@ public class CronometroSeries extends Thread {
 			cronSerie.start();
 
 			cronSerie.join();
+			labelCuentaAtras.setText("PULSA AVANZAR");
 
 			if (serie == ejercicio.getSeries()) {
 				cronEjercicio.terminar();
+				panelEjercicio.setEjerciciosCompletados(panelEjercicio.getEjerciciosCompletados() + 1);
 				btnSiguiente.setVisible(true);
 			} else {
 				btnAvanzar.setVisible(true);

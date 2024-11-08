@@ -6,11 +6,13 @@ import java.awt.GridLayout;
 import javax.swing.BoxLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import epicfitpc.modelo.Historico;
+import epicfitpc.modelo.TiempoEjercicio;
 import epicfitpc.modelo.Workout;
 import epicfitpc.utils.Estilos;
 import epicfitpc.utils.UsuarioLogueado;
@@ -19,10 +21,15 @@ import epicfitpc.vista.componentes.JButtonPrimary;
 import epicfitpc.vista.componentes.JLabelTitle;
 
 public class PanelResumen extends JPanel {
+	private static final long serialVersionUID = -5043545200247246122L;
 	private Historico historico = null;
+	private ArrayList<TiempoEjercicio> tiempoEjercicios;
+	private String[] mensajesPositivos = {"¡Felicidades!", ""};
+	private String[] mensajesAnimo = {"¡Ánimo, tú puedes!"};
 
-	public PanelResumen(Historico historico) {
+	public PanelResumen(Historico historico, ArrayList<TiempoEjercicio> tiempoEjercicios) {
 		this.historico = historico;
+		this.tiempoEjercicios = tiempoEjercicios;
 		initialize();
 	}
 
@@ -70,7 +77,7 @@ public class PanelResumen extends JPanel {
 
 		// Mensaje motivacional
 		JPanel panelMotivacional = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		JLabel labelMotivacional = new JLabel("Ánimo, ¡tú puedes!"); // Quizas mostrar mensajes aleatorios guardados
+		JLabel labelMotivacional = new JLabel("Ánimo, ¡tú puedes!");
 		panelMotivacional.add(labelMotivacional);
 		panelMotivacional.setBackground(Estilos.DARK_BACKGROUND);
 		panelInferior.add(panelMotivacional);
@@ -92,7 +99,7 @@ public class PanelResumen extends JPanel {
 	}
 
 	private void cerrarPanel() {
-				MainFrame.getInstance().getContentPane().removeAll();
+		MainFrame.getInstance().getContentPane().removeAll();
 		MainFrame.getInstance().getContentPane().add(new PanelMenu(UsuarioLogueado.getInstance().getUsuario()));
 		MainFrame.getInstance().revalidate();
 		MainFrame.getInstance().repaint();
