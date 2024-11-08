@@ -93,7 +93,7 @@ public class PanelResumen extends JPanel {
 
 	private void cerrarPanel() {
 				MainFrame.getInstance().getContentPane().removeAll();
-		MainFrame.getInstance().getContentPane().add(new PanelMenu());
+		MainFrame.getInstance().getContentPane().add(new PanelMenu(UsuarioLogueado.getInstance().getUsuario()));
 		MainFrame.getInstance().revalidate();
 		MainFrame.getInstance().repaint();
 

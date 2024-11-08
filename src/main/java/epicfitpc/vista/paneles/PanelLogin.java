@@ -1,3 +1,4 @@
+
 package epicfitpc.vista.paneles;
 
 import javax.swing.JPanel;
@@ -61,7 +62,7 @@ public class PanelLogin extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					// Obtener los datos introducidos
-					String usuarioIntroducido = txtIntroduceTuCorreo.getText();
+					String usuarioIntroducido = txtIntroduceTuCorreo.getText().toLowerCase();
 					String passIntroducido = txtIntroduceTuPass.getText();
 
 					boolean hayConexion = GestorDeConexiones.getInstance().hayConexion();
@@ -85,7 +86,7 @@ public class PanelLogin extends JPanel {
 						WindowUtils.confirmationPane("Hola, " + usuario.getNombre() + ", ¡bienvenid@ a EpicFit!", "Acceso concedido");
 						UsuarioLogueado.getInstance().setUsuario(usuario);
 						MainFrame.getInstance().getContentPane().removeAll();
-						MainFrame.getInstance().getContentPane().add(new PanelMenu());
+						MainFrame.getInstance().getContentPane().add(new PanelMenu(usuario));
 						MainFrame.getInstance().revalidate();
 						MainFrame.getInstance().repaint();
 					} else {

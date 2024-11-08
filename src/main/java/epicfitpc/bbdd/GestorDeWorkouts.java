@@ -44,8 +44,10 @@ public class GestorDeWorkouts {
 			Workout workout = documento.toObject(Workout.class);
 			workout.setId(documento.getId());
 			
+
 			ArrayList<Ejercicio> ejercicios = obtenerEjercicios(workout);
 			workout.setEjercicios(ejercicios);
+
 			
 			int tiempoTotal = agregarTiempoEstimadoWorkout(ejercicios);
 			workout.setTiempo(tiempoTotal);

@@ -31,9 +31,10 @@ public class GestorDeHistoricos {
 			throws InterruptedException, ExecutionException {
 		System.out.println("BBDD: obtenerTodosLosHistoricosPorUsuario");
 		ArrayList<Historico> historicos = null;
-		
+
 		String idUsuario = usuario.getId();
-		CollectionReference historicosDb = db.collection(DBUtils.USUARIOS).document(idUsuario).collection(DBUtils.HISTORICOS);
+		CollectionReference historicosDb = db.collection(DBUtils.USUARIOS).document(idUsuario)
+				.collection(DBUtils.HISTORICOS);
 		ApiFuture<QuerySnapshot> futureQuery = historicosDb.orderBy("fecha", Query.Direction.DESCENDING).get();
 		QuerySnapshot querySnapshot = null;
 
@@ -82,7 +83,7 @@ public class GestorDeHistoricos {
 
 		return w;
 	}
-	
+
 	public boolean guardarHistorico(Usuario usuario, Historico historico)
 			throws InterruptedException, ExecutionException {
 		// Obtener la referencia de la colección 'historicos' para el usuario
