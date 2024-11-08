@@ -19,7 +19,6 @@ import epicfitpc.vista.componentes.JButtonPrimary;
 import epicfitpc.vista.componentes.JLabelTitle;
 
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
@@ -34,6 +33,7 @@ public class PanelLogin extends JPanel {
 	private JTextField txtIntroduceTuCorreo;
 	private JTextField txtIntroduceTuPass;
 	private static final String FICHERO_USUARIOS = Rutas.BACKUP_USUARIOS;
+	private boolean hayConexion = GestorDeConexiones.getInstance().hayConexion();
 
 	public PanelLogin(MainFrame frame) {
 		initialize(frame);
@@ -43,16 +43,16 @@ public class PanelLogin extends JPanel {
 		setLayout(new GridLayout(1, 2));
 		setBounds(100, 100, 1200, 750);
 		setBackground(Estilos.DARK_BACKGROUND);
-		
+
 		JPanel panelIzquierda = new JPanel();
 		panelIzquierda.setBackground(Estilos.PRIMARY);
 		panelIzquierda.setLayout(new BorderLayout());
 		add(panelIzquierda);
-		
+
 		JPanel panelDerecha = new JPanel();
 		panelDerecha.setLayout(null);
 		add(panelDerecha);
-		
+
 		JLabelTitle lblNewLabel = new JLabelTitle("¡Bienvenid@ a EpicFit!");
 		lblNewLabel.setBounds(180, 111, 300, 31);
 		panelDerecha.add(lblNewLabel);
@@ -60,40 +60,50 @@ public class PanelLogin extends JPanel {
 		JButtonPrimary btnNewButton = new JButtonPrimary("Iniciar sesión");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					// Obtener los datos introducidos
-					String usuarioIntroducido = txtIntroduceTuCorreo.getText().toLowerCase();
-					String passIntroducido = txtIntroduceTuPass.getText();
 
-					boolean hayConexion = GestorDeConexiones.getInstance().hayConexion();
-					ArrayList<Usuario> usuarios = null;
-					Usuario usuario = null;
+				// Obtener los datos introducidos
+				String usuarioIntroducido = txtIntroduceTuCorreo.getText().toLowerCase();
+				String passIntroducido = txtIntroduceTuPass.getText();
 
-					// CARGAR DEPENDIENDO DE CONEXIÓN
-					if (hayConexion) {
+				ArrayList<Usuario> usuarios = null;
+				Usuario usuario = null;
+
+				// CARGAR DEPENDIENDO DE CONEXIÓN
+				if (hayConexion) {
+					try {
 						GestorDeUsuarios gestorDeUsuarios = new GestorDeUsuarios(Conexion.getInstance().getConexion());
 						usuarios = gestorDeUsuarios.obtenerTodosLosUsuarios();
-					} else {
-						GestorDeFicherosBinarios<Usuario> gdfb = new GestorDeFicherosBinarios<Usuario>(FICHERO_USUARIOS);
+					} catch (Exception e1) {
+						WindowUtils.errorPane("Error al obtener usuarios.", "Error");
+					}
+				} else {
+					GestorDeFicherosBinarios<Usuario> gdfb = new GestorDeFicherosBinarios<Usuario>(FICHERO_USUARIOS);
+					try {
 						usuarios = gdfb.leer();
+					} catch (Exception e2) {
+						WindowUtils.errorPane("Error al leer usuarios.", "Error");
 					}
-					
-					// Devolverá el usuario si los datos introducidos son correctos
-					Controlador controlador = new Controlador();
+				}
+
+				// Devolverá el usuario si los datos introducidos son correctos
+				Controlador controlador = new Controlador();
+				try {
 					usuario = controlador.comprobarUsuario(usuarios, usuarioIntroducido, passIntroducido);
-					if (usuario != null) {
-						// si usuario y login es correcto
-						WindowUtils.confirmationPane("Hola, " + usuario.getNombre() + ", ¡bienvenid@ a EpicFit!", "Acceso concedido");
-						UsuarioLogueado.getInstance().setUsuario(usuario);
-						MainFrame.getInstance().getContentPane().removeAll();
-						MainFrame.getInstance().getContentPane().add(new PanelMenu(usuario));
-						MainFrame.getInstance().revalidate();
-						MainFrame.getInstance().repaint();
-					} else {
-						WindowUtils.errorPane("No se ha podido completar el inicio de sesión." , "Acceso denegado");
-					}
-				} catch (Exception e1) {
-					WindowUtils.errorPane("No se ha podido completar el inicio de sesión." , "Acceso denegado");
+				} catch (Exception e3) {
+					WindowUtils.errorPane("Error en el acceso.", "Error");
+				}
+				if (usuario != null) {
+					// si usuario y login es correcto
+					WindowUtils.confirmationPane("Hola, " + usuario.getNombre() + ", ¡bienvenid@ a EpicFit!",
+							"Acceso concedido");
+					UsuarioLogueado.getInstance().setUsuario(usuario);
+					MainFrame.getInstance().getContentPane().removeAll();
+					MainFrame.getInstance().getContentPane()
+							.add(new PanelMenu(UsuarioLogueado.getInstance().getUsuario()));
+					MainFrame.getInstance().revalidate();
+					MainFrame.getInstance().repaint();
+				} else {
+					WindowUtils.errorPane("No se ha podido completar el inicio de sesión.", "Acceso denegado");
 				}
 			}
 		});
@@ -121,6 +131,7 @@ public class PanelLogin extends JPanel {
 
 		JButtonPrimary btnNewButton_1 = new JButtonPrimary("Registrarme");
 		btnNewButton_1.addActionListener(new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
 				MainFrame.getInstance().getContentPane().removeAll();
 				MainFrame.getInstance().getContentPane().add(new PanelRegistro(frame));
@@ -134,10 +145,15 @@ public class PanelLogin extends JPanel {
 		JLabel lblNewLabel_2_1 = new JLabel("¿Todavia no tienes cuenta?");
 		lblNewLabel_2_1.setBounds(180, 550, 300, 20);
 		panelDerecha.add(lblNewLabel_2_1);
-		
+
 		// logo de la compania
 		ImageIcon img = WindowUtils.cargarImagen(Rutas.LOGO_EF, 500, 500);
 		JLabel lblNewLabel_3 = new JLabel(img);
 		panelIzquierda.add(lblNewLabel_3);
+		
+		if (!hayConexion) {
+			btnNewButton_1.setVisible(false);
+			lblNewLabel_2_1.setVisible(false);
+		}
 	}
 }

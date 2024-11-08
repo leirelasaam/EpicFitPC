@@ -8,7 +8,6 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -36,6 +35,7 @@ import epicfitpc.modelo.Workout;
 import epicfitpc.utils.Conexion;
 import epicfitpc.utils.DBUtils;
 import epicfitpc.utils.Estilos;
+import epicfitpc.utils.GestorDeConexiones;
 import epicfitpc.utils.ImageUtils;
 import epicfitpc.utils.UsuarioLogueado;
 import epicfitpc.utils.WindowUtils;
@@ -49,6 +49,8 @@ public class PanelEjercicio extends JPanel {
 	private Usuario usuario;
 	private Historico historico;
 	private ArrayList<TiempoEjercicio> tiempoEjercicios = null;
+
+	private boolean hayConexion = GestorDeConexiones.getInstance().hayConexion();
 
 	private PanelMenu panelMenu;
 
@@ -177,7 +179,7 @@ public class PanelEjercicio extends JPanel {
 		labelRepeticiones = new JLabel("Repeticiones: "
 				+ (workout != null ? workout.getEjercicios().get(ejercicioActualIndex).getRepeticiones() : "X"));
 		labelRepeticiones.setHorizontalAlignment(SwingConstants.CENTER);
-		labelRepeticiones.setFont(new Font("Noto Sans", Font.BOLD, 20));
+		labelRepeticiones.setFont(new Font("Noto Sans", Font.BOLD, 18));
 		panelCentral.add(labelRepeticiones);
 
 		labelTiempoSerie = new JLabel("00:00");
@@ -235,16 +237,17 @@ public class PanelEjercicio extends JPanel {
 		});
 
 		JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		panelInferior.add(btnIniciar);
-		panelInferior.add(btnPausar);
-		panelInferior.add(btnSiguiente);
-		panelInferior.add(btnAvanzar);
-		panelInferior.add(btnSalir);
 		add(panelInferior, BorderLayout.SOUTH);
 
+		panelInferior.add(btnIniciar);
+		panelInferior.add(btnSiguiente);
+		panelInferior.add(btnAvanzar);
+		panelInferior.add(btnPausar);
+		panelInferior.add(btnSalir);
+
+		btnPausar.setVisible(false);
 		btnAvanzar.setVisible(false);
 		btnSiguiente.setVisible(false);
-		btnPausar.setVisible(false);
 
 		cronGeneral = new CronometroProgresivo("Cronómetro del workout", labelCronometroGeneral, controladorCron);
 	}
@@ -305,16 +308,6 @@ public class PanelEjercicio extends JPanel {
 	}
 
 	private void siguienteEjercicio() {
-		if (tiempoEjercicios == null)
-			tiempoEjercicios = new ArrayList<TiempoEjercicio>();
-		Ejercicio ejercicioActual = workout.getEjercicios().get(ejercicioActualIndex);
-
-		TiempoEjercicio tiempoEjercicio = new TiempoEjercicio();
-		tiempoEjercicio.setEjercicio(ejercicioActual);
-		tiempoEjercicio.setTiempo(cronEjercicio.getTiempo());
-		tiempoEjercicios.add(tiempoEjercicio);
-		System.out.println("Tiempos: " + tiempoEjercicios.toString());
-
 		if (ejercicioActualIndex < workout.getEjercicios().size() - 1) {
 			ejercicioActualIndex++;
 			serieActual = 1;
@@ -325,6 +318,18 @@ public class PanelEjercicio extends JPanel {
 				cronGeneral.terminar();
 			salir();
 		}
+	}
+
+	public ArrayList<TiempoEjercicio> getTiempoEjercicios() {
+		return this.tiempoEjercicios;
+	}
+
+	public void setTiempoEjercicio(ArrayList<TiempoEjercicio> tiempoEjercicios) {
+		this.tiempoEjercicios = tiempoEjercicios;
+	}
+
+	public void addTiempoEjercicio(TiempoEjercicio tiempoEjercicio) {
+		this.tiempoEjercicios.add(tiempoEjercicio);
 	}
 
 	private void salir() {
@@ -344,37 +349,44 @@ public class PanelEjercicio extends JPanel {
 			return;
 		}
 
+		Firestore db = null;
 		try {
-			Firestore db = Conexion.getInstance().getConexion();
-			historico = new Historico();
-			historico.setTiempo(cronGeneral.getTiempo());
-			historico.setFecha(Timestamp.now());
-			historico.setWorkout(db.document(DBUtils.WORKOUTS + "/" + workout.getId()));
-			historico.setPorcentaje(calcularPorcentaje());
-
-			GestorDeHistoricos gdh = new GestorDeHistoricos(db);
-			gdh.guardarHistorico(usuario, historico);
-
-			GestorDeUsuarios gdu = new GestorDeUsuarios(db);
-
-			int nivelUsuario = usuario.getNivel();
-			String idUsuario = usuario.getId();
-
-			if (nivelUsuario == workout.getNivel() && historico.getPorcentaje() == 100) {
-				int nuevoNivel = nivelUsuario + 1;
-
-				usuario.setNivel(nuevoNivel);
-				gdu.actualizarNivelUsuario(idUsuario, nuevoNivel);
-			}
-
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+			db = Conexion.getInstance().getConexion();
+		} catch (Exception e) {
+			
 		}
+		
+		historico = new Historico();
+		historico.setTiempo(cronGeneral.getTiempo());
+		historico.setFecha(Timestamp.now());
+		historico.setWorkout(db.document(DBUtils.WORKOUTS + "/" + workout.getId()));
+		historico.setPorcentaje(calcularPorcentaje());
+		
+		if (hayConexion) {
+			try {
+				
 
+				GestorDeHistoricos gdh = new GestorDeHistoricos(db);
+				gdh.guardarHistorico(usuario, historico);
+				
+				GestorDeUsuarios gdu = new GestorDeUsuarios(db);
+				int nivelUsuario = usuario.getNivel();
+				String idUsuario = usuario.getId();
+
+				if (nivelUsuario == workout.getNivel() && historico.getPorcentaje() == 100) {
+					int nuevoNivel = nivelUsuario + 1;
+
+					usuario.setNivel(nuevoNivel);
+					gdu.actualizarNivelUsuario(idUsuario, nuevoNivel);
+				}
+
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		cerrarPanel();
 	}
 
@@ -389,11 +401,11 @@ public class PanelEjercicio extends JPanel {
 		MainFrame.getInstance().revalidate();
 		MainFrame.getInstance().repaint();
 	}
-	
+
 	public void setEjerciciosCompletados(int completados) {
 		this.ejerciciosCompletados = completados;
 	}
-	
+
 	public int getEjerciciosCompletados() {
 		return this.ejerciciosCompletados;
 	}
