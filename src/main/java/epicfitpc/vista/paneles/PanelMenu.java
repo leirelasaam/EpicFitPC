@@ -39,4 +39,8 @@ public class PanelMenu extends JPanel {
         tabbedPane.addTab(titulo, nuevoPanel);
         tabbedPane.setSelectedComponent(nuevoPanel);
     }
+    
+    public void seleccionarPrimerTab() {
+        tabbedPane.setSelectedIndex(0);
+    }
 }

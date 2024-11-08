@@ -48,6 +48,8 @@ public class PanelEjercicio extends JPanel {
 	private Usuario usuario;
 	private Historico historico;
 	private ArrayList<TiempoEjercicio> tiempoEjercicios = null;
+	
+	private PanelMenu panelMenu;
 
 	private ControladorCronometros controladorCron = null;
 	private CronometroProgresivo cronGeneral;
@@ -71,11 +73,12 @@ public class PanelEjercicio extends JPanel {
 	private int serieActual = 1;
 	int ejerciciosCompletados = 0;
 
-	public PanelEjercicio(Workout workout) {
+	public PanelEjercicio(Workout workout, PanelMenu panelMenu) {
 		this.usuario = UsuarioLogueado.getInstance().getUsuario();
 		this.workout = workout;
 		Collections.sort(workout.getEjercicios(), Comparator.comparingInt(Ejercicio::getOrden));
 		this.controladorCron = new ControladorCronometros();
+		this.panelMenu = panelMenu;
 		initialize();
 	}
 
@@ -319,6 +322,7 @@ public class PanelEjercicio extends JPanel {
 			this.getParent().remove(this);
 			this.revalidate();
 			this.repaint();
+			panelMenu.seleccionarPrimerTab();
 			return;
 		}
 			

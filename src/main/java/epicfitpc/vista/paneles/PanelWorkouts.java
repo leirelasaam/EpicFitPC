@@ -299,7 +299,7 @@ public class PanelWorkouts extends JPanel {
 	}
 
 	private void iniciarWorkout() {
-		PanelEjercicio panelEjercicio = new PanelEjercicio(workoutSeleccionado);
+		PanelEjercicio panelEjercicio = new PanelEjercicio(workoutSeleccionado, panelMenu);
 		panelMenu.agregarNuevoTab("Ejercicio", panelEjercicio);
 	}
 
