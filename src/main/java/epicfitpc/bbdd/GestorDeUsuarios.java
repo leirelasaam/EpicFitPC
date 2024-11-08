@@ -53,18 +53,9 @@ public class GestorDeUsuarios {
 
 		List<QueryDocumentSnapshot> documentos = querySnapshot.getDocuments();
 		for (QueryDocumentSnapshot documento : documentos) {
-			String id = documento.getId();
-			String nombre = documento.getString("nombre");
-			String apellido = documento.getString("apellido");
-			String correo = documento.getString("correo");
-			double nivel = documento.getDouble("nivel");
-			Timestamp fechaNac = documento.getTimestamp("fechaNac");
-			Timestamp fechaAlt = documento.getTimestamp("fechaAlt");
-			boolean esEntrenador = documento.getBoolean("esEntrenador");
-			String user = documento.getString("usuario");
-			String pass = documento.getString("pass");
-			Usuario usuario = new Usuario(id, nombre, apellido, correo, user, pass, nivel, fechaNac, fechaAlt,
-					esEntrenador);
+			Usuario usuario = documento.toObject(Usuario.class);
+			usuario.setId(documento.getId());
+			
 			if (null == usuarios)
 				usuarios = new ArrayList<Usuario>();
 			usuarios.add(usuario);
@@ -119,20 +110,8 @@ public class GestorDeUsuarios {
 
 		for (DocumentSnapshot documento : querySnapshot.getDocuments()) {
 			if (documento.exists()) {
-
-				String nombre = documento.getString("nombre");
-				String apellido = documento.getString("apellido");
-				String correo = documento.getString("correo");
-				double nivel = documento.getDouble("nivel");
-				Timestamp fechaNac = documento.getTimestamp("fechaNac");
-				Timestamp fechaAlt = documento.getTimestamp("fechaAlt");
-				boolean esEntrenador = documento.getBoolean("esEntrenador");
-				String user = documento.getString("usuario");
-				String pass = documento.getString("pass");
-
-				usuario = new Usuario(null, nombre, apellido, correo, user, pass, nivel, fechaNac, fechaAlt,
-						esEntrenador);
-				System.out.println(usuario.toString());
+				usuario = documento.toObject(Usuario.class);
+				usuario.setId(documento.getId());
 			} else {
 				// Devuelve null si no se encuentra el usuario
 				System.out.println("No se encontró un usuario con el nombre de usuario especificado: " + nombreUsuario);
