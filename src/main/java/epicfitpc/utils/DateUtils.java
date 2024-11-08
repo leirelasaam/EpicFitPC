@@ -46,5 +46,11 @@ public class DateUtils {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
         return sdf.format(date);
     }
+    
+    public static String formatearTiempoCronometro(int tiempo) {
+		int minutos = tiempo / 60;
+		int segundos = tiempo % 60;
+		return String.format("%02d:%02d", minutos, segundos);
+	}
 }
 

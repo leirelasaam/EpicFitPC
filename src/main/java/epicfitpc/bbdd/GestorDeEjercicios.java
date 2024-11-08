@@ -25,6 +25,7 @@ public class GestorDeEjercicios {
 
 	public ArrayList<Ejercicio> obtenerEjerciciosPorWorkout(Workout workout)
 			throws InterruptedException, ExecutionException {
+		System.out.println("BBDD: obtenerEjerciciosPorWorkout");
 		ArrayList<Ejercicio> ejercicios = null;
 		String idWorkout = workout.getId();
 

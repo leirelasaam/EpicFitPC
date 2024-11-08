@@ -29,6 +29,7 @@ public class GestorDeHistoricos {
 
 	public ArrayList<Historico> obtenerTodosLosHistoricosPorUsuario(Usuario usuario)
 			throws InterruptedException, ExecutionException {
+		System.out.println("BBDD: obtenerTodosLosHistoricosPorUsuario");
 		ArrayList<Historico> historicos = null;
 
 		String idUsuario = usuario.getId();

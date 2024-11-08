@@ -268,6 +268,7 @@ public class PanelWorkouts extends JPanel {
 	}
 
 	private ArrayList<Workout> obtenerWorkouts() {
+		System.out.println("Obteniendo workouts en Workout");
 		ArrayList<Workout> workouts = null;
 		Firestore db;
 		boolean hayConexion = GestorDeConexiones.getInstance().hayConexion();
@@ -298,7 +299,7 @@ public class PanelWorkouts extends JPanel {
 	}
 
 	private void iniciarWorkout() {
-		PanelEjercicio panelEjercicio = new PanelEjercicio(workoutSeleccionado);
+		PanelEjercicio panelEjercicio = new PanelEjercicio(workoutSeleccionado, panelMenu);
 		panelMenu.agregarNuevoTab("Ejercicio", panelEjercicio);
 	}
 
