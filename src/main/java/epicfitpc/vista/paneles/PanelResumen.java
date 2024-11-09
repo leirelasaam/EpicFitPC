@@ -46,7 +46,7 @@ public class PanelResumen extends JPanel {
 
 	private void initialize() {
 		setLayout(new BorderLayout(0, 0));
-		setBackground(Estilos.DARK_BACKGROUND);
+		setBackground(Estilos.BACKGROUND);
 
 		// PARTE NORTE DEL PANEL
 		// Titulo
@@ -80,7 +80,7 @@ public class PanelResumen extends JPanel {
 		panelEjercicios = new JPanel(new GridLayout(0, 1, 10, 10));
 		panelEjercicios.setBackground(Color.WHITE);
 		panelEjercicios.setBorder(new EmptyBorder(10, 10, 10, 10));
-		panelEjercicios.setBackground(Estilos.DARK_BACKGROUND);
+		panelEjercicios.setBackground(Estilos.BACKGROUND);
 
 		JScrollPane scrollPane = new JScrollPane(panelEjercicios);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -131,7 +131,7 @@ public class PanelResumen extends JPanel {
 		// Paneles vacíos para que se ajusten bien los tamaños
 		for (int i = numeroDePaneles; i < panelesNecesarios; i++) {
 			JPanel emptyPanel = new JPanel();
-			emptyPanel.setBackground(Estilos.DARK_BACKGROUND);
+			emptyPanel.setBackground(Estilos.BACKGROUND);
 			panel.add(emptyPanel);
 		}
 	}

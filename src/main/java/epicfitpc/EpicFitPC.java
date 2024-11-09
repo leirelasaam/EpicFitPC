@@ -55,7 +55,7 @@ public class EpicFitPC {
 			UIManager.put("ComboBox.font", Estilos.FONT_SMALL_BOLD);
 
 			// Configuración de colores para el JTabbedPane
-			UIManager.put("TabbedPane.selectedBackground", Estilos.DARK_BACKGROUND);
+			UIManager.put("TabbedPane.selectedBackground", Estilos.BACKGROUND);
 			UIManager.put("TabbedPane.selectedForeground", Estilos.PRIMARY);
 			UIManager.put("TabbedPane.font", Estilos.FONT_SMALL_BOLD);
 

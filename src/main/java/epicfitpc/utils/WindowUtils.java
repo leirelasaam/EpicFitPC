@@ -17,9 +17,9 @@ public class WindowUtils {
 	 * @param title   título
 	 */
 	public static void errorPane(String message, String title) {
-		UIManager.put("OptionPane.background", Estilos.DARK_BACKGROUND);
-		UIManager.put("OptionPane.messagebackground", Estilos.DARK_BACKGROUND);
-		UIManager.put("Panel.background", Estilos.DARK_BACKGROUND);
+		UIManager.put("OptionPane.background", Estilos.BACKGROUND);
+		UIManager.put("OptionPane.messagebackground", Estilos.BACKGROUND);
+		UIManager.put("Panel.background", Estilos.BACKGROUND);
 		UIManager.put("Button.background", Color.WHITE);
 		UIManager.put("Button.foreground", Color.BLACK);
 
@@ -39,9 +39,9 @@ public class WindowUtils {
 	 * @param title   título
 	 */
 	public static void confirmationPane(String message, String title) {
-		UIManager.put("OptionPane.background", Estilos.DARK_BACKGROUND);
-		UIManager.put("OptionPane.messagebackground", Estilos.DARK_BACKGROUND);
-		UIManager.put("Panel.background", Estilos.DARK_BACKGROUND);
+		UIManager.put("OptionPane.background", Estilos.BACKGROUND);
+		UIManager.put("OptionPane.messagebackground", Estilos.BACKGROUND);
+		UIManager.put("Panel.background", Estilos.BACKGROUND);
 		UIManager.put("Button.background", Color.WHITE);
 		UIManager.put("Button.foreground", Color.BLACK);
 
