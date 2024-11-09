@@ -44,7 +44,7 @@ public class PanelRegistro extends JPanel {
 	private static final long serialVersionUID = -7631458094715795013L;
 	private JTextField textUsuario;
 	private JPasswordField passwordField;
-	private JPasswordField passwordField_2;
+	private JPasswordField passwordField2;
 	private JTextField textFechaNac;
 	private JTextField textNombre;
 	private JTextField textApellido;
@@ -70,7 +70,7 @@ public class PanelRegistro extends JPanel {
 		panelDatosUsuario.setBorder(new EmptyBorder(50, 50, 100, 50));
 		panelContenido.add(panelDatosUsuario);
 
-		JLabelTitle lblDatosDeUsuario = new JLabelTitle("Datos de usuario");
+		JLabelTitle lblDatosDeUsuario = new JLabelTitle("Datos del Usuario");
 		panelDatosUsuario.add(lblDatosDeUsuario);
 
 		JLabel lblNombre = new JLabel("Nombre");
@@ -107,7 +107,7 @@ public class PanelRegistro extends JPanel {
 		panelDatosCuenta.setBorder(new EmptyBorder(50, 50, 100, 50));
 		panelContenido.add(panelDatosCuenta);
 
-		JLabelTitle lblDatosCuenta = new JLabelTitle("Datos de tu cuenta");
+		JLabelTitle lblDatosCuenta = new JLabelTitle("Datos de la Cuenta");
 		panelDatosCuenta.add(lblDatosCuenta);
 
 		JLabel lblUsuario = new JLabel("Usuario");
@@ -130,11 +130,11 @@ public class PanelRegistro extends JPanel {
 		passwordField = new JPasswordField();
 		panelDatosCuenta.add(passwordField);
 
-		JLabel lblPass2 = new JLabel("Repita la contraseña:");
+		JLabel lblPass2 = new JLabel("Repita la contraseña");
 		panelDatosCuenta.add(lblPass2);
 
-		passwordField_2 = new JPasswordField();
-		panelDatosCuenta.add(passwordField_2);
+		passwordField2 = new JPasswordField();
+		panelDatosCuenta.add(passwordField2);
 
 //		UtilDateModel model = new UtilDateModel();
 //		JDatePanelImpl datePanel = new JDatePanelImpl(model, null);
@@ -262,7 +262,7 @@ public class PanelRegistro extends JPanel {
 		Controlador ctr = new Controlador();
 
 		String pass1 = new String(passwordField.getPassword());
-		String pass2 = new String(passwordField_2.getPassword());
+		String pass2 = new String(passwordField2.getPassword());
 
 		if (!ctr.validarApellido(usuario.getApellido())) {
 			WindowUtils.errorPane("El apellido esta vacio o es mayor de 50 carácteres", "Datos incorrectos");

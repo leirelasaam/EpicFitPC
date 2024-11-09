@@ -62,7 +62,7 @@ public class PanelPerfil extends JPanel {
 		panelDatosUsuario.setBorder(new EmptyBorder(50, 50, 100, 50));
 		panelContenido.add(panelDatosUsuario);
 
-		JLabelTitle lblDatosDeUsuario = new JLabelTitle("Datos de usuario");
+		JLabelTitle lblDatosDeUsuario = new JLabelTitle("Datos del Usuario");
 		panelDatosUsuario.add(lblDatosDeUsuario);
 
 		JLabel lblNombre = new JLabel("Nombre");
@@ -94,7 +94,7 @@ public class PanelPerfil extends JPanel {
 		panelContenido.add(panelDatosCuenta);
 
 		// PANEL DERECHA - Datos de cuenta
-		JLabelTitle lblDatosCuenta = new JLabelTitle("Datos de tu cuenta");
+		JLabelTitle lblDatosCuenta = new JLabelTitle("Datos de la Cuenta");
 		panelDatosCuenta.add(lblDatosCuenta);
 
 		JLabel lblLogin = new JLabel("Usuario");
