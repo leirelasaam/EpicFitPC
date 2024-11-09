@@ -80,7 +80,7 @@ public class PanelPerfil extends JPanel {
 		textApellidos.setText(usuario.getApellido());
 		panelDatosUsuario.add(textApellidos);
 
-		JLabel lblFechaNac = new JLabel("Fecha de nacimiento");
+		JLabel lblFechaNac = new JLabel("<html>Fecha de nacimiento (<i>dd/mm/aaaa</i>)</html>");
 		panelDatosUsuario.add(lblFechaNac);
 
 		textFechaNac = new JTextField();
