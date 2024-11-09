@@ -2,10 +2,15 @@ package epicfitpc.vista.paneles;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import com.google.cloud.firestore.Firestore;
@@ -52,6 +57,7 @@ public class PanelHistorico extends JPanel {
 		panelHInterior.setBackground(Estilos.DARK_BACKGROUND);
 
 		JScrollPane scrollPane = new JScrollPane(panelHInterior);
+		scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		add(scrollPane);
 
@@ -59,11 +65,9 @@ public class PanelHistorico extends JPanel {
 	}
 
 	/**
-	 * Añade los paneles de cada workout al grid. Se añaden paneles vacíos en caso
+	 * Añade los paneles de cada histórico al grid. Se añaden paneles vacíos en caso
 	 * de que no haya suficientes para mantener las proporciones.
 	 * 
-	 * @param nivel Número entero que es el nivel por el cual se filtra. -1 si no
-	 *              hay filtro.
 	 */
 	private void agregarPanelesHistoricos() {
 		int numeroDePaneles = 0;
@@ -76,9 +80,16 @@ public class PanelHistorico extends JPanel {
 				HistoricoItemPanel itemPanel = new HistoricoItemPanel(historico);
 				panelHInterior.add(itemPanel);
 			}
-		}
 
-		generarPanelesVacios(numeroDePaneles, panelesNecesarios, panelHInterior);
+			generarPanelesVacios(numeroDePaneles, panelesNecesarios, panelHInterior);
+		} else {
+			JLabel lblNoHistoricos = new JLabel(
+					"<html><p><b>No hay registros.</b></p><p style=\"color: black;\">Empieza a realizar workouts para añadir históricos.</p></html>");
+			lblNoHistoricos.setHorizontalAlignment(SwingConstants.CENTER);
+			lblNoHistoricos.setFont(new Font("Noto Sans", Font.PLAIN, 20));
+			lblNoHistoricos.setForeground(Estilos.PRIMARY_DARK);
+			panelHInterior.add(lblNoHistoricos);
+		}
 
 	}
 

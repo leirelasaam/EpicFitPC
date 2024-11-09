@@ -34,7 +34,7 @@ public class MainFrame extends JFrame {
 		setBackground(Estilos.DARK_BACKGROUND);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Rutas.LOGO_EF));
 
-		PanelLogin panelLogin = new PanelLogin(this);
+		PanelLogin panelLogin = new PanelLogin();
 		getContentPane().add(panelLogin);
 		revalidate();
 		repaint();
