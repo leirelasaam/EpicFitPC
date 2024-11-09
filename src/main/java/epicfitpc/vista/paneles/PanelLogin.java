@@ -55,18 +55,18 @@ public class PanelLogin extends JPanel {
 		panelDerecha.setLayout(null);
 		add(panelDerecha);
 
-		JLabelTitle lblNewLabel = new JLabelTitle("¡Bienvenid@ a EpicFit!");
-		lblNewLabel.setBounds(180, 111, 300, 31);
-		panelDerecha.add(lblNewLabel);
+		JLabelTitle lblTitulo = new JLabelTitle("¡Bienvenid@ a EpicFit!");
+		lblTitulo.setBounds(180, 111, 300, 31);
+		panelDerecha.add(lblTitulo);
 
-		JButtonPrimary btnNewButton = new JButtonPrimary("Iniciar sesión");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButtonPrimary btnIniciarSesion = new JButtonPrimary("Iniciar sesión");
+		btnIniciarSesion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				iniciarSesion();
 			}
 		});
-		btnNewButton.setBounds(180, 378, 241, 31);
-		panelDerecha.add(btnNewButton);
+		btnIniciarSesion.setBounds(180, 378, 241, 31);
+		panelDerecha.add(btnIniciarSesion);
 
 		txtIntroduceTuCorreo = new JTextField();
 		txtIntroduceTuCorreo.setText("");
@@ -74,9 +74,9 @@ public class PanelLogin extends JPanel {
 		panelDerecha.add(txtIntroduceTuCorreo);
 		txtIntroduceTuCorreo.setColumns(10);
 
-		JLabel lblNewLabel_1 = new JLabel("Usuario");
-		lblNewLabel_1.setBounds(180, 211, 100, 14);
-		panelDerecha.add(lblNewLabel_1);
+		JLabel lblUsuario = new JLabel("Usuario");
+		lblUsuario.setBounds(180, 211, 100, 14);
+		panelDerecha.add(lblUsuario);
 
 		txtIntroduceTuPass = new JPasswordField();
 		txtIntroduceTuPass.setBounds(180, 307, 241, 31);
@@ -91,26 +91,23 @@ public class PanelLogin extends JPanel {
 		    }
 		});
 
-		JLabel lblNewLabel_2 = new JLabel("Contraseña");
-		lblNewLabel_2.setBounds(180, 282, 100, 14);
-		panelDerecha.add(lblNewLabel_2);
+		JLabel lblPass = new JLabel("Contraseña");
+		lblPass.setBounds(180, 282, 100, 14);
+		panelDerecha.add(lblPass);
 
-		JButtonPrimary btnNewButton_1 = new JButtonPrimary("Registrarme");
-		btnNewButton_1.addActionListener(new ActionListener() {
+		JButtonPrimary btnRegistrarme = new JButtonPrimary("Registrarme");
+		btnRegistrarme.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				MainFrame.getInstance().getContentPane().removeAll();
-				MainFrame.getInstance().getContentPane().add(new PanelRegistro());
-				MainFrame.getInstance().revalidate();
-				MainFrame.getInstance().repaint();
+				irRegistro();
 			}
 		});
-		btnNewButton_1.setBounds(180, 535, 241, 31);
-		panelDerecha.add(btnNewButton_1);
+		btnRegistrarme.setBounds(180, 535, 241, 31);
+		panelDerecha.add(btnRegistrarme);
 
-		JLabel lblNewLabel_2_1 = new JLabel("¿Todavia no tienes cuenta?");
-		lblNewLabel_2_1.setBounds(180, 510, 300, 20);
-		panelDerecha.add(lblNewLabel_2_1);
+		JLabel lblTienesCuenta = new JLabel("¿Todavia no tienes cuenta?");
+		lblTienesCuenta.setBounds(180, 510, 300, 20);
+		panelDerecha.add(lblTienesCuenta);
 		
 		JButtonPrimary btnSalir = new JButtonPrimary("Salir");
 		btnSalir.addActionListener(new ActionListener() {
@@ -126,12 +123,12 @@ public class PanelLogin extends JPanel {
 
 		// logo de la compania
 		ImageIcon img = WindowUtils.cargarImagen(Rutas.LOGO_EF, 500, 500);
-		JLabel lblNewLabel_3 = new JLabel(img);
-		panelIzquierda.add(lblNewLabel_3);
+		JLabel lblImagen = new JLabel(img);
+		panelIzquierda.add(lblImagen);
 		
 		if (!hayConexion) {
-			btnNewButton_1.setVisible(false);
-			lblNewLabel_2_1.setVisible(false);
+			btnRegistrarme.setVisible(false);
+			lblTienesCuenta.setVisible(false);
 		}
 	}
 
@@ -169,15 +166,26 @@ public class PanelLogin extends JPanel {
 		}
 		if (usuario != null) {
 			// si usuario y login es correcto
-			WindowUtils.confirmationPane("Hola, " + usuario.getNombre() + ", ¡bienvenid@ a EpicFit!",
+			WindowUtils.confirmationPane("Hola, " + usuario.getNombre() + ", ¡Bienvenid@ a EpicFit!",
 					"Acceso concedido");
 			UsuarioLogueado.getInstance().setUsuario(usuario);
-			MainFrame.getInstance().getContentPane().removeAll();
-			MainFrame.getInstance().getContentPane().add(new PanelMenu(UsuarioLogueado.getInstance().getUsuario()));
-			MainFrame.getInstance().revalidate();
-			MainFrame.getInstance().repaint();
+			irWorkouts();
 		} else {
 			WindowUtils.errorPane("No se ha podido completar el inicio de sesión.", "Acceso denegado");
 		}
+	}
+	
+	private void irWorkouts() {
+		MainFrame.getInstance().getContentPane().removeAll();
+		MainFrame.getInstance().getContentPane().add(new PanelMenu(UsuarioLogueado.getInstance().getUsuario()));
+		MainFrame.getInstance().revalidate();
+		MainFrame.getInstance().repaint();
+	}
+	
+	private void irRegistro() {
+		MainFrame.getInstance().getContentPane().removeAll();
+		MainFrame.getInstance().getContentPane().add(new PanelRegistro());
+		MainFrame.getInstance().revalidate();
+		MainFrame.getInstance().repaint();
 	}
 }
