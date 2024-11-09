@@ -2,19 +2,15 @@ package epicfitpc.bbdd;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
 
 import com.google.api.core.ApiFuture;
-import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
@@ -153,7 +149,6 @@ public class GestorDeUsuarios {
 	}
 
 	public Usuario comprobarUsuario(String usuarioIntroducido, String contraseniaIntroducida) throws Exception {
-		;
 		ArrayList<Usuario> usuarios = obtenerTodosLosUsuarios();
 
 		// Recorremos los usuarios para buscar el usuario introducido
@@ -190,54 +185,6 @@ public class GestorDeUsuarios {
 			}
 		}
 		return false;
-	}
-
-	public boolean validarNombre(String nombre) {
-		return nombre != null && !nombre.isEmpty() && nombre.length() <= 25;
-	}
-
-	public boolean validarApellido(String apellido) {
-		boolean validar = apellido != null && !apellido.isEmpty() && apellido.length() <= 50;
-		return validar;
-	}
-
-	public boolean validarCorreo(String correo) {
-		String regexCorreo = "^[\\w-\\.]+@[\\w-]+\\.[a-z]{2,6}$";
-		return correo != null && Pattern.matches(regexCorreo, correo);
-	}
-
-	public boolean validarUsername(String user) {
-		String regexUser = "^(?=.*[a-z])(?=.*[A-Z]).{2,15}$";
-		return user != null && Pattern.matches(regexUser, user);
-	}
-
-	public boolean validarPassword(String pass) {
-		String regexPass = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!_]).{8,20}$";
-		return pass != null && Pattern.matches(regexPass, pass);
-	}
-
-	public boolean validarFechaNacimiento(Timestamp fechaNac) {
-		LocalDate fechaMinima = LocalDate.now().minusYears(14);
-		LocalDate fechaNacLocal = fechaNac.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		return fechaNac != null && fechaNacLocal.isBefore(fechaMinima);
-	}
-
-	// Prueba para comprobar que se conecta a la firebase e imprime todos los
-	// usuarios -> ID: zoVUUYKznIh8KDXOxjUc, Nombre: Leire, Usuario: 1234
-	public void imprimirTodosLosUsuarios() throws Exception {
-		// Obtenemos todos los usuarios
-		ArrayList<Usuario> usuarios = obtenerTodosLosUsuarios();
-
-		// Si hay usuarios en la lista, los imprime
-		if (usuarios != null && !usuarios.isEmpty()) {
-			System.out.println("Usuarios encontrados:");
-			for (Usuario usuario : usuarios) {
-				System.out.println("ID: " + usuario.getId() + ", Nombre: " + usuario.getNombre() + ", Usuario: "
-						+ usuario.getUsuario());
-			}
-		} else {
-			System.out.println("No se encontraron usuarios.");
-		}
 	}
 
 	public boolean modificarUsuario(Usuario usuarioActualizado, String nombreUsuarioOriginal) {

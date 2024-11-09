@@ -18,6 +18,7 @@ import java.util.concurrent.ExecutionException;
 import javax.swing.JSpinner;
 
 import epicfitpc.bbdd.GestorDeUsuarios;
+import epicfitpc.controlador.Controlador;
 import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.Conexion;
 import epicfitpc.utils.Estilos;
@@ -195,10 +196,6 @@ public class PanelRegistro extends JPanel {
 		}
 	}
 
-	/**
-	 * @param spinnerTipoUsuario
-	 * @return
-	 */
 	private Usuario crearObjetoUsuario() {
 		Usuario usuario = new Usuario();
 		usuario.setApellido(textApellido.getText());
@@ -223,9 +220,6 @@ public class PanelRegistro extends JPanel {
 		return usuario;
 	}
 
-	/**
-	 * @return
-	 */
 	private Timestamp convertirStringToTimestamp() {
 
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -233,17 +227,11 @@ public class PanelRegistro extends JPanel {
 		try {
 			parsedDate = dateFormat.parse(textFechaNac.getText());
 		} catch (ParseException e) {
-			e.printStackTrace();
+			WindowUtils.errorPane("Error en conversión de fecha", "Error");
 		}
 		return Timestamp.of(parsedDate);
 	}
 
-	/**
-	 * @param frame
-	 * @param usuario
-	 * @param guardadoCorrectamente
-	 * @param gestorDeUsuarios
-	 */
 	private void guardarUsuario(Usuario usuario, boolean guardadoCorrectamente) {
 		try {
 			if (gdu == null)
@@ -251,11 +239,11 @@ public class PanelRegistro extends JPanel {
 			guardadoCorrectamente = gdu.guardarUsuarios(usuario);
 
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			WindowUtils.errorPane("Error de escritura/lectura en la base de datos.", "Error en el guardado");
 		} catch (InterruptedException e1) {
-			e1.printStackTrace();
+			WindowUtils.errorPane("Interrupción en la base de datos.", "Error en el guardado");
 		} catch (ExecutionException e1) {
-			e1.printStackTrace();
+			WindowUtils.errorPane("Error de ejecución en la base de datos.", "Error en el guardado");
 		}
 		if (!guardadoCorrectamente) {
 			WindowUtils.errorPane("No se ha podido crear correctamente, vuelva a intentarlo más tarde.",
@@ -266,34 +254,30 @@ public class PanelRegistro extends JPanel {
 		}
 	}
 
-	/**
-	 * @param frame
-	 * @param usuario
-	 * @param gestorDeUsuarios
-	 * @throws Exception
-	 */
 	private boolean validacionesCamposCorrectos(Usuario usuario) throws Exception {
 		boolean validar = true;
 		if (gdu == null)
 			gdu = new GestorDeUsuarios(Conexion.getInstance().getConexion());
+		
+		Controlador ctr = new Controlador();
 
 		String pass1 = new String(passwordField.getPassword());
 		String pass2 = new String(passwordField_2.getPassword());
 
-		if (!gdu.validarApellido(usuario.getApellido())) {
+		if (!ctr.validarApellido(usuario.getApellido())) {
 			WindowUtils.errorPane("El apellido esta vacio o es mayor de 50 carácteres", "Datos incorrectos");
 			validar = false;
-		} else if (!gdu.validarCorreo(usuario.getCorreo())) {
+		} else if (!ctr.validarCorreo(usuario.getCorreo())) {
 			WindowUtils.errorPane("Correo incorrecto, vuelva a insertarlo.", "Datos incorrectos");
 			validar = false;
-		} else if (!gdu.validarFechaNacimiento(usuario.getFechaNac())) {
+		} else if (!ctr.validarFechaNacimiento(usuario.getFechaNac())) {
 			WindowUtils.errorPane("Fecha de nacimiento incorrecta. El usuario tiene que ser mayor de 14 años.",
 					"Datos incorrectos");
 			validar = false;
-		} else if (!gdu.validarNombre(usuario.getNombre())) {
+		} else if (!ctr.validarNombre(usuario.getNombre())) {
 			WindowUtils.errorPane("Nombre incorrecto, esta vacio o es mayor de 50 carácteres.", "Datos incorrectos");
 			validar = false;
-		} else if (!gdu.validarPassword(usuario.getPass())) {
+		} else if (!ctr.validarPassword(usuario.getPass())) {
 			WindowUtils.errorPane(
 					"Contraseña incorrecta, debe tener entre 8 y 20 caracteres, incluir al menos una letra minúscula, una mayúscula, un número y un carácter especial.",
 					"Datos incorrectos");

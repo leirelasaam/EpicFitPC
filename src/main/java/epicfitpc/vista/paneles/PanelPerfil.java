@@ -7,6 +7,7 @@ import javax.swing.border.EmptyBorder;
 import com.google.cloud.Timestamp;
 
 import epicfitpc.bbdd.GestorDeUsuarios;
+import epicfitpc.controlador.Controlador;
 import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.Conexion;
 import epicfitpc.utils.DateUtils;
@@ -173,42 +174,38 @@ public class PanelPerfil extends JPanel {
 				guardadoCorrectamente = gdu.modificarUsuario(usuarioModificado, usuario.getUsuario());
 
 				if (guardadoCorrectamente) {
-					WindowUtils.confirmationPane("Se han guardado correctamente las modificaciones",
+					WindowUtils.confirmationPane("Se han guardado correctamente las modificaciones,",
 							"Guardado correco");
 				} else {
-					WindowUtils.errorPane("No se han podido guardar las modificaciones. Pruebe mas tarde",
+					WindowUtils.errorPane("No se han podido guardar las modificaciones. Pruebe mas tarde.",
 							"Error en guardado");
 				}
 			}
 
 		} catch (Exception e2) {
-			e2.printStackTrace();
+			WindowUtils.errorPane("No se han podido actualizar los datos.", "Error en guardado");
 		}
 	}
 
-	/**
-	 * @param frame
-	 * @param usuario
-	 * @param gestorDeUsuarios
-	 * @throws Exception
-	 */
 	public boolean validacionesCamposCorrectos(Usuario usuarioModificado, Usuario usuario) throws Exception {
 		boolean validar = true;
 
 		if (gdu == null)
 			gdu = new GestorDeUsuarios(Conexion.getInstance().getConexion());
 
-		if (!gdu.validarApellido(usuarioModificado.getApellido())) {
+		Controlador ctr = new Controlador();
+
+		if (!ctr.validarApellido(usuarioModificado.getApellido())) {
 			WindowUtils.errorPane("El apellido esta vacio o es mayor de 50 carácteres", "Datos incorrectos");
 			validar = false;
-		} else if (!gdu.validarCorreo(usuarioModificado.getCorreo())) {
+		} else if (!ctr.validarCorreo(usuarioModificado.getCorreo())) {
 			WindowUtils.errorPane("Correo incorrecto, vuelva a insertarlo.", "Datos incorrectos");
 			validar = false;
-		} else if (!gdu.validarFechaNacimiento(usuarioModificado.getFechaNac())) {
+		} else if (!ctr.validarFechaNacimiento(usuarioModificado.getFechaNac())) {
 			WindowUtils.errorPane("Fecha de nacimiento incorrecta. El usuario tiene que ser mayor de 14 años.",
 					"Datos incorrectos");
 			validar = false;
-		} else if (!gdu.validarNombre(usuarioModificado.getNombre())) {
+		} else if (!ctr.validarNombre(usuarioModificado.getNombre())) {
 			WindowUtils.errorPane("Nombre incorrecto, esta vacio o es mayor de 50 carácteres.", "Datos incorrectos");
 			validar = false;
 		} else if (gdu.comprobarSiExisteNombreUsuario(usuarioModificado.getUsuario())
