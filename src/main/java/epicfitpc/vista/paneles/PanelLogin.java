@@ -44,7 +44,7 @@ public class PanelLogin extends JPanel {
 	private void initialize() {
 		setLayout(new GridLayout(1, 2));
 		setBounds(100, 100, 1200, 750);
-		setBackground(Estilos.DARK_BACKGROUND);
+		setBackground(Estilos.BACKGROUND);
 
 		JPanel panelIzquierda = new JPanel();
 		panelIzquierda.setBackground(Estilos.PRIMARY);

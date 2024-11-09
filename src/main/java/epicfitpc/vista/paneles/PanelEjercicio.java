@@ -90,7 +90,7 @@ public class PanelEjercicio extends JPanel {
 	private void initialize() {
 		setLayout(new BorderLayout(0, 0));
 		setBorder(new EmptyBorder(20, 40, 20, 40));
-		setBackground(Estilos.DARK_BACKGROUND);
+		setBackground(Estilos.BACKGROUND);
 
 		// Panel Superior
 		JPanel panelSuperior = new JPanel(new GridLayout(1, 0, 20, 10));

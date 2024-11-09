@@ -54,7 +54,7 @@ public class PanelHistorico extends JPanel {
 		panelHInterior.setBackground(Color.WHITE);
 		panelHInterior.setLayout(new GridLayout(0, 1, 10, 10));
 		panelHInterior.setBorder(new EmptyBorder(10, 10, 10, 10));
-		panelHInterior.setBackground(Estilos.DARK_BACKGROUND);
+		panelHInterior.setBackground(Estilos.BACKGROUND);
 
 		JScrollPane scrollPane = new JScrollPane(panelHInterior);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -104,7 +104,7 @@ public class PanelHistorico extends JPanel {
 		// Paneles vacíos para que se ajusten bien los tamaños
 		for (int i = numeroDePaneles; i < panelesNecesarios; i++) {
 			JPanel emptyPanel = new JPanel();
-			emptyPanel.setBackground(Estilos.DARK_BACKGROUND);
+			emptyPanel.setBackground(Estilos.BACKGROUND);
 			panel.add(emptyPanel);
 		}
 	}
