@@ -2,6 +2,7 @@ package epicfitpc.vista.paneles;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 import com.google.cloud.Timestamp;
 
@@ -13,11 +14,17 @@ import epicfitpc.utils.GestorDeConexiones;
 import epicfitpc.utils.UsuarioLogueado;
 import epicfitpc.vista.MainFrame;
 import epicfitpc.vista.componentes.JButtonPrimary;
+import epicfitpc.vista.componentes.JLabelTitle;
+import epicfitpc.vista.componentes.RoundedPanel;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -37,73 +44,90 @@ public class PanelPerfil extends JPanel {
 	private JTextField textNivel;
 
 	public PanelPerfil(PanelMenu panelMenu, Usuario usuario) {
-
-		GestorDeUsuarios gestorDeUsuarios = inicializarGestorDeUsuarios();
-
-		setLayout(null);
+		setLayout(new BorderLayout(0,0));
+		setBorder(new EmptyBorder(50, 50, 50, 50));
 		setBounds(100, 100, 1200, 750);
+		
+		JPanel panelContenido = new JPanel(new GridLayout(1, 0, 100, 0));
+		panelContenido.setBorder(new EmptyBorder(50, 50, 100, 50));
+		add(panelContenido, BorderLayout.CENTER);
+		
+		RoundedPanel panelDatosUsuario = new RoundedPanel(new GridLayout(0, 1, 0, 0));
+		panelDatosUsuario.setBorder(new EmptyBorder(50, 50, 100, 50));
+		panelContenido.add(panelDatosUsuario);
+		
+		JLabelTitle lblDatosDeUsuario = new JLabelTitle("Datos de usuario");
+		panelDatosUsuario.add(lblDatosDeUsuario);
+		
+		JLabel lblNombre = new JLabel("Nombre");
+		panelDatosUsuario.add(lblNombre);
 
 		textNombre = new JTextField();
-		textNombre.setBounds(219, 139, 135, 20);
 		textNombre.setText(usuario.getNombre());
-		add(textNombre);
 		textNombre.setColumns(10);
-
-		JLabel lblNombre = new JLabel("Nombre");
-		lblNombre.setBounds(219, 114, 71, 14);
-		add(lblNombre);
+		panelDatosUsuario.add(textNombre);
 
 		JLabel lblApellidos = new JLabel("Apellidos");
-		lblApellidos.setBounds(219, 192, 71, 14);
-		add(lblApellidos);
+		panelDatosUsuario.add(lblApellidos);
 
 		textApellidos = new JTextField();
 		textApellidos.setColumns(10);
-		textApellidos.setBounds(219, 217, 135, 20);
 		textApellidos.setText(usuario.getApellido());
-		add(textApellidos);
+		panelDatosUsuario.add(textApellidos);
 
 		JLabel lblFechaNac = new JLabel("Fecha de nacimiento");
-		lblFechaNac.setBounds(219, 269, 135, 14);
-		add(lblFechaNac);
+		panelDatosUsuario.add(lblFechaNac);
 
 		textFechaNac = new JTextField();
 		textFechaNac.setColumns(10);
-		textFechaNac.setBounds(219, 294, 135, 20);
 		textFechaNac.setText(parsearTimestampAString(usuario.getFechaNac().toSqlTimestamp()));
-		add(textFechaNac);
+		panelDatosUsuario.add(textFechaNac);
+		
+		RoundedPanel panelDatosCuenta = new RoundedPanel(new GridLayout(0, 1, 0, 0));
+		panelDatosCuenta.setBorder(new EmptyBorder(50, 50, 100, 50));
+		panelContenido.add(panelDatosCuenta);
 
-		JLabel lblDatosCuenta = new JLabel("Datos de tu cuenta");
-		lblDatosCuenta.setForeground(new Color(255, 140, 0));
-		lblDatosCuenta.setBounds(476, 75, 135, 14);
-		add(lblDatosCuenta);
-
-		JLabel lblDatosDeUsuario = new JLabel("Datos de usuario");
-		lblDatosDeUsuario.setForeground(new Color(255, 140, 0));
-		lblDatosDeUsuario.setBounds(219, 75, 135, 14);
-		add(lblDatosDeUsuario);
+		JLabelTitle lblDatosCuenta = new JLabelTitle("Datos de tu cuenta");
+		panelDatosCuenta.add(lblDatosCuenta);
 
 		JLabel lblLogin = new JLabel("Usuario");
-		lblLogin.setBounds(476, 114, 52, 14);
-		add(lblLogin);
+		panelDatosCuenta.add(lblLogin);		
+		
+		textUsuario = new JTextField();
+		textUsuario.setColumns(10);
+		textUsuario.setText(usuario.getUsuario());
+		panelDatosCuenta.add(textUsuario);
 
 		JLabel lblCorreo = new JLabel("Correo electrónico ");
-		lblCorreo.setBounds(476, 192, 135, 14);
-		add(lblCorreo);
+		panelDatosCuenta.add(lblCorreo);
 
 		textCorreo = new JTextField();
 		textCorreo.setColumns(10);
-		textCorreo.setBounds(476, 217, 135, 20);
 		textCorreo.setText(usuario.getCorreo());
-		add(textCorreo);
+		panelDatosCuenta.add(textCorreo);
 
-		JButtonPrimary btnguardarDatos = new JButtonPrimary("GUARDAR DATOS");
-		btnguardarDatos.addActionListener(new ActionListener() {
+		JLabel lblNivel = new JLabel("Nivel");
+		panelDatosCuenta.add(lblNivel);
+
+		textNivel = new JTextField();
+		textNivel.setColumns(10);
+		textNivel.setText(String.valueOf(usuario.getNivel()));
+		textNivel.setEditable(false);
+		panelDatosCuenta.add(textNivel);
+		
+		JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		panelInferior.setBorder(new EmptyBorder(0, 50, 0, 50));
+		add(panelInferior, BorderLayout.SOUTH);
+		
+
+		JButtonPrimary btnGuardarDatos = new JButtonPrimary("GUARDAR DATOS");
+		btnGuardarDatos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Usuario usuarioModificado;
 				boolean guardadoCorrectamente = false;
 				boolean validar = false;
 				try {
+					GestorDeUsuarios gestorDeUsuarios = new GestorDeUsuarios(Conexion.getInstance().getConexion());
 					usuarioModificado = crearObjetoUsuario();
 					validar = validacionesCamposCorrectos(panelMenu, usuarioModificado, usuario, gestorDeUsuarios);
 					if (validar) {
@@ -124,34 +148,16 @@ public class PanelPerfil extends JPanel {
 
 			}
 		});
-
-		btnguardarDatos.setBackground(new Color(0, 0, 0));
-		btnguardarDatos.setBounds(598, 471, 138, 20);
-		add(btnguardarDatos);
+		btnGuardarDatos.setPreferredSize(new Dimension(200, 30));
+		panelInferior.add(btnGuardarDatos);
 		
 		boolean hayConexion = GestorDeConexiones.getInstance().hayConexion();
 		if (!hayConexion)
-			btnguardarDatos.setVisible(false);
-
-		textUsuario = new JTextField();
-		textUsuario.setColumns(10);
-		textUsuario.setBounds(476, 139, 135, 20);
-		textUsuario.setText(usuario.getUsuario());
-		add(textUsuario);
-
-		JLabel lblNivel = new JLabel("Nivel");
-		lblNivel.setBounds(476, 269, 71, 14);
-		add(lblNivel);
-
-		textNivel = new JTextField();
-		textNivel.setColumns(10);
-		textNivel.setBounds(476, 294, 135, 20);
-		textNivel.setText(String.valueOf(usuario.getNivel()));
-		textNivel.setEditable(false);
-		add(textNivel);
+			btnGuardarDatos.setVisible(false);
 		
-		JButtonPrimary btnSalir = new JButtonPrimary("Cerrar sesión");
-		btnSalir.addActionListener(new ActionListener() {
+		JButtonPrimary btnCerrarSesion = new JButtonPrimary("Cerrar sesión");
+		btnCerrarSesion.setPreferredSize(new Dimension(200, 30));
+		btnCerrarSesion.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				UsuarioLogueado.getInstance().setUsuario(null);
@@ -161,31 +167,15 @@ public class PanelPerfil extends JPanel {
 				MainFrame.getInstance().repaint();
 			}
 		});
-		btnSalir.setBounds(180, 624, 241, 31);
-		add(btnSalir);
-		btnSalir.setBackgroundColor(Estilos.BLACK);
-		btnSalir.setHoverColor(Color.DARK_GRAY);
+		panelInferior.add(btnCerrarSesion);
+		btnCerrarSesion.setBackgroundColor(Estilos.BLACK);
+		btnCerrarSesion.setHoverColor(Color.DARK_GRAY);
 	}
 
 	public static String parsearTimestampAString(java.sql.Timestamp timestamp) {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 		return sdf.format(timestamp);
-	}
-
-	/**
-	 * @return
-	 */
-	public GestorDeUsuarios inicializarGestorDeUsuarios() {
-		GestorDeUsuarios gestorDeUsuarios = null;
-		try {
-			gestorDeUsuarios = new GestorDeUsuarios(Conexion.getInstance().getConexion());
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		return gestorDeUsuarios;
 	}
 
 	/**
