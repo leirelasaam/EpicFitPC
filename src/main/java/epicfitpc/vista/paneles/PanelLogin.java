@@ -20,12 +20,14 @@ import epicfitpc.vista.componentes.JLabelTitle;
 
 import javax.swing.JLabel;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.ImageIcon;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 
 public class PanelLogin extends JPanel {
@@ -35,11 +37,11 @@ public class PanelLogin extends JPanel {
 	private static final String FICHERO_USUARIOS = Rutas.BACKUP_USUARIOS;
 	private boolean hayConexion = GestorDeConexiones.getInstance().hayConexion();
 
-	public PanelLogin(MainFrame frame) {
-		initialize(frame);
+	public PanelLogin() {
+		initialize();
 	}
 
-	private void initialize(MainFrame frame) {
+	private void initialize() {
 		setLayout(new GridLayout(1, 2));
 		setBounds(100, 100, 1200, 750);
 		setBackground(Estilos.DARK_BACKGROUND);
@@ -134,7 +136,7 @@ public class PanelLogin extends JPanel {
 
 			public void actionPerformed(ActionEvent e) {
 				MainFrame.getInstance().getContentPane().removeAll();
-				MainFrame.getInstance().getContentPane().add(new PanelRegistro(frame));
+				MainFrame.getInstance().getContentPane().add(new PanelRegistro());
 				MainFrame.getInstance().revalidate();
 				MainFrame.getInstance().repaint();
 			}
@@ -145,6 +147,18 @@ public class PanelLogin extends JPanel {
 		JLabel lblNewLabel_2_1 = new JLabel("¿Todavia no tienes cuenta?");
 		lblNewLabel_2_1.setBounds(180, 550, 300, 20);
 		panelDerecha.add(lblNewLabel_2_1);
+		
+		JButtonPrimary btnSalir = new JButtonPrimary("Salir");
+		btnSalir.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				MainFrame.getInstance().dispatchEvent(new WindowEvent(MainFrame.getInstance(), WindowEvent.WINDOW_CLOSING));
+			}
+		});
+		btnSalir.setBounds(180, 624, 241, 31);
+		panelDerecha.add(btnSalir);
+		btnSalir.setBackgroundColor(Estilos.BLACK);
+		btnSalir.setHoverColor(Color.DARK_GRAY);
 
 		// logo de la compania
 		ImageIcon img = WindowUtils.cargarImagen(Rutas.LOGO_EF, 500, 500);

@@ -8,7 +8,9 @@ import com.google.cloud.Timestamp;
 import epicfitpc.bbdd.GestorDeUsuarios;
 import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.Conexion;
+import epicfitpc.utils.Estilos;
 import epicfitpc.utils.GestorDeConexiones;
+import epicfitpc.utils.UsuarioLogueado;
 import epicfitpc.vista.MainFrame;
 import epicfitpc.vista.componentes.JButtonPrimary;
 
@@ -39,6 +41,7 @@ public class PanelPerfil extends JPanel {
 		GestorDeUsuarios gestorDeUsuarios = inicializarGestorDeUsuarios();
 
 		setLayout(null);
+		setBounds(100, 100, 1200, 750);
 
 		textNombre = new JTextField();
 		textNombre.setBounds(219, 139, 135, 20);
@@ -146,6 +149,22 @@ public class PanelPerfil extends JPanel {
 		textNivel.setText(String.valueOf(usuario.getNivel()));
 		textNivel.setEditable(false);
 		add(textNivel);
+		
+		JButtonPrimary btnSalir = new JButtonPrimary("Cerrar sesión");
+		btnSalir.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				UsuarioLogueado.getInstance().setUsuario(null);
+				MainFrame.getInstance().getContentPane().removeAll();
+				MainFrame.getInstance().getContentPane().add(new PanelLogin());
+				MainFrame.getInstance().revalidate();
+				MainFrame.getInstance().repaint();
+			}
+		});
+		btnSalir.setBounds(180, 624, 241, 31);
+		add(btnSalir);
+		btnSalir.setBackgroundColor(Estilos.BLACK);
+		btnSalir.setHoverColor(Color.DARK_GRAY);
 	}
 
 	public static String parsearTimestampAString(java.sql.Timestamp timestamp) {

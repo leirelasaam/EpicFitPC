@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.util.ArrayList;
+
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
@@ -76,9 +78,11 @@ public class PanelHistorico extends JPanel {
 				HistoricoItemPanel itemPanel = new HistoricoItemPanel(historico);
 				panelHInterior.add(itemPanel);
 			}
+			
+			generarPanelesVacios(numeroDePaneles, panelesNecesarios, panelHInterior);
+		} else {
+			panelHInterior.add(new JLabel("No hay registros. Empieza a realizar workouts para añadir históricos."));
 		}
-
-		generarPanelesVacios(numeroDePaneles, panelesNecesarios, panelHInterior);
 
 	}
 

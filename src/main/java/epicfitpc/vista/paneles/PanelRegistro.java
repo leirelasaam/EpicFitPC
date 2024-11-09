@@ -42,7 +42,7 @@ public class PanelRegistro extends JPanel {
 	private JTextField textEmail;
 	private JSpinner spinnerTipoUsuario;
 
-	public PanelRegistro(MainFrame frame) {
+	public PanelRegistro() {
 		setLayout(null);
 
 		textUsuario = new JTextField();
@@ -137,14 +137,14 @@ public class PanelRegistro extends JPanel {
 
 				boolean validar = false;
 				try {
-					validar = validacionesCamposCorrectos(frame, usuario, gestorDeUsuarios);
+					validar = validacionesCamposCorrectos(MainFrame.getInstance(), usuario, gestorDeUsuarios);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 				
 				if(validar) {
 					
-					guardarUsuario(frame, usuario, guardadoCorrectamente, gestorDeUsuarios);
+					guardarUsuario(MainFrame.getInstance(), usuario, guardadoCorrectamente, gestorDeUsuarios);
 				}
 				 
 			}
@@ -168,7 +168,7 @@ public class PanelRegistro extends JPanel {
 					Timestamp localDate = convertirStringToTimestamp();
 					usuario.setFechaNac(localDate);
 				}else {
-					JOptionPane.showMessageDialog(frame, "La fecha de nacimiento no puede estar vacía.");
+					JOptionPane.showMessageDialog(MainFrame.getInstance(), "La fecha de nacimiento no puede estar vacía.");
 				}
 				
 
@@ -216,7 +216,7 @@ public class PanelRegistro extends JPanel {
 				} else {
 					JOptionPane.showMessageDialog(frame, "Usuario creado correctamente");
 					frame.getContentPane().removeAll();
-					frame.getContentPane().add(new PanelLogin(frame));
+					frame.getContentPane().add(new PanelLogin());
 					frame.revalidate();
 					frame.repaint();
 
@@ -282,10 +282,10 @@ public class PanelRegistro extends JPanel {
 		JButton btnVolver = new JButton("Volver");
 		btnVolver.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.getContentPane().removeAll();
-				frame.getContentPane().add(new PanelLogin(frame));
-				frame.revalidate();
-				frame.repaint();
+				MainFrame.getInstance().getContentPane().removeAll();
+				MainFrame.getInstance().getContentPane().add(new PanelLogin());
+				MainFrame.getInstance().revalidate();
+				MainFrame.getInstance().repaint();
 			}
 		});
 		btnVolver.setBounds(10, 531, 89, 23);
