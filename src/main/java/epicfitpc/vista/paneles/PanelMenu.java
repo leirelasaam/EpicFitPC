@@ -26,7 +26,7 @@ public class PanelMenu extends JPanel {
 
 		PanelWorkouts panelWorkouts = new PanelWorkouts(this);
 		PanelHistorico panelHistorico = new PanelHistorico();
-		PanelPerfil panelPerfil = new PanelPerfil(this, usuario);
+		PanelPerfil panelPerfil = new PanelPerfil(usuario);
 
 		tabbedPane.addTab("Workouts", panelWorkouts);
 		tabbedPane.addTab("Histórico", panelHistorico);
