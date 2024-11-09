@@ -56,6 +56,7 @@ public class PanelPerfil extends JPanel {
 		panelContenido.setBorder(new EmptyBorder(50, 50, 100, 50));
 		add(panelContenido, BorderLayout.CENTER);
 
+		// PANEL IZQUIERDA - Datos de usuario
 		RoundedPanel panelDatosUsuario = new RoundedPanel(new GridLayout(0, 1, 0, 0));
 		panelDatosUsuario.setBorder(new EmptyBorder(50, 50, 100, 50));
 		panelContenido.add(panelDatosUsuario);
@@ -91,6 +92,7 @@ public class PanelPerfil extends JPanel {
 		panelDatosCuenta.setBorder(new EmptyBorder(50, 50, 100, 50));
 		panelContenido.add(panelDatosCuenta);
 
+		// PANEL DERECHA - Datos de cuenta
 		JLabelTitle lblDatosCuenta = new JLabelTitle("Datos de tu cuenta");
 		panelDatosCuenta.add(lblDatosCuenta);
 
@@ -119,6 +121,7 @@ public class PanelPerfil extends JPanel {
 		textNivel.setEditable(false);
 		panelDatosCuenta.add(textNivel);
 
+		// PANEL INFERIOR - Botones
 		JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		panelInferior.setBorder(new EmptyBorder(0, 50, 0, 50));
 		add(panelInferior, BorderLayout.SOUTH);
