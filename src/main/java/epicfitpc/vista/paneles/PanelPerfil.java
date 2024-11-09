@@ -7,6 +7,7 @@ import javax.swing.border.EmptyBorder;
 import com.google.cloud.Timestamp;
 
 import epicfitpc.bbdd.GestorDeUsuarios;
+import epicfitpc.controlador.Controlador;
 import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.Conexion;
 import epicfitpc.utils.DateUtils;
@@ -56,6 +57,7 @@ public class PanelPerfil extends JPanel {
 		panelContenido.setBorder(new EmptyBorder(50, 50, 100, 50));
 		add(panelContenido, BorderLayout.CENTER);
 
+		// PANEL IZQUIERDA - Datos de usuario
 		RoundedPanel panelDatosUsuario = new RoundedPanel(new GridLayout(0, 1, 0, 0));
 		panelDatosUsuario.setBorder(new EmptyBorder(50, 50, 100, 50));
 		panelContenido.add(panelDatosUsuario);
@@ -79,7 +81,7 @@ public class PanelPerfil extends JPanel {
 		textApellidos.setText(usuario.getApellido());
 		panelDatosUsuario.add(textApellidos);
 
-		JLabel lblFechaNac = new JLabel("Fecha de nacimiento");
+		JLabel lblFechaNac = new JLabel("<html>Fecha de nacimiento (<i>dd/mm/aaaa</i>)</html>");
 		panelDatosUsuario.add(lblFechaNac);
 
 		textFechaNac = new JTextField();
@@ -91,6 +93,7 @@ public class PanelPerfil extends JPanel {
 		panelDatosCuenta.setBorder(new EmptyBorder(50, 50, 100, 50));
 		panelContenido.add(panelDatosCuenta);
 
+		// PANEL DERECHA - Datos de cuenta
 		JLabelTitle lblDatosCuenta = new JLabelTitle("Datos de tu cuenta");
 		panelDatosCuenta.add(lblDatosCuenta);
 
@@ -119,6 +122,7 @@ public class PanelPerfil extends JPanel {
 		textNivel.setEditable(false);
 		panelDatosCuenta.add(textNivel);
 
+		// PANEL INFERIOR - Botones
 		JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		panelInferior.setBorder(new EmptyBorder(0, 50, 0, 50));
 		add(panelInferior, BorderLayout.SOUTH);
@@ -170,42 +174,38 @@ public class PanelPerfil extends JPanel {
 				guardadoCorrectamente = gdu.modificarUsuario(usuarioModificado, usuario.getUsuario());
 
 				if (guardadoCorrectamente) {
-					WindowUtils.confirmationPane("Se han guardado correctamente las modificaciones",
+					WindowUtils.confirmationPane("Se han guardado correctamente las modificaciones,",
 							"Guardado correco");
 				} else {
-					WindowUtils.errorPane("No se han podido guardar las modificaciones. Pruebe mas tarde",
+					WindowUtils.errorPane("No se han podido guardar las modificaciones. Pruebe mas tarde.",
 							"Error en guardado");
 				}
 			}
 
 		} catch (Exception e2) {
-			e2.printStackTrace();
+			WindowUtils.errorPane("No se han podido actualizar los datos.", "Error en guardado");
 		}
 	}
 
-	/**
-	 * @param frame
-	 * @param usuario
-	 * @param gestorDeUsuarios
-	 * @throws Exception
-	 */
 	public boolean validacionesCamposCorrectos(Usuario usuarioModificado, Usuario usuario) throws Exception {
 		boolean validar = true;
 
 		if (gdu == null)
 			gdu = new GestorDeUsuarios(Conexion.getInstance().getConexion());
 
-		if (!gdu.validarApellido(usuarioModificado.getApellido())) {
+		Controlador ctr = new Controlador();
+
+		if (!ctr.validarApellido(usuarioModificado.getApellido())) {
 			WindowUtils.errorPane("El apellido esta vacio o es mayor de 50 carácteres", "Datos incorrectos");
 			validar = false;
-		} else if (!gdu.validarCorreo(usuarioModificado.getCorreo())) {
+		} else if (!ctr.validarCorreo(usuarioModificado.getCorreo())) {
 			WindowUtils.errorPane("Correo incorrecto, vuelva a insertarlo.", "Datos incorrectos");
 			validar = false;
-		} else if (!gdu.validarFechaNacimiento(usuarioModificado.getFechaNac())) {
+		} else if (!ctr.validarFechaNacimiento(usuarioModificado.getFechaNac())) {
 			WindowUtils.errorPane("Fecha de nacimiento incorrecta. El usuario tiene que ser mayor de 14 años.",
 					"Datos incorrectos");
 			validar = false;
-		} else if (!gdu.validarNombre(usuarioModificado.getNombre())) {
+		} else if (!ctr.validarNombre(usuarioModificado.getNombre())) {
 			WindowUtils.errorPane("Nombre incorrecto, esta vacio o es mayor de 50 carácteres.", "Datos incorrectos");
 			validar = false;
 		} else if (gdu.comprobarSiExisteNombreUsuario(usuarioModificado.getUsuario())
