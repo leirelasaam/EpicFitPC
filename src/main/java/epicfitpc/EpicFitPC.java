@@ -4,11 +4,14 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.UIManager;
 
 import epicfitpc.ficheros.GestorDeBackups;
+import epicfitpc.modelo.Historico;
+import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.Conexion;
 import epicfitpc.utils.Estilos;
 import epicfitpc.utils.GestorDeConexiones;
@@ -36,7 +39,7 @@ public class EpicFitPC {
 		 * (ClassNotFoundException e) { // TODO Auto-generated catch block
 		 * e.printStackTrace(); }
 		 */
-
+		
 		try {
 			// Establecer tema según sistema operativo
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

@@ -51,15 +51,15 @@ public class PanelRegistro extends JPanel {
 		textUsuario.setColumns(10);
 
 		JLabel lblPass = new JLabel("Contraseña:");
-		lblPass.setBounds(94, 193, 102, 14);
+		lblPass.setBounds(94, 193, 152, 14);
 		add(lblPass);
 
 		JLabel lblUsuario = new JLabel("Nombre de Usuario:");
-		lblUsuario.setBounds(94, 83, 130, 14);
+		lblUsuario.setBounds(94, 83, 152, 14);
 		add(lblUsuario);
 
 		JLabel lblPass2 = new JLabel("Repita la contraseña:");
-		lblPass2.setBounds(94, 296, 130, 14);
+		lblPass2.setBounds(94, 296, 152, 14);
 		add(lblPass2);
 
 		passwordField = new JPasswordField();
@@ -71,15 +71,15 @@ public class PanelRegistro extends JPanel {
 		add(passwordField_2);
 
 		JLabel lblFechaNac = new JLabel("Fecha de nacimiento:");
-		lblFechaNac.setBounds(303, 83, 130, 14);
+		lblFechaNac.setBounds(303, 83, 159, 14);
 		add(lblFechaNac);
 
 		JLabel lblNombre = new JLabel("Nombre:");
-		lblNombre.setBounds(303, 193, 110, 14);
+		lblNombre.setBounds(303, 193, 144, 14);
 		add(lblNombre);
 
 		JLabel lblApellido = new JLabel("Apellido:");
-		lblApellido.setBounds(303, 296, 130, 14);
+		lblApellido.setBounds(303, 296, 159, 14);
 		add(lblApellido);
 
 		textFechaNac = new JTextField();
@@ -103,11 +103,11 @@ public class PanelRegistro extends JPanel {
 		textApellido.setColumns(10);
 
 		JLabel lblCorreo = new JLabel("Correo electrónico: ");
-		lblCorreo.setBounds(518, 83, 130, 14);
+		lblCorreo.setBounds(518, 83, 179, 14);
 		add(lblCorreo);
 
 		JLabel lblTipoUsuario = new JLabel("Elija el tipo de usuario: ");
-		lblTipoUsuario.setBounds(518, 193, 130, 14);
+		lblTipoUsuario.setBounds(518, 193, 179, 14);
 		add(lblTipoUsuario);
 
 		textEmail = new JTextField();

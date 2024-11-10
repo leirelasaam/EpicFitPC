@@ -11,6 +11,7 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 
+import epicfitpc.ficheros.GestorDeFicherosXML;
 import epicfitpc.modelo.Historico;
 import epicfitpc.modelo.Usuario;
 import epicfitpc.modelo.Workout;
@@ -57,6 +58,9 @@ public class GestorDeHistoricos {
 
 			historicos.add(historico);
 		}
+		
+		GestorDeFicherosXML gestorDeFicherosXML = new GestorDeFicherosXML();
+		gestorDeFicherosXML.crearBackupXML(usuario, historicos, "C:\\");
 
 		return historicos;
 	}
