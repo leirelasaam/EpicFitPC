@@ -27,39 +27,6 @@ public class Usuario implements Serializable {
 		// Constructor vacío
 	}
 
-	public Usuario(String id, String nombre, String apellido, String correo, String usuario, String pass,
-			Timestamp fechaNac, Timestamp fechaAlt, int nivel, boolean esEntrenador) {
-		super();
-		this.id = id;
-		this.nombre = nombre;
-		this.apellido = apellido;
-		this.correo = correo;
-		this.usuario = usuario;
-		this.pass = pass;
-		this.fechaNac = fechaNac;
-		this.fechaAlt = fechaAlt;
-		this.nivel = nivel;
-		this.esEntrenador = esEntrenador;
-	}
-
-	// Constructor que recibe los valores crudos desde el documento
-	public Usuario(String id, String nombre, String apellido, String correo, String user, String pass, double nivel,
-			Timestamp fechaNac, Timestamp fechaAlt, boolean esEntrenador) {
-		this.id = id;
-		this.nombre = nombre;
-		this.apellido = apellido;
-		this.correo = correo;
-		this.usuario = user;
-		this.pass = pass;
-
-		this.nivel = (int) nivel;
-
-		this.fechaNac = fechaNac;
-		this.fechaAlt = fechaAlt;
-
-		this.esEntrenador = esEntrenador;
-	}
-
 	public String getId() {
 		return id;
 	}

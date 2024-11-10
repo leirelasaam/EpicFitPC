@@ -26,7 +26,7 @@ public class PanelMenu extends JPanel {
 
 		PanelWorkouts panelWorkouts = new PanelWorkouts(this);
 		PanelHistorico panelHistorico = new PanelHistorico();
-		PanelPerfil panelPerfil = new PanelPerfil(this, usuario);
+		PanelPerfil panelPerfil = new PanelPerfil(usuario);
 
 		tabbedPane.addTab("Workouts", panelWorkouts);
 		tabbedPane.addTab("Histórico", panelHistorico);
@@ -38,5 +38,9 @@ public class PanelMenu extends JPanel {
     public void agregarNuevoTab(String titulo, JPanel nuevoPanel) {
         tabbedPane.addTab(titulo, nuevoPanel);
         tabbedPane.setSelectedComponent(nuevoPanel);
+    }
+    
+    public void seleccionarPrimerTab() {
+        tabbedPane.setSelectedIndex(0);
     }
 }

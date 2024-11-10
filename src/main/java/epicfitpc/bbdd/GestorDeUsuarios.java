@@ -2,19 +2,15 @@ package epicfitpc.bbdd;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
 
 import com.google.api.core.ApiFuture;
-import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
@@ -29,7 +25,7 @@ import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.DBUtils;
 
 public class GestorDeUsuarios {
-	
+
 	private Firestore db = null;
 
 	public GestorDeUsuarios(Firestore db) {
@@ -37,11 +33,12 @@ public class GestorDeUsuarios {
 	}
 
 	public ArrayList<Usuario> obtenerTodosLosUsuarios() throws InterruptedException, ExecutionException {
+		System.out.println("BBDD: obtenerTodosLosUsuarios");
 		ArrayList<Usuario> usuarios = null;
 		CollectionReference usuariosDb = db.collection(DBUtils.USUARIOS);
 		ApiFuture<QuerySnapshot> futureQuery = usuariosDb.get();
 		QuerySnapshot querySnapshot = null;
-		
+
 		try {
 			querySnapshot = futureQuery.get();
 		} catch (InterruptedException e) {
@@ -52,32 +49,24 @@ public class GestorDeUsuarios {
 
 		List<QueryDocumentSnapshot> documentos = querySnapshot.getDocuments();
 		for (QueryDocumentSnapshot documento : documentos) {
-			String id = documento.getId();
-			String nombre = documento.getString("nombre");
-			String apellido = documento.getString("apellido");
-			String correo = documento.getString("correo");
-			double nivel = documento.getDouble("nivel");
-			Timestamp fechaNac = documento.getTimestamp("fechaNac");
-			Timestamp fechaAlt = documento.getTimestamp("fechaAlt");
-			boolean esEntrenador = documento.getBoolean("esEntrenador");
-			String user = documento.getString("usuario");
-			String pass = documento.getString("pass");
-			Usuario usuario = new Usuario(id, nombre, apellido, correo, user, pass, nivel, fechaNac, fechaAlt,
-					esEntrenador);
+			Usuario usuario = documento.toObject(Usuario.class);
+			usuario.setId(documento.getId());
+			
 			if (null == usuarios)
 				usuarios = new ArrayList<Usuario>();
 			usuarios.add(usuario);
 		}
 		return usuarios;
 	}
-	
+
 	// Para el backup
 	public ArrayList<Usuario> obtenerUsuariosConHistoricos() throws InterruptedException, ExecutionException {
+		System.out.println("BBDD: obtenerUsuariosConHistoricos");
 		ArrayList<Usuario> usuarios = null;
 		CollectionReference usuariosDb = db.collection(DBUtils.USUARIOS);
 		ApiFuture<QuerySnapshot> futureQuery = usuariosDb.get();
 		QuerySnapshot querySnapshot = null;
-		
+
 		try {
 			querySnapshot = futureQuery.get();
 		} catch (InterruptedException e) {
@@ -85,13 +74,13 @@ public class GestorDeUsuarios {
 		} catch (ExecutionException e) {
 			throw e;
 		}
-		
+
 		GestorDeHistoricos gdh = new GestorDeHistoricos(db);
 		List<QueryDocumentSnapshot> documentos = querySnapshot.getDocuments();
 		for (QueryDocumentSnapshot documento : documentos) {
 			Usuario usuario = documento.toObject(Usuario.class);
 			usuario.setId(documento.getId());
-			
+
 			ArrayList<Historico> historicos = gdh.obtenerTodosLosHistoricosPorUsuario(usuario);
 			usuario.setHistoricos(historicos);
 
@@ -117,20 +106,8 @@ public class GestorDeUsuarios {
 
 		for (DocumentSnapshot documento : querySnapshot.getDocuments()) {
 			if (documento.exists()) {
-
-				String nombre = documento.getString("nombre");
-				String apellido = documento.getString("apellido");
-				String correo = documento.getString("correo");
-				double nivel = documento.getDouble("nivel");
-				Timestamp fechaNac = documento.getTimestamp("fechaNac");
-				Timestamp fechaAlt = documento.getTimestamp("fechaAlt");
-				boolean esEntrenador = documento.getBoolean("esEntrenador");
-				String user = documento.getString("usuario");
-				String pass = documento.getString("pass");
-
-				usuario = new Usuario(null, nombre, apellido, correo, user, pass, nivel, fechaNac, fechaAlt,
-						esEntrenador);
-				System.out.println(usuario.toString());
+				usuario = documento.toObject(Usuario.class);
+				usuario.setId(documento.getId());
 			} else {
 				// Devuelve null si no se encuentra el usuario
 				System.out.println("No se encontró un usuario con el nombre de usuario especificado: " + nombreUsuario);
@@ -142,6 +119,7 @@ public class GestorDeUsuarios {
 
 	public boolean guardarUsuarios(Usuario usuario)
 			throws InterruptedException, ExecutionException, FileNotFoundException, IOException {
+		System.out.println("BBDD: guardarUsuarios");
 
 		Map<String, Object> user = new HashMap<String, Object>();
 		user.put("usuario", usuario.getUsuario());
@@ -161,8 +139,16 @@ public class GestorDeUsuarios {
 		return false;
 	}
 
+	public boolean actualizarNivelUsuario(String usuarioId, int nuevoNivel)
+			throws InterruptedException, ExecutionException {
+		//Así lo propone firebase
+	    DocumentReference docRef = db.collection(DBUtils.USUARIOS).document(usuarioId);
+	    ApiFuture<WriteResult> future = docRef.update("nivel", nuevoNivel);
+	    WriteResult result = future.get();
+	    return result != null;
+	}
+
 	public Usuario comprobarUsuario(String usuarioIntroducido, String contraseniaIntroducida) throws Exception {
-		;
 		ArrayList<Usuario> usuarios = obtenerTodosLosUsuarios();
 
 		// Recorremos los usuarios para buscar el usuario introducido
@@ -189,7 +175,6 @@ public class GestorDeUsuarios {
 		throw new Exception("Datos incorrectos.");
 	}
 
-
 	public boolean comprobarSiExisteNombreUsuario(String usuarioIntroducido) throws Exception {
 		ArrayList<Usuario> usuarios = obtenerTodosLosUsuarios();
 
@@ -200,54 +185,6 @@ public class GestorDeUsuarios {
 			}
 		}
 		return false;
-	}
-
-	public boolean validarNombre(String nombre) {
-		return nombre != null && !nombre.isEmpty() && nombre.length() <= 25;
-	}
-
-	public boolean validarApellido(String apellido) {
-		boolean validar = apellido != null && !apellido.isEmpty() && apellido.length() <= 50;
-		return validar;
-	}
-
-	public boolean validarCorreo(String correo) {
-		String regexCorreo = "^[\\w-\\.]+@[\\w-]+\\.[a-z]{2,6}$";
-		return correo != null && Pattern.matches(regexCorreo, correo);
-	}
-
-	public boolean validarUsername(String user) {
-		String regexUser = "^(?=.*[a-z])(?=.*[A-Z]).{2,15}$";
-		return user != null && Pattern.matches(regexUser, user);
-	}
-
-	public boolean validarPassword(String pass) {
-		String regexPass = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!_]).{8,20}$";
-		return pass != null && Pattern.matches(regexPass, pass);
-	}
-
-	public boolean validarFechaNacimiento(Timestamp fechaNac) {
-		LocalDate fechaMinima = LocalDate.now().minusYears(14);
-		LocalDate fechaNacLocal = fechaNac.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		return fechaNac != null && fechaNacLocal.isBefore(fechaMinima);
-	}
-
-	// Prueba para comprobar que se conecta a la firebase e imprime todos los
-	// usuarios -> ID: zoVUUYKznIh8KDXOxjUc, Nombre: Leire, Usuario: 1234
-	public void imprimirTodosLosUsuarios() throws Exception {
-		// Obtenemos todos los usuarios
-		ArrayList<Usuario> usuarios = obtenerTodosLosUsuarios();
-
-		// Si hay usuarios en la lista, los imprime
-		if (usuarios != null && !usuarios.isEmpty()) {
-			System.out.println("Usuarios encontrados:");
-			for (Usuario usuario : usuarios) {
-				System.out.println("ID: " + usuario.getId() + ", Nombre: " + usuario.getNombre() + ", Usuario: "
-						+ usuario.getUsuario());
-			}
-		} else {
-			System.out.println("No se encontraron usuarios.");
-		}
 	}
 
 	public boolean modificarUsuario(Usuario usuarioActualizado, String nombreUsuarioOriginal) {

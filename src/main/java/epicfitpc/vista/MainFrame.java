@@ -31,10 +31,10 @@ public class MainFrame extends JFrame {
 		setLocationRelativeTo(null);
 		setResizable(true);
 		getContentPane().setLayout(new BorderLayout());
-		setBackground(Estilos.DARK_BACKGROUND);
+		setBackground(Estilos.BACKGROUND);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Rutas.LOGO_EF));
 
-		PanelLogin panelLogin = new PanelLogin(this);
+		PanelLogin panelLogin = new PanelLogin();
 		getContentPane().add(panelLogin);
 		revalidate();
 		repaint();

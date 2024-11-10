@@ -2,25 +2,33 @@ package epicfitpc.vista.paneles;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 import com.google.cloud.Timestamp;
 
 import epicfitpc.bbdd.GestorDeUsuarios;
+import epicfitpc.controlador.Controlador;
 import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.Conexion;
+import epicfitpc.utils.DateUtils;
+import epicfitpc.utils.Estilos;
+import epicfitpc.utils.GestorDeConexiones;
+import epicfitpc.utils.UsuarioLogueado;
+import epicfitpc.utils.WindowUtils;
 import epicfitpc.vista.MainFrame;
 import epicfitpc.vista.componentes.JButtonPrimary;
+import epicfitpc.vista.componentes.JLabelTitle;
+import epicfitpc.vista.componentes.RoundedPanel;
 
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.awt.event.ActionEvent;
 
 public class PanelPerfil extends JPanel {
@@ -32,166 +40,177 @@ public class PanelPerfil extends JPanel {
 	private JTextField textCorreo;
 	private JTextField textUsuario;
 	private JTextField textNivel;
+	private Usuario usuario;
+	private GestorDeUsuarios gdu;
 
-	public PanelPerfil(PanelMenu panelMenu, Usuario usuario) {
+	public PanelPerfil(Usuario usuario) {
+		this.usuario = usuario;
+		initialize();
+	}
 
-		GestorDeUsuarios gestorDeUsuarios = inicializarGestorDeUsuarios();
+	private void initialize() {
+		setLayout(new BorderLayout(0, 0));
+		setBorder(new EmptyBorder(50, 50, 50, 50));
+		setBounds(100, 100, 1200, 750);
 
-		setLayout(null);
+		JPanel panelContenido = new JPanel(new GridLayout(1, 0, 100, 0));
+		panelContenido.setBorder(new EmptyBorder(50, 50, 100, 50));
+		add(panelContenido, BorderLayout.CENTER);
 
-		textNombre = new JTextField();
-		textNombre.setBounds(219, 139, 135, 20);
-		textNombre.setText(usuario.getNombre());
-		add(textNombre);
-		textNombre.setColumns(10);
+		// PANEL IZQUIERDA - Datos de usuario
+		RoundedPanel panelDatosUsuario = new RoundedPanel(new GridLayout(0, 1, 0, 0));
+		panelDatosUsuario.setBorder(new EmptyBorder(50, 50, 100, 50));
+		panelContenido.add(panelDatosUsuario);
+
+		JLabelTitle lblDatosDeUsuario = new JLabelTitle("Datos del Usuario");
+		panelDatosUsuario.add(lblDatosDeUsuario);
 
 		JLabel lblNombre = new JLabel("Nombre");
-		lblNombre.setBounds(219, 114, 71, 14);
-		add(lblNombre);
+		panelDatosUsuario.add(lblNombre);
+
+		textNombre = new JTextField();
+		textNombre.setText(usuario.getNombre());
+		textNombre.setColumns(10);
+		panelDatosUsuario.add(textNombre);
 
 		JLabel lblApellidos = new JLabel("Apellidos");
-		lblApellidos.setBounds(219, 192, 71, 14);
-		add(lblApellidos);
+		panelDatosUsuario.add(lblApellidos);
 
 		textApellidos = new JTextField();
 		textApellidos.setColumns(10);
-		textApellidos.setBounds(219, 217, 135, 20);
 		textApellidos.setText(usuario.getApellido());
-		add(textApellidos);
+		panelDatosUsuario.add(textApellidos);
 
-		JLabel lblFechaNac = new JLabel("Fecha de nacimiento");
-		lblFechaNac.setBounds(219, 269, 135, 14);
-		add(lblFechaNac);
+		JLabel lblFechaNac = new JLabel("<html>Fecha de nacimiento (<i>dd/mm/aaaa</i>)</html>");
+		panelDatosUsuario.add(lblFechaNac);
 
 		textFechaNac = new JTextField();
 		textFechaNac.setColumns(10);
-		textFechaNac.setBounds(219, 294, 135, 20);
-		textFechaNac.setText(parsearTimestampAString(usuario.getFechaNac().toSqlTimestamp()));
-		add(textFechaNac);
+		textFechaNac.setText(DateUtils.parsearTimestampAString(usuario.getFechaNac().toSqlTimestamp()));
+		panelDatosUsuario.add(textFechaNac);
 
-		JLabel lblDatosCuenta = new JLabel("Datos de tu cuenta");
-		lblDatosCuenta.setForeground(new Color(255, 140, 0));
-		lblDatosCuenta.setBounds(476, 75, 135, 14);
-		add(lblDatosCuenta);
+		RoundedPanel panelDatosCuenta = new RoundedPanel(new GridLayout(0, 1, 0, 0));
+		panelDatosCuenta.setBorder(new EmptyBorder(50, 50, 100, 50));
+		panelContenido.add(panelDatosCuenta);
 
-		JLabel lblDatosDeUsuario = new JLabel("Datos de usuario");
-		lblDatosDeUsuario.setForeground(new Color(255, 140, 0));
-		lblDatosDeUsuario.setBounds(219, 75, 135, 14);
-		add(lblDatosDeUsuario);
+		// PANEL DERECHA - Datos de cuenta
+		JLabelTitle lblDatosCuenta = new JLabelTitle("Datos de la Cuenta");
+		panelDatosCuenta.add(lblDatosCuenta);
 
 		JLabel lblLogin = new JLabel("Usuario");
-		lblLogin.setBounds(476, 114, 52, 14);
-		add(lblLogin);
-
-		JLabel lblCorreo = new JLabel("Correo electrónico ");
-		lblCorreo.setBounds(476, 192, 135, 14);
-		add(lblCorreo);
-
-		textCorreo = new JTextField();
-		textCorreo.setColumns(10);
-		textCorreo.setBounds(476, 217, 135, 20);
-		textCorreo.setText(usuario.getCorreo());
-		add(textCorreo);
-
-		JButtonPrimary btnguardarDatos = new JButtonPrimary("GUARDAR DATOS");
-		btnguardarDatos.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Usuario usuarioModificado;
-				boolean guardadoCorrectamente = false;
-				boolean validar = false;
-				try {
-					usuarioModificado = crearObjetoUsuario();
-					validar = validacionesCamposCorrectos(panelMenu, usuarioModificado, usuario, gestorDeUsuarios);
-					if (validar) {
-						guardadoCorrectamente = gestorDeUsuarios.modificarUsuario(usuarioModificado, usuario.getUsuario());
-
-						if (guardadoCorrectamente) {
-							JOptionPane.showMessageDialog(MainFrame.getInstance(),
-									"Se han guardado correctamente las modificaciones");
-						} else {
-							JOptionPane.showMessageDialog(MainFrame.getInstance(),
-									"No se han podido guardar las modificaciones. Pruebe mas tarde");
-						}
-					}
-
-				} catch (Exception e2) {
-					e2.printStackTrace();
-				}
-
-			}
-		});
-
-		btnguardarDatos.setBackground(new Color(0, 0, 0));
-		btnguardarDatos.setBounds(598, 471, 138, 20);
-		add(btnguardarDatos);
+		panelDatosCuenta.add(lblLogin);
 
 		textUsuario = new JTextField();
 		textUsuario.setColumns(10);
-		textUsuario.setBounds(476, 139, 135, 20);
 		textUsuario.setText(usuario.getUsuario());
-		add(textUsuario);
+		panelDatosCuenta.add(textUsuario);
+
+		JLabel lblCorreo = new JLabel("Correo electrónico ");
+		panelDatosCuenta.add(lblCorreo);
+
+		textCorreo = new JTextField();
+		textCorreo.setColumns(10);
+		textCorreo.setText(usuario.getCorreo());
+		panelDatosCuenta.add(textCorreo);
 
 		JLabel lblNivel = new JLabel("Nivel");
-		lblNivel.setBounds(476, 269, 71, 14);
-		add(lblNivel);
+		panelDatosCuenta.add(lblNivel);
 
 		textNivel = new JTextField();
 		textNivel.setColumns(10);
-		textNivel.setBounds(476, 294, 135, 20);
 		textNivel.setText(String.valueOf(usuario.getNivel()));
 		textNivel.setEditable(false);
-		add(textNivel);
+		panelDatosCuenta.add(textNivel);
+
+		// PANEL INFERIOR - Botones
+		JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		panelInferior.setBorder(new EmptyBorder(0, 50, 0, 50));
+		add(panelInferior, BorderLayout.SOUTH);
+
+		JButtonPrimary btnGuardarDatos = new JButtonPrimary("GUARDAR DATOS");
+		btnGuardarDatos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				guardarDatosActualizados();
+			}
+		});
+		btnGuardarDatos.setPreferredSize(new Dimension(200, 30));
+		panelInferior.add(btnGuardarDatos);
+
+		boolean hayConexion = GestorDeConexiones.getInstance().hayConexion();
+		if (!hayConexion)
+			btnGuardarDatos.setVisible(false);
+
+		JButtonPrimary btnCerrarSesion = new JButtonPrimary("Cerrar sesión");
+		btnCerrarSesion.setPreferredSize(new Dimension(200, 30));
+		btnCerrarSesion.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				cerrarSesion();
+			}
+		});
+		panelInferior.add(btnCerrarSesion);
+		btnCerrarSesion.setBackgroundColor(Estilos.BLACK);
+		btnCerrarSesion.setHoverColor(Color.DARK_GRAY);
 	}
 
-	public static String parsearTimestampAString(java.sql.Timestamp timestamp) {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
-		return sdf.format(timestamp);
+	private void cerrarSesion() {
+		UsuarioLogueado.getInstance().setUsuario(null);
+		MainFrame.getInstance().getContentPane().removeAll();
+		MainFrame.getInstance().getContentPane().add(new PanelLogin());
+		MainFrame.getInstance().revalidate();
+		MainFrame.getInstance().repaint();
 	}
 
-	/**
-	 * @return
-	 */
-	public GestorDeUsuarios inicializarGestorDeUsuarios() {
-		GestorDeUsuarios gestorDeUsuarios = null;
+	private void guardarDatosActualizados() {
+		Usuario usuarioModificado;
+		boolean guardadoCorrectamente = false;
+		boolean validar = false;
 		try {
-			gestorDeUsuarios = new GestorDeUsuarios(Conexion.getInstance().getConexion());
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
+			if (gdu == null)
+				gdu = new GestorDeUsuarios(Conexion.getInstance().getConexion());
+			usuarioModificado = crearObjetoUsuario();
+			validar = validacionesCamposCorrectos(usuarioModificado, usuario);
+			if (validar) {
+				guardadoCorrectamente = gdu.modificarUsuario(usuarioModificado, usuario.getUsuario());
+
+				if (guardadoCorrectamente) {
+					WindowUtils.confirmationPane("Se han guardado correctamente las modificaciones,",
+							"Guardado correco");
+				} else {
+					WindowUtils.errorPane("No se han podido guardar las modificaciones. Pruebe mas tarde.",
+							"Error en guardado");
+				}
+			}
+
+		} catch (Exception e2) {
+			WindowUtils.errorPane("No se han podido actualizar los datos.", "Error en guardado");
 		}
-		return gestorDeUsuarios;
 	}
 
-	/**
-	 * @param frame
-	 * @param usuario
-	 * @param gestorDeUsuarios
-	 * @throws Exception
-	 */
-	public boolean validacionesCamposCorrectos(PanelMenu panelmenu, Usuario usuarioModificado, Usuario usuario,
-			GestorDeUsuarios gestorDeUsuarios) throws Exception {
+	public boolean validacionesCamposCorrectos(Usuario usuarioModificado, Usuario usuario) throws Exception {
 		boolean validar = true;
-		String usuariomod = usuarioModificado.getUsuario();
-		String alias2 = usuario.getUsuario();
 
-		if (!gestorDeUsuarios.validarApellido(usuarioModificado.getApellido())) {
-			JOptionPane.showMessageDialog(panelmenu, "El apellido esta vacio o es mayor de 50 carácteres");
+		if (gdu == null)
+			gdu = new GestorDeUsuarios(Conexion.getInstance().getConexion());
+
+		Controlador ctr = new Controlador();
+
+		if (!ctr.validarApellido(usuarioModificado.getApellido())) {
+			WindowUtils.errorPane("El apellido esta vacio o es mayor de 50 carácteres", "Datos incorrectos");
 			validar = false;
-		} else if (!gestorDeUsuarios.validarCorreo(usuarioModificado.getCorreo())) {
-			JOptionPane.showMessageDialog(panelmenu, "Correo incorrecto, vuelva a insertarlo.");
+		} else if (!ctr.validarCorreo(usuarioModificado.getCorreo())) {
+			WindowUtils.errorPane("Correo incorrecto, vuelva a insertarlo.", "Datos incorrectos");
 			validar = false;
-		} else if (!gestorDeUsuarios.validarFechaNacimiento(usuarioModificado.getFechaNac())) {
-			JOptionPane.showMessageDialog(panelmenu,
-					"Fecha de nacimiento incorrecta. El usuario tiene que ser mayor de 14 años.");
+		} else if (!ctr.validarFechaNacimiento(usuarioModificado.getFechaNac())) {
+			WindowUtils.errorPane("Fecha de nacimiento incorrecta. El usuario tiene que ser mayor de 14 años.",
+					"Datos incorrectos");
 			validar = false;
-		} else if (!gestorDeUsuarios.validarNombre(usuarioModificado.getNombre())) {
-			JOptionPane.showMessageDialog(panelmenu, "Nombre incorrecto, esta vacio o es mayor de 50 carácteres.");
+		} else if (!ctr.validarNombre(usuarioModificado.getNombre())) {
+			WindowUtils.errorPane("Nombre incorrecto, esta vacio o es mayor de 50 carácteres.", "Datos incorrectos");
 			validar = false;
-		} else if (gestorDeUsuarios.comprobarSiExisteNombreUsuario(usuarioModificado.getUsuario())
+		} else if (gdu.comprobarSiExisteNombreUsuario(usuarioModificado.getUsuario())
 				&& !usuario.getUsuario().equals(usuarioModificado.getUsuario())) {
-			JOptionPane.showMessageDialog(panelmenu, "El nombre de usuario ya existe.");
+			WindowUtils.errorPane("El nombre de usuario ya existe.", "Datos incorrectos");
 			validar = false;
 		}
 
@@ -204,27 +223,16 @@ public class PanelPerfil extends JPanel {
 		usuario.setUsuario(textUsuario.getText());
 		usuario.setCorreo(textCorreo.getText());
 
-		Timestamp localDate = convertirStringToTimestamp();
+		Timestamp localDate = null;
+		try {
+			localDate = DateUtils.convertirStringToTimestamp(textFechaNac.getText());
+		} catch (ParseException e) {
+			WindowUtils.errorPane("Error en conversión de fecha", "Error");
+		}
 		usuario.setFechaNac(localDate);
 
 		usuario.setNombre(textNombre.getText());
 
 		return usuario;
 	}
-
-	/**
-	 * @return
-	 */
-	public Timestamp convertirStringToTimestamp() {
-
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		Date parsedDate = null;
-		try {
-			parsedDate = dateFormat.parse(textFechaNac.getText());
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		return Timestamp.of(parsedDate);
-	}
-
 }

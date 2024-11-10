@@ -1,5 +1,6 @@
 package epicfitpc.utils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -46,5 +47,27 @@ public class DateUtils {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
         return sdf.format(date);
     }
+    
+    public static String formatearTiempoCronometro(int tiempo) {
+		int minutos = tiempo / 60;
+		int segundos = tiempo % 60;
+		return String.format("%02d:%02d", minutos, segundos);
+	}
+    
+	public static String parsearTimestampAString(java.sql.Timestamp timestamp) {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		return sdf.format(timestamp);
+	}
+	
+	public static Timestamp convertirStringToTimestamp(String texto) throws ParseException {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		Date parsedDate = null;
+		try {
+			parsedDate = dateFormat.parse(texto);
+		} catch (ParseException e) {
+			throw e;
+		}
+		return Timestamp.of(parsedDate);
+	}
 }
 

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -96,13 +97,13 @@ public class PanelWorkouts extends JPanel {
 		comboBox.setRenderer(new ComboBoxRenderer());
 
 		panelWInterior = new JPanel();
-		panelWInterior.setBackground(Estilos.DARK_BACKGROUND);
+		panelWInterior.setBackground(Estilos.BACKGROUND);
 		panelWInterior.setBorder(new EmptyBorder(10, 10, 10, 10));
 		panelWInterior.setLayout(new GridLayout(0, 1, 10, 10));
 
 		JPanel panelEjerciciosW = new JPanel();
 		panelEjerciciosW.setLayout(new BorderLayout(0, 0));
-		panelEjerciciosW.setBackground(Estilos.DARK_BACKGROUND);
+		panelEjerciciosW.setBackground(Estilos.BACKGROUND);
 		add(panelEjerciciosW);
 
 		labelWorkout = new JLabel(SELECCIONA_WORKOUT);
@@ -115,7 +116,7 @@ public class PanelWorkouts extends JPanel {
 
 		panelEj = new JPanel();
 		panelEj.setLayout(new GridLayout(0, 1, 10, 10));
-		panelEj.setBackground(Estilos.DARK_BACKGROUND);
+		panelEj.setBackground(Estilos.BACKGROUND);
 		panelEj.setBorder(new EmptyBorder(10, 10, 10, 10));
 
 		playButton = new JButtonPrimary("Play");
@@ -129,9 +130,11 @@ public class PanelWorkouts extends JPanel {
 
 		JScrollPane scrollPane = new JScrollPane(panelWInterior);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		panelContenidoWorkout.add(scrollPane);
 
 		JScrollPane scrollPaneEj = new JScrollPane(panelEj);
+		scrollPaneEj.setBorder(BorderFactory.createEmptyBorder());
 		scrollPaneEj.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		panelEjerciciosW.add(scrollPaneEj, BorderLayout.CENTER);
 
@@ -183,7 +186,7 @@ public class PanelWorkouts extends JPanel {
 		// Paneles vacíos para que se ajusten bien los tamaños
 		for (int i = numeroDePaneles; i < panelesNecesarios; i++) {
 			JPanel emptyPanel = new JPanel();
-			emptyPanel.setBackground(Estilos.DARK_BACKGROUND);
+			emptyPanel.setBackground(Estilos.BACKGROUND);
 			panel.add(emptyPanel);
 		}
 	}
@@ -268,6 +271,7 @@ public class PanelWorkouts extends JPanel {
 	}
 
 	private ArrayList<Workout> obtenerWorkouts() {
+		System.out.println("Obteniendo workouts en Workout");
 		ArrayList<Workout> workouts = null;
 		Firestore db;
 		boolean hayConexion = GestorDeConexiones.getInstance().hayConexion();
@@ -298,7 +302,7 @@ public class PanelWorkouts extends JPanel {
 	}
 
 	private void iniciarWorkout() {
-		PanelEjercicio panelEjercicio = new PanelEjercicio(workoutSeleccionado);
+		PanelEjercicio panelEjercicio = new PanelEjercicio(workoutSeleccionado, panelMenu);
 		panelMenu.agregarNuevoTab("Ejercicio", panelEjercicio);
 	}
 
