@@ -320,6 +320,8 @@ public class PanelEjercicio extends JPanel {
 
 	private void siguienteEjercicio() {
 		if (ejercicioActualIndex < workout.getEjercicios().size() - 1) {
+			if (cronDescanso.isAlive())
+				cronDescanso.terminar();
 			ejercicioActualIndex++;
 			serieActual = 1;
 			labelDescansoEstipulado
