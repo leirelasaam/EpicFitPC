@@ -145,7 +145,7 @@ public class PanelEjercicio extends JPanel {
 		panelEjercicio.add(labelEjercicio);
 
 		labelEjercicioActual = new JLabel(
-				workout != null ? workout.getEjercicios().get(ejercicioActualIndex).getNombre() : "No seleccionado");
+				workout != null && workout.getEjercicios() != null ? workout.getEjercicios().get(ejercicioActualIndex).getNombre() : "No hay ejercicios");
 		labelEjercicioActual.setHorizontalAlignment(SwingConstants.CENTER);
 		labelEjercicioActual.setFont(new Font("Noto Sans", Font.BOLD, 18));
 		panelEjercicio.add(labelEjercicioActual);
@@ -171,13 +171,13 @@ public class PanelEjercicio extends JPanel {
 		panelCentral.add(labelCuentaAtras);
 
 		labelNumeroSerie = new JLabel("Serie: 1 de "
-				+ (workout != null ? workout.getEjercicios().get(ejercicioActualIndex).getSeries() : "X"));
+				+ (workout != null && workout.getEjercicios() != null ? workout.getEjercicios().get(ejercicioActualIndex).getSeries() : "X"));
 		labelNumeroSerie.setHorizontalAlignment(SwingConstants.CENTER);
 		labelNumeroSerie.setFont(new Font("Noto Sans", Font.BOLD, 18));
 		panelCentral.add(labelNumeroSerie);
 
 		labelRepeticiones = new JLabel("Repeticiones: "
-				+ (workout != null ? workout.getEjercicios().get(ejercicioActualIndex).getRepeticiones() : "X"));
+				+ (workout != null && workout.getEjercicios() != null ? workout.getEjercicios().get(ejercicioActualIndex).getRepeticiones() : "X"));
 		labelRepeticiones.setHorizontalAlignment(SwingConstants.CENTER);
 		labelRepeticiones.setFont(new Font("Noto Sans", Font.BOLD, 18));
 		panelCentral.add(labelRepeticiones);
@@ -188,7 +188,7 @@ public class PanelEjercicio extends JPanel {
 		panelCentral.add(labelTiempoSerie);
 
 		JLabel labelDescansoEstipulado = new JLabel("Descanso de "
-				+ (workout != null ? workout.getEjercicios().get(ejercicioActualIndex).getDescanso() : "0") + " s");
+				+ (workout != null && workout.getEjercicios() != null ? workout.getEjercicios().get(ejercicioActualIndex).getDescanso() : "0") + " s");
 		labelDescansoEstipulado.setHorizontalAlignment(SwingConstants.CENTER);
 		labelDescansoEstipulado.setFont(new Font("Noto Sans", Font.BOLD, 18));
 		panelCentral.add(labelDescansoEstipulado);
