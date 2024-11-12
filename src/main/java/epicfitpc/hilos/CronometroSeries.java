@@ -76,7 +76,7 @@ public class CronometroSeries extends Thread {
 
 			// SE GESTIONA EN CASO DE QUE SEA LA ÚLTIMA SERIE
 			if (serie == ejercicio.getSeries()) {
-				labelCuentaAtras.setText("FINISH");
+				labelCuentaAtras.setText("END");
 				
 				// SE TERMINA EL EJERCICIO
 				cronEjercicio.terminar();
@@ -96,7 +96,7 @@ public class CronometroSeries extends Thread {
 
 				btnSiguiente.setVisible(true);
 			} else {
-				labelCuentaAtras.setText("CONTINUE");
+				labelCuentaAtras.setText("STOP");
 				btnAvanzar.setVisible(true);
 			}
 		} catch (InterruptedException e) {
