@@ -59,7 +59,7 @@ public class Controlador {
 	}
 
 	public boolean validarPassword(String pass) {
-		String regexPass = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!_]).{8,20}$";
+		String regexPass = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!_?*-]).{8,20}$";
 		return pass != null && Pattern.matches(regexPass, pass);
 	}
 

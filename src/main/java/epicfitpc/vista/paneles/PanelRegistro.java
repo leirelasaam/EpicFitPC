@@ -136,12 +136,6 @@ public class PanelRegistro extends JPanel {
 		passwordField2 = new JPasswordField();
 		panelDatosCuenta.add(passwordField2);
 
-//		UtilDateModel model = new UtilDateModel();
-//		JDatePanelImpl datePanel = new JDatePanelImpl(model, null);
-//		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, null);
-//		datePicker.setBounds(303, 108, 130, 20);
-//		add(datePicker);
-
 		// PANEL INFERIOR
 		JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		panelInferior.setBorder(new EmptyBorder(0, 50, 0, 50));
