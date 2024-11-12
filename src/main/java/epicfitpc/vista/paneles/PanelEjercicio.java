@@ -58,6 +58,7 @@ public class PanelEjercicio extends JPanel {
 	private CronometroProgresivo cronGeneral;
 	private CronometroProgresivo cronEjercicio;
 	private CronometroSeries cronSeries;
+	private CronometroProgresivo cronDescanso;
 
 	private JButtonPrimary btnPausar;
 	private JButtonPrimary btnIniciar;
@@ -73,6 +74,7 @@ public class PanelEjercicio extends JPanel {
 	private JLabel lblCronEjercicio;
 	private JLabel labelCuentaAtras;
 	private JLabel labelRepeticiones;
+	private JLabel labelDescansoEstipulado;
 
 	private int ejercicioActualIndex = 0;
 	private int serieActual = 1;
@@ -144,8 +146,9 @@ public class PanelEjercicio extends JPanel {
 		labelEjercicio.setForeground(Estilos.PRIMARY_DARK);
 		panelEjercicio.add(labelEjercicio);
 
-		labelEjercicioActual = new JLabel(
-				workout != null && workout.getEjercicios() != null ? workout.getEjercicios().get(ejercicioActualIndex).getNombre() : "No hay ejercicios");
+		labelEjercicioActual = new JLabel(workout != null && workout.getEjercicios() != null
+				? workout.getEjercicios().get(ejercicioActualIndex).getNombre()
+				: "No hay ejercicios");
 		labelEjercicioActual.setHorizontalAlignment(SwingConstants.CENTER);
 		labelEjercicioActual.setFont(new Font("Noto Sans", Font.BOLD, 18));
 		panelEjercicio.add(labelEjercicioActual);
@@ -170,14 +173,16 @@ public class PanelEjercicio extends JPanel {
 		labelCuentaAtras.setForeground(Estilos.PRIMARY_DARK);
 		panelCentral.add(labelCuentaAtras);
 
-		labelNumeroSerie = new JLabel("Serie: 1 de "
-				+ (workout != null && workout.getEjercicios() != null ? workout.getEjercicios().get(ejercicioActualIndex).getSeries() : "X"));
+		labelNumeroSerie = new JLabel("Serie: 1 de " + (workout != null && workout.getEjercicios() != null
+				? workout.getEjercicios().get(ejercicioActualIndex).getSeries()
+				: "X"));
 		labelNumeroSerie.setHorizontalAlignment(SwingConstants.CENTER);
 		labelNumeroSerie.setFont(new Font("Noto Sans", Font.BOLD, 18));
 		panelCentral.add(labelNumeroSerie);
 
-		labelRepeticiones = new JLabel("Repeticiones: "
-				+ (workout != null && workout.getEjercicios() != null ? workout.getEjercicios().get(ejercicioActualIndex).getRepeticiones() : "X"));
+		labelRepeticiones = new JLabel("Repeticiones: " + (workout != null && workout.getEjercicios() != null
+				? workout.getEjercicios().get(ejercicioActualIndex).getRepeticiones()
+				: "X"));
 		labelRepeticiones.setHorizontalAlignment(SwingConstants.CENTER);
 		labelRepeticiones.setFont(new Font("Noto Sans", Font.BOLD, 18));
 		panelCentral.add(labelRepeticiones);
@@ -187,8 +192,9 @@ public class PanelEjercicio extends JPanel {
 		labelTiempoSerie.setFont(new Font("Noto Sans", Font.PLAIN, 25));
 		panelCentral.add(labelTiempoSerie);
 
-		JLabel labelDescansoEstipulado = new JLabel("Descanso de "
-				+ (workout != null && workout.getEjercicios() != null ? workout.getEjercicios().get(ejercicioActualIndex).getDescanso() : "0") + " s");
+		labelDescansoEstipulado = new JLabel("Descanso de " + (workout != null && workout.getEjercicios() != null
+				? workout.getEjercicios().get(ejercicioActualIndex).getDescanso()
+				: "0") + " s");
 		labelDescansoEstipulado.setHorizontalAlignment(SwingConstants.CENTER);
 		labelDescansoEstipulado.setFont(new Font("Noto Sans", Font.BOLD, 18));
 		panelCentral.add(labelDescansoEstipulado);
@@ -292,8 +298,11 @@ public class PanelEjercicio extends JPanel {
 
 	private void iniciarSerie() {
 		Ejercicio ejercicioActual = workout.getEjercicios().get(ejercicioActualIndex);
-		cronSeries = new CronometroSeries(ejercicioActual, labelNumeroSerie, labelTiempoSerie, labelTiempoDescanso,
-				labelCuentaAtras, controladorCron, cronEjercicio, serieActual, btnAvanzar, btnSiguiente, this);
+		cronDescanso = new CronometroProgresivo("Descanso", labelTiempoDescanso, controladorCron);
+
+		cronSeries = new CronometroSeries(ejercicioActual, labelNumeroSerie, labelTiempoSerie, labelCuentaAtras,
+				controladorCron, cronEjercicio, cronDescanso, serieActual, btnAvanzar, btnSiguiente, this);
+
 		cronSeries.start();
 	}
 
@@ -302,6 +311,8 @@ public class PanelEjercicio extends JPanel {
 		Ejercicio ejercicioActual = workout.getEjercicios().get(ejercicioActualIndex);
 
 		if (serieActual < ejercicioActual.getSeries()) {
+			if (cronDescanso.isAlive())
+				cronDescanso.terminar();
 			serieActual++;
 			iniciarSerie();
 		}
@@ -311,6 +322,8 @@ public class PanelEjercicio extends JPanel {
 		if (ejercicioActualIndex < workout.getEjercicios().size() - 1) {
 			ejercicioActualIndex++;
 			serieActual = 1;
+			labelDescansoEstipulado
+					.setText("Descanso de " + workout.getEjercicios().get(ejercicioActualIndex).getDescanso() + " s");
 			btnSiguiente.setVisible(false);
 			iniciarEjercicio();
 		} else {
@@ -339,6 +352,8 @@ public class PanelEjercicio extends JPanel {
 			cronGeneral.terminar();
 		if (cronEjercicio != null && cronEjercicio.isAlive())
 			cronEjercicio.terminar();
+		if (cronDescanso != null && cronDescanso.isAlive())
+			cronDescanso.terminar();
 
 		if (cronGeneral.getTiempo() == 0 || ejerciciosCompletados == 0) {
 			this.setVisible(false);
@@ -353,22 +368,21 @@ public class PanelEjercicio extends JPanel {
 		try {
 			db = Conexion.getInstance().getConexion();
 		} catch (Exception e) {
-			
+
 		}
-		
+
 		historico = new Historico();
 		historico.setTiempo(cronGeneral.getTiempo());
 		historico.setFecha(Timestamp.now());
 		historico.setWorkout(db.document(DBUtils.WORKOUTS + "/" + workout.getId()));
 		historico.setPorcentaje(calcularPorcentaje());
-		
+
 		if (hayConexion) {
 			try {
-				
 
 				GestorDeHistoricos gdh = new GestorDeHistoricos(db);
 				gdh.guardarHistorico(usuario, historico);
-				
+
 				GestorDeUsuarios gdu = new GestorDeUsuarios(db);
 				int nivelUsuario = usuario.getNivel();
 				String idUsuario = usuario.getId();
@@ -386,7 +400,7 @@ public class PanelEjercicio extends JPanel {
 				e.printStackTrace();
 			}
 		}
-		
+
 		cerrarPanel();
 	}
 

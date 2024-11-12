@@ -14,10 +14,10 @@ public class CronometroSeries extends Thread {
 	private Ejercicio ejercicio;
 	private JLabel lblSerie;
 	private JLabel lblTiempoSerie;
-	private JLabel labelTiempoDescanso;
 	private JLabel labelCuentaAtras;
 	private ControladorCronometros controladorCron;
 	private CronometroProgresivo cronEjercicio;
+	private CronometroProgresivo cronDescanso;
 	private int serie;
 	private JButton btnAvanzar;
 	private JButton btnSiguiente;
@@ -25,15 +25,16 @@ public class CronometroSeries extends Thread {
 	private CronometroRegresivo cronRegresivo;
 	private PanelEjercicio panelEjercicio;
 
-	public CronometroSeries(Ejercicio ejercicio, JLabel lblSerie, JLabel lblTiempoSerie, JLabel labelTiempoDescanso,
-			JLabel labelCuentaAtras, ControladorCronometros controladorCron, CronometroProgresivo cronEjercicio,
-			int serie, JButton btnAvanzar, JButton btnSiguiente, PanelEjercicio panelEjercicio) {
+	public CronometroSeries(Ejercicio ejercicio, JLabel lblSerie, JLabel lblTiempoSerie, JLabel labelCuentaAtras,
+			ControladorCronometros controladorCron, CronometroProgresivo cronEjercicio,
+			CronometroProgresivo cronDescanso, int serie, JButton btnAvanzar, JButton btnSiguiente,
+			PanelEjercicio panelEjercicio) {
 		this.ejercicio = ejercicio;
 		this.lblSerie = lblSerie;
 		this.lblTiempoSerie = lblTiempoSerie;
 		this.controladorCron = controladorCron;
 		this.cronEjercicio = cronEjercicio;
-		this.labelTiempoDescanso = labelTiempoDescanso;
+		this.cronDescanso = cronDescanso;
 		this.labelCuentaAtras = labelCuentaAtras;
 		this.serie = serie;
 		this.btnAvanzar = btnAvanzar;
@@ -56,25 +57,26 @@ public class CronometroSeries extends Thread {
 			cronSerie.start();
 
 			cronSerie.join();
-			
+
+			cronDescanso.start();
 
 			if (serie == ejercicio.getSeries()) {
 				labelCuentaAtras.setText("FINISH");
 				cronEjercicio.terminar();
-				
+
 				// Gestionar guardado del tiempo del ejercicio completado
 				panelEjercicio.setEjerciciosCompletados(panelEjercicio.getEjerciciosCompletados() + 1);
 				ArrayList<TiempoEjercicio> tiempoEjercicios = panelEjercicio.getTiempoEjercicios();
 				if (tiempoEjercicios == null) {
 					panelEjercicio.setTiempoEjercicio(new ArrayList<TiempoEjercicio>());
 				}
-					
+
 				TiempoEjercicio tiempoEjercicio = new TiempoEjercicio();
 				tiempoEjercicio.setEjercicio(ejercicio);
 				tiempoEjercicio.setTiempo(cronEjercicio.getTiempo());
-				
+
 				panelEjercicio.addTiempoEjercicio(tiempoEjercicio);
-				
+
 				btnSiguiente.setVisible(true);
 			} else {
 				labelCuentaAtras.setText("CONTINUE");
@@ -90,6 +92,8 @@ public class CronometroSeries extends Thread {
 			cronSerie.terminar();
 		if (cronRegresivo.isAlive())
 			cronRegresivo.terminar();
+		if (cronDescanso.isAlive())
+			cronDescanso.terminar();
 
 		this.interrupt();
 	}
