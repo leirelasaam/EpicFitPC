@@ -63,9 +63,6 @@ public class GestorDeHistoricos {
 			historicos.add(historico);
 		}
 		
-		GestorDeFicherosXML gestorDeFicherosXML = new GestorDeFicherosXML();
-		gestorDeFicherosXML.crearBackupXML(usuario, historicos, "C:\\");
-
 		return historicos;
 	}
 
