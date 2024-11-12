@@ -5,7 +5,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 
 import epicfitpc.bbdd.GestorDeUsuarios;
-import epicfitpc.controlador.Controlador;
 import epicfitpc.ficheros.GestorDeFicherosBinarios;
 import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.Conexion;
@@ -30,6 +29,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 
+/**
+ * Panel para el inicio de sesión.
+ */
 public class PanelLogin extends JPanel {
 	private static final long serialVersionUID = 3044079574914466193L;
 	private JTextField txtIntroduceTuCorreo;
@@ -158,9 +160,8 @@ public class PanelLogin extends JPanel {
 		}
 
 		// Devolverá el usuario si los datos introducidos son correctos
-		Controlador controlador = new Controlador();
 		try {
-			usuario = controlador.comprobarUsuario(usuarios, usuarioIntroducido, passIntroducido);
+			usuario = comprobarUsuario(usuarios, usuarioIntroducido, passIntroducido);
 		} catch (Exception e3) {
 			WindowUtils.errorPane("Error en el acceso.", "Error");
 		}
@@ -187,5 +188,30 @@ public class PanelLogin extends JPanel {
 		MainFrame.getInstance().getContentPane().add(new PanelRegistro());
 		MainFrame.getInstance().revalidate();
 		MainFrame.getInstance().repaint();
+	}
+	
+	public Usuario comprobarUsuario(ArrayList<Usuario> usuarios, String usuarioIntroducido,
+			String contraseniaIntroducida) throws Exception {
+		// Recorremos los usuarios para buscar el usuario introducido
+		for (Usuario usuario : usuarios) {
+
+			// Verificar que userName no sea null antes de comparar
+			if (usuario.getUsuario() != null && usuario.getUsuario().equals(usuarioIntroducido)) {
+				// Usuario encontrado, ahora verificamos la contraseña
+				if (usuario.getPass() != null && usuario.getPass().equals(contraseniaIntroducida)) {
+					// Usuario y contraseña correctos
+					// JOptionPane.showMessageDialog(null, "Acceso concedido.");
+					return usuario; // Devuelve el usuario si ambas condiciones son correctas
+				} else {
+					// Si la contraseña no es correcta, lanzamos excepción genérica
+					// JOptionPane.showMessageDialog(null, "Datos introducidos incorrectos.");
+					throw new Exception("Datos incorrectos.");
+				}
+			}
+		}
+		// Si no se encuentra el usuario en la base de datos, lanzamos otra excepción
+		// genérica
+		// JOptionPane.showMessageDialog(null, "Datos introducidos incorrectos.");
+		throw new Exception("Datos incorrectos.");
 	}
 }

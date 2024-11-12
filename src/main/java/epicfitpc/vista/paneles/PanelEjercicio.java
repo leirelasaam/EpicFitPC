@@ -43,6 +43,11 @@ import epicfitpc.vista.MainFrame;
 import epicfitpc.vista.componentes.JButtonPrimary;
 import epicfitpc.vista.componentes.RoundedPanel;
 
+/**
+ * Panel que gestiona el iniciado de un ejercicio, donde se instancias
+ * diferentes cronómetros para controlar el tiempo del workout, de los
+ * ejercicios, de las series y de los descansos.
+ */
 public class PanelEjercicio extends JPanel {
 	private static final long serialVersionUID = -8810446678745477313L;
 	private Workout workout;

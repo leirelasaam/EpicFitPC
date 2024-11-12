@@ -27,6 +27,9 @@ import epicfitpc.vista.componentes.JButtonPrimary;
 import epicfitpc.vista.componentes.JLabelTitle;
 import epicfitpc.vista.componentes.ResumenEjercicioPanel;
 
+/**
+ * Panel que muestra el resumen del workout realizado.
+ */
 public class PanelResumen extends JPanel {
 	private static final long serialVersionUID = -5043545200247246122L;
 	private Historico historico = null;

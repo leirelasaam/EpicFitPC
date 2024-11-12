@@ -10,6 +10,9 @@ import java.awt.Graphics2D;
 import java.awt.LayoutManager;
 import java.awt.RenderingHints;
 
+/**
+ * Panel con forma redondeada.
+ */
 public class RoundedPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     private int cornerRadius = 20;

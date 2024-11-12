@@ -8,6 +8,10 @@ import javax.swing.JTabbedPane;
 import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.Estilos;
 
+/**
+ * Panel del menú principal que contiene pestañas para acceder a los diferentes
+ * apartados de la aplicación, tras el inicio de sesión.
+ */
 public class PanelMenu extends JPanel {
 
 	private static final long serialVersionUID = 6067181926807089944L;
@@ -34,13 +38,13 @@ public class PanelMenu extends JPanel {
 
 		add(tabbedPane);
 	}
-	
-    public void agregarNuevoTab(String titulo, JPanel nuevoPanel) {
-        tabbedPane.addTab(titulo, nuevoPanel);
-        tabbedPane.setSelectedComponent(nuevoPanel);
-    }
-    
-    public void seleccionarPrimerTab() {
-        tabbedPane.setSelectedIndex(0);
-    }
+
+	public void agregarNuevoTab(String titulo, JPanel nuevoPanel) {
+		tabbedPane.addTab(titulo, nuevoPanel);
+		tabbedPane.setSelectedComponent(nuevoPanel);
+	}
+
+	public void seleccionarPrimerTab() {
+		tabbedPane.setSelectedIndex(0);
+	}
 }

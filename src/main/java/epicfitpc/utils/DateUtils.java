@@ -48,17 +48,35 @@ public class DateUtils {
         return sdf.format(date);
     }
     
+    /**
+     * Formatea el tiempo de segundos a mm:ss.
+     * 
+     * @param tiempo Tiempo en segundos
+     * @return Tiempo formateado
+     */
     public static String formatearTiempoCronometro(int tiempo) {
 		int minutos = tiempo / 60;
 		int segundos = tiempo % 60;
 		return String.format("%02d:%02d", minutos, segundos);
 	}
     
+    /**
+     * Parsea un timestamp al formato dd/MM/yyyy.
+     * @param timestamp Tiempo en formato Timestamp
+     * @return Timestamp formateado
+     */
 	public static String parsearTimestampAString(java.sql.Timestamp timestamp) {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		return sdf.format(timestamp);
 	}
 	
+	/**
+	 * Convierte una cadena que contiene una fecha en Date y después en Timestamp.
+	 * 
+	 * @param texto String que contiene la fecha
+	 * @return Timestamp de la fecha introducida
+	 * @throws ParseException
+	 */
 	public static Timestamp convertirStringToTimestamp(String texto) throws ParseException {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		Date parsedDate = null;

@@ -12,6 +12,9 @@ import epicfitpc.modelo.Usuario;
 import epicfitpc.modelo.Workout;
 import epicfitpc.utils.Rutas;
 
+/**
+ * Gestiona los backups de la aplicación por medio de ficheros binarios.
+ */
 public class GestorDeBackups {
 	private Firestore db = null;
 	private static final String FICHERO_USUARIOS = Rutas.BACKUP_USUARIOS;

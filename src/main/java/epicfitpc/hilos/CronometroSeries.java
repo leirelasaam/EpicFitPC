@@ -9,6 +9,13 @@ import epicfitpc.modelo.Ejercicio;
 import epicfitpc.modelo.TiempoEjercicio;
 import epicfitpc.vista.paneles.PanelEjercicio;
 
+/**
+ * Clase que controla las series y el descanso. Se implementa como una clase a
+ * parte para que el método .join() no interfiera con el hilo principal del
+ * frame. Concretamente, al utilizar este método en el panel, la interfaz se
+ * congela y no se actualizan los valores de los elementos JLabel que están
+ * enlazados con los diferentes cronómetros.
+ */
 public class CronometroSeries extends Thread {
 
 	private Ejercicio ejercicio;
@@ -48,20 +55,30 @@ public class CronometroSeries extends Thread {
 			System.out.println("  Serie " + serie + " de " + ejercicio.getSeries());
 			cronSerie = new CronometroRegresivo("Serie " + serie, lblTiempoSerie, ejercicio.getTiempoSerie(), false,
 					controladorCron);
+			
+			// SE INICIA LA CUENTA ATRÁS DE 5S
 			cronRegresivo = new CronometroRegresivo("Cuenta atrás", labelCuentaAtras, 5, true, controladorCron);
 			cronRegresivo.start();
 
+			// SE ESPERA A QUE TERMINE LA CUENTA ATRÁS
 			cronRegresivo.join();
 
 			labelCuentaAtras.setText("GO");
+			
+			// SE INICIA LA SERIE
 			cronSerie.start();
 
+			// SE ESPERA A QUE TERMINE LA SERIE
 			cronSerie.join();
 
+			// SE INICIA EL DESCANSO
 			cronDescanso.start();
 
+			// SE GESTIONA EN CASO DE QUE SEA LA ÚLTIMA SERIE
 			if (serie == ejercicio.getSeries()) {
 				labelCuentaAtras.setText("FINISH");
+				
+				// SE TERMINA EL EJERCICIO
 				cronEjercicio.terminar();
 
 				// Gestionar guardado del tiempo del ejercicio completado

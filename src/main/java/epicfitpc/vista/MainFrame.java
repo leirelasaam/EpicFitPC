@@ -10,7 +10,8 @@ import epicfitpc.utils.Rutas;
 import epicfitpc.vista.paneles.PanelLogin;
 
 /**
- * JFrame que contiene el panel del menú.
+ * JFrame que contiene los paneles de la aplicación. Solamente existe una
+ * instancia.
  */
 public class MainFrame extends JFrame {
 

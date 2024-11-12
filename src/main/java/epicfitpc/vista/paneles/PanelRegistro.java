@@ -18,11 +18,11 @@ import java.util.concurrent.ExecutionException;
 import javax.swing.JSpinner;
 
 import epicfitpc.bbdd.GestorDeUsuarios;
-import epicfitpc.controlador.Controlador;
 import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.Conexion;
 import epicfitpc.utils.Estilos;
 import epicfitpc.utils.WindowUtils;
+import epicfitpc.validaciones.GestorDeValidaciones;
 import epicfitpc.vista.MainFrame;
 import epicfitpc.vista.componentes.JButtonPrimary;
 import epicfitpc.vista.componentes.JLabelTitle;
@@ -39,6 +39,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 
+/**
+ * Panel para llevar a cabo el registro en la aplicación.
+ */
 public class PanelRegistro extends JPanel {
 
 	private static final long serialVersionUID = -7631458094715795013L;
@@ -259,7 +262,7 @@ public class PanelRegistro extends JPanel {
 		if (gdu == null)
 			gdu = new GestorDeUsuarios(Conexion.getInstance().getConexion());
 		
-		Controlador ctr = new Controlador();
+		GestorDeValidaciones ctr = new GestorDeValidaciones();
 
 		String pass1 = new String(passwordField.getPassword());
 		String pass2 = new String(passwordField2.getPassword());

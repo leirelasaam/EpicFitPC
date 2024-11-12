@@ -14,7 +14,9 @@ import epicfitpc.utils.Conexion;
 import epicfitpc.utils.GestorDeConexiones;
 */
 
-// Esta clase debe lanzar la aplicación
+/**
+ * Clase que lanza la aplicación.
+ */
 public class EpicFitPC {
 
 	public static void main(String[] args) {
