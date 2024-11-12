@@ -156,7 +156,7 @@ public class PanelWorkouts extends JPanel {
 		// Items reales para los workouts
 		if (workouts != null) {
 			for (Workout workout : workouts) {
-				if (nivel == -1 || workout.getNivel() == nivel) {
+				if ((nivel == -1 || workout.getNivel() == nivel) && workout.getEjercicios() != null) {
 					numeroDePaneles++;
 					WorkoutItemPanel itemPanel = new WorkoutItemPanel(workout);
 					panelWInterior.add(itemPanel);
