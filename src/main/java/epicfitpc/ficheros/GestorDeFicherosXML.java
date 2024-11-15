@@ -18,6 +18,7 @@ import java.util.List;
 
 /**
  * Gestiona la escritura de históricos en ficheros xml.
+ * Siempre se sobreescribe el fichero para guardar solo los históricos del usuario logueado.
  */
 public class GestorDeFicherosXML {
 
