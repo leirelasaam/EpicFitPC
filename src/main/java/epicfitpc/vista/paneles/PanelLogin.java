@@ -87,13 +87,13 @@ public class PanelLogin extends JPanel {
 		txtIntroduceTuPass.setBounds(180, 307, 241, 31);
 		panelDerecha.add(txtIntroduceTuPass);
 		txtIntroduceTuPass.setColumns(10);
-		
+
 		// Habilitar inicio mediante tecla ENTER
 		txtIntroduceTuPass.addActionListener(new ActionListener() {
-		    @Override
-		    public void actionPerformed(ActionEvent e) {
-		        iniciarSesion();
-		    }
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				iniciarSesion();
+			}
 		});
 
 		JLabel lblPass = new JLabel("Contraseña");
@@ -113,12 +113,13 @@ public class PanelLogin extends JPanel {
 		JLabel lblTienesCuenta = new JLabel("¿Todavia no tienes cuenta?");
 		lblTienesCuenta.setBounds(180, 510, 300, 20);
 		panelDerecha.add(lblTienesCuenta);
-		
+
 		JButtonPrimary btnSalir = new JButtonPrimary("Salir");
 		btnSalir.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				MainFrame.getInstance().dispatchEvent(new WindowEvent(MainFrame.getInstance(), WindowEvent.WINDOW_CLOSING));
+				MainFrame.getInstance()
+						.dispatchEvent(new WindowEvent(MainFrame.getInstance(), WindowEvent.WINDOW_CLOSING));
 			}
 		});
 		btnSalir.setBounds(180, 584, 241, 31);
@@ -130,7 +131,7 @@ public class PanelLogin extends JPanel {
 		ImageIcon img = WindowUtils.cargarImagen(Rutas.LOGO_EF, 500, 500);
 		JLabel lblImagen = new JLabel(img);
 		panelIzquierda.add(lblImagen);
-		
+
 		if (!hayConexion) {
 			btnRegistrarme.setVisible(false);
 			lblTienesCuenta.setVisible(false);
@@ -158,7 +159,12 @@ public class PanelLogin extends JPanel {
 			try {
 				usuarios = gdfb.leer();
 			} catch (Exception e2) {
-				WindowUtils.errorPane("Error al leer usuarios.", "Error");
+				// Si no hay conexión ni existen los ficheros de backup, se cierra la app.
+				WindowUtils.errorPane(
+						"<p>No existen ficheros de backup y no hay conexión.</p><p>No es posible utilizar la aplicación, se cerrará a continuación.</p>",
+						"Error global");
+				MainFrame.getInstance()
+						.dispatchEvent(new WindowEvent(MainFrame.getInstance(), WindowEvent.WINDOW_CLOSING));
 			}
 		}
 
@@ -173,32 +179,32 @@ public class PanelLogin extends JPanel {
 			WindowUtils.confirmationPane("Hola, " + usuario.getNombre() + ", ¡Bienvenid@ a EpicFit!",
 					"Acceso concedido");
 			UsuarioLogueado.getInstance().setUsuario(usuario);
-			
-			/*Ejecutando prceso de copia de historicos en cuanto nos logueamos*/
-			
+
+			/* Ejecutando prceso de copia de historicos en cuanto nos logueamos */
+
 			ExecutorService executor = Executors.newSingleThreadExecutor();
-	        executor.execute(new Procesos());
-	        executor.shutdown();
+			executor.execute(new Procesos());
+			executor.shutdown();
 			irWorkouts();
 		} else {
 			WindowUtils.errorPane("No se ha podido completar el inicio de sesión.", "Acceso denegado");
 		}
 	}
-	
+
 	private void irWorkouts() {
 		MainFrame.getInstance().getContentPane().removeAll();
 		MainFrame.getInstance().getContentPane().add(new PanelMenu(UsuarioLogueado.getInstance().getUsuario()));
 		MainFrame.getInstance().revalidate();
 		MainFrame.getInstance().repaint();
 	}
-	
+
 	private void irRegistro() {
 		MainFrame.getInstance().getContentPane().removeAll();
 		MainFrame.getInstance().getContentPane().add(new PanelRegistro());
 		MainFrame.getInstance().revalidate();
 		MainFrame.getInstance().repaint();
 	}
-	
+
 	public Usuario comprobarUsuario(ArrayList<Usuario> usuarios, String usuarioIntroducido,
 			String contraseniaIntroducida) throws Exception {
 		// Recorremos los usuarios para buscar el usuario introducido
