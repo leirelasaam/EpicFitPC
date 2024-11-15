@@ -17,9 +17,6 @@ import epicfitpc.utils.GestorDeConexiones;
 import epicfitpc.utils.Rutas;
 import epicfitpc.utils.UsuarioLogueado;
 
-/**
- * Esta clase lanza los backups de archivos .dat y .xml.WW
- */
 public class Procesos implements Runnable {
 
 	@Override
@@ -31,8 +28,12 @@ public class Procesos implements Runnable {
 		} else {
 			System.out.println("No se ha podido realizar los backups porque no hay conexión a la bbdd");
 		}
+
 	}
 
+	/**
+	 * @return
+	 */
 	public void procesoFicheroXML(Firestore db) {
 
 		System.out.println("Iniciando el proceso de obtención de históricos en segundo plano...");
@@ -46,15 +47,16 @@ public class Procesos implements Runnable {
 		} catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();
 		}
-		if(historicos != null) {
-			GestorDeFicherosXML gestorDeFicherosXML = new GestorDeFicherosXML();
-			gestorDeFicherosXML.crearBackupXML(usuario, historicos, Rutas.BACKUP_HISTORICOS);
-		}
 
+		GestorDeFicherosXML gestorDeFicherosXML = new GestorDeFicherosXML();
+		gestorDeFicherosXML.crearBackupXML(usuario, historicos, Rutas.BACKUP_HISTORICOS);
 
 		System.out.println("Proceso terminado de la creación de fichero XML de históricos...");
 	}
 
+	/**
+	 * @param db
+	 */
 	public void procesoFicheroBinario(Firestore db) {
 		System.out.println("Iniciando el proceso de obtención del backup binario...");
 		GestorDeBackups gestorDeBackups = new GestorDeBackups(db);
@@ -68,6 +70,9 @@ public class Procesos implements Runnable {
 		}
 	}
 
+	/**
+	 * @return
+	 */
 	public Firestore conexionFirebase() {
 		// Conectar a Firebase y obtener los datos
 		Firestore db = null;

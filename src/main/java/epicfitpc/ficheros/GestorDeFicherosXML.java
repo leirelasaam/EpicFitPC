@@ -5,7 +5,6 @@ import epicfitpc.modelo.Usuario;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -29,18 +28,53 @@ public class GestorDeFicherosXML {
 
 			File file = new File(filePath);
 			if (file.exists()) {
-				file.delete();
+				doc = dBuilder.parse(file);
+				doc.getDocumentElement().normalize();
+			} else {
+				doc = dBuilder.newDocument();
+				Element rootElement = doc.createElement("backup");
+				doc.appendChild(rootElement);
 			}
 
-			doc = dBuilder.newDocument();
-			Element rootElement = doc.createElement("backup");
-			doc.appendChild(rootElement);
+			// Obtener el nodo "usuarios" o crear uno nuevo si no existe
+			Element rootElement = doc.getDocumentElement();
+			NodeList usuariosNodes = rootElement.getElementsByTagName("usuarios");
+			Element usuariosElement;
+			if (usuariosNodes.getLength() > 0) {
+				usuariosElement = (Element) usuariosNodes.item(0);
+			} else {
+				usuariosElement = doc.createElement("usuarios");
+				rootElement.appendChild(usuariosElement);
+			}
 
-	        Element usuariosElement = doc.createElement("usuarios");
-	        rootElement.appendChild(usuariosElement);
+			// Buscar si el usuario ya existe en el archivo XML
+			NodeList usuarioNodes = usuariosElement.getElementsByTagName("usuario");
+			Element usuarioElement = null;
+			for (int i = 0; i < usuarioNodes.getLength(); i++) {
+				Element existingUsuario = (Element) usuarioNodes.item(i);
+				NodeList usuarioIdNodes = existingUsuario.getElementsByTagName("usuario");
 
-	        Element usuarioElement = doc.createElement("usuario");
-	        usuariosElement.appendChild(usuarioElement);
+				if (usuarioIdNodes.getLength() > 0 && usuarioIdNodes.item(0) != null) {
+					String usuarioId = usuarioIdNodes.item(0).getTextContent();
+					if (usuarioId.equals(usuario.getUsuario())) {
+						usuarioElement = existingUsuario;
+						break;
+					}
+				}
+			}
+
+			// Si el usuario no existe, crear un nuevo nodo
+			if (usuarioElement == null) {
+				usuarioElement = doc.createElement("usuario");
+				usuariosElement.appendChild(usuarioElement);
+			} else {
+				removeChildElements(usuarioElement, "id", "nombre", "apellido", "correo", "usuario", "pass", "nivel",
+						"esEntrenador");
+				Node historicosNode = usuarioElement.getElementsByTagName("historicos").item(0);
+				if (historicosNode != null) {
+					usuarioElement.removeChild(historicosNode);
+				}
+			}
 
 			// Agregar los datos del usuario nuevamente
 			usuarioElement.appendChild(createTextElement(doc, "id", usuario.getId()));
@@ -68,14 +102,11 @@ public class GestorDeFicherosXML {
 
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
-
 			DOMSource source = new DOMSource(doc);
 			StreamResult result = new StreamResult(new File(filePath));
 			transformer.transform(source, result);
 
-			System.out.println("Backup de históricos en XML realizado en " + filePath);
+			System.out.println("Backup XML actualizado en " + filePath);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -86,5 +117,17 @@ public class GestorDeFicherosXML {
 		Element element = doc.createElement(tagName);
 		element.appendChild(doc.createTextNode(textContent));
 		return element;
+	}
+	
+	private void removeChildElements(Element parent, String... tagNames) {
+	    for (String tagName : tagNames) {
+	        NodeList nodes = parent.getElementsByTagName(tagName);
+	        for (int i = 0; i < nodes.getLength(); i++) {
+	            Node node = nodes.item(i);
+	            if (node != null) {
+	                parent.removeChild(node);
+	            }
+	        }
+	    }
 	}
 }
