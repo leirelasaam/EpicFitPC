@@ -20,34 +20,6 @@ import epicfitpc.utils.GestorDeConexiones;
 public class EpicFitPC {
 
 	public static void main(String[] args) {
-		// PARA EL BACKUP
-		/*
-		Firestore db = null;
-		GestorDeBackups gdb = null;
-		try {
-			db = Conexion.getInstance().getConexion();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		gdb = new GestorDeBackups(db);
-
-		boolean conectado = GestorDeConexiones.getInstance().hayConexion();
-		try {
-			if (conectado) {
-				System.out.println("Hay conexión a Internet");
-				gdb.realizarBackup();
-				gdb.cargarBackup();
-			} else {
-				gdb.cargarBackup();
-				System.out.println("No hay conexión a Internet");
-			}
-		} catch (InterruptedException | ExecutionException | IOException | ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
-
 		try {
 			// Establecer tema según sistema operativo
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
