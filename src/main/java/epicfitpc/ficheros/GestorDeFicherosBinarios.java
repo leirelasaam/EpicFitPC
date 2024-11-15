@@ -31,6 +31,12 @@ public class GestorDeFicherosBinarios<T extends Serializable> {
 
 		try {
 			File fichero = new File(ruta);
+			
+			// Si el archivo no existe, se crea
+	        if (!fichero.exists()) {
+	            fichero.createNewFile();
+	        }
+			
 			fos = new FileOutputStream(fichero, false);
 			oos = new ObjectOutputStream(fos);
 			for (T t : ts) {

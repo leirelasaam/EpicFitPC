@@ -139,12 +139,6 @@ public class PanelRegistro extends JPanel {
 		passwordField2 = new JPasswordField();
 		panelDatosCuenta.add(passwordField2);
 
-//		UtilDateModel model = new UtilDateModel();
-//		JDatePanelImpl datePanel = new JDatePanelImpl(model, null);
-//		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, null);
-//		datePicker.setBounds(303, 108, 130, 20);
-//		add(datePicker);
-
 		// PANEL INFERIOR
 		JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		panelInferior.setBorder(new EmptyBorder(0, 50, 0, 50));
@@ -262,25 +256,25 @@ public class PanelRegistro extends JPanel {
 		if (gdu == null)
 			gdu = new GestorDeUsuarios(Conexion.getInstance().getConexion());
 		
-		GestorDeValidaciones ctr = new GestorDeValidaciones();
+		GestorDeValidaciones gdv = new GestorDeValidaciones();
 
 		String pass1 = new String(passwordField.getPassword());
 		String pass2 = new String(passwordField2.getPassword());
 
-		if (!ctr.validarApellido(usuario.getApellido())) {
+		if (!gdv.validarApellido(usuario.getApellido())) {
 			WindowUtils.errorPane("El apellido esta vacio o es mayor de 50 carácteres", "Datos incorrectos");
 			validar = false;
-		} else if (!ctr.validarCorreo(usuario.getCorreo())) {
+		} else if (!gdv.validarCorreo(usuario.getCorreo())) {
 			WindowUtils.errorPane("Correo incorrecto, vuelva a insertarlo.", "Datos incorrectos");
 			validar = false;
-		} else if (!ctr.validarFechaNacimiento(usuario.getFechaNac())) {
+		} else if (!gdv.validarFechaNacimiento(usuario.getFechaNac())) {
 			WindowUtils.errorPane("Fecha de nacimiento incorrecta. El usuario tiene que ser mayor de 14 años.",
 					"Datos incorrectos");
 			validar = false;
-		} else if (!ctr.validarNombre(usuario.getNombre())) {
+		} else if (!gdv.validarNombre(usuario.getNombre())) {
 			WindowUtils.errorPane("Nombre incorrecto, esta vacio o es mayor de 50 carácteres.", "Datos incorrectos");
 			validar = false;
-		} else if (!ctr.validarPassword(usuario.getPass())) {
+		} else if (!gdv.validarPassword(usuario.getPass())) {
 			WindowUtils.errorPane(
 					"Contraseña incorrecta, debe tener entre 8 y 20 caracteres, incluir al menos una letra minúscula, una mayúscula, un número y un carácter especial.",
 					"Datos incorrectos");

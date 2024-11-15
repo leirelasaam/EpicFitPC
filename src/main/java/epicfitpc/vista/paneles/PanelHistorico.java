@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -32,7 +32,7 @@ public class PanelHistorico extends JPanel {
 
 	private static final long serialVersionUID = 2651779404513169891L;
 	private JPanel panelHInterior;
-	private ArrayList<Historico> historicos = null;
+	private List<Historico> historicos = null;
 	private Usuario usuario = null;
 	private static final int PANELES_NECESARIOS = 4;
 
@@ -112,9 +112,9 @@ public class PanelHistorico extends JPanel {
 		}
 	}
 
-	private ArrayList<Historico> obtenerHistoricos() {
+	private List<Historico> obtenerHistoricos() {
 		System.out.println("Obteniendo históricos en Histórico");
-		ArrayList<Historico> historicos = null;
+		List<Historico> historicos = null;
 		Firestore db;
 		boolean hayConexion = GestorDeConexiones.getInstance().hayConexion();
 
@@ -126,8 +126,6 @@ public class PanelHistorico extends JPanel {
 			} catch (Exception e) {
 				WindowUtils.errorPane("Error en la carga desde la base de datos.", "Error en la base de datos");
 			}
-		} else {
-			historicos = usuario.getHistoricos();
 		}
 
 		return historicos;

@@ -61,7 +61,7 @@ public class WorkoutItemPanel extends JPanel {
 
         JLabelTitle lblNombre = new JLabelTitle(workout.getNombre());
         JLabel lblNivel = new JLabel("<html><b>Nivel</b>: " + workout.getNivel() + "</html>");
-        JLabel lblEjercicios = new JLabel("<html><b>Ejercicios</b>: " + workout.getEjercicios().size() + "</html>");
+       //JLabel lblEjercicios = new JLabel("<html><b>Ejercicios</b>: " + workout.getEjercicios().size() + "</html>");
 
         int tiempoEnSegundos = workout.getTiempo();
         String tiempoFormateado = DateUtils.formatearTiempo(tiempoEnSegundos);
@@ -73,6 +73,6 @@ public class WorkoutItemPanel extends JPanel {
         gbc.gridy++;
         add(lblNivel, gbc);
         gbc.gridy++;
-        add(lblEjercicios, gbc);
+        //add(lblEjercicios, gbc);
     }
 }

@@ -1,3 +1,4 @@
 /target/
 *key_firestore.json
 *.dat
+src/main/java/epicfitpc/ficheros/backup/historicos.xml

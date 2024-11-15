@@ -7,6 +7,7 @@ import javax.swing.JPasswordField;
 import epicfitpc.bbdd.GestorDeUsuarios;
 import epicfitpc.ficheros.GestorDeFicherosBinarios;
 import epicfitpc.modelo.Usuario;
+import epicfitpc.procesos.Procesos;
 import epicfitpc.utils.Conexion;
 import epicfitpc.utils.Estilos;
 import epicfitpc.utils.GestorDeConexiones;
@@ -21,6 +22,8 @@ import javax.swing.JLabel;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.ImageIcon;
@@ -170,6 +173,12 @@ public class PanelLogin extends JPanel {
 			WindowUtils.confirmationPane("Hola, " + usuario.getNombre() + ", ¡Bienvenid@ a EpicFit!",
 					"Acceso concedido");
 			UsuarioLogueado.getInstance().setUsuario(usuario);
+			
+			/*Ejecutando prceso de copia de historicos en cuanto nos logueamos*/
+			
+			ExecutorService executor = Executors.newSingleThreadExecutor();
+	        executor.execute(new Procesos());
+	        executor.shutdown();
 			irWorkouts();
 		} else {
 			WindowUtils.errorPane("No se ha podido completar el inicio de sesión.", "Acceso denegado");

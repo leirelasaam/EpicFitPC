@@ -31,4 +31,6 @@ public class Rutas {
 	public static final String BACKUP_CARPETA = "src\\main\\java\\epicfitpc\\ficheros\\backup\\";
 	public static final String BACKUP_USUARIOS = BACKUP_CARPETA + "usuarios.dat";
 	public static final String BACKUP_WORKOUTS = BACKUP_CARPETA + "workouts.dat";
+	public static final String BACKUP_HISTORICOS = BACKUP_CARPETA + "historicos.xml";
+
 }
