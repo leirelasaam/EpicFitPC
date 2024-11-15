@@ -188,6 +188,7 @@ public class PanelLogin extends JPanel {
 			WindowUtils.confirmationPane("Hola, " + usuario.getNombre() + ", ¡Bienvenid@ a EpicFit!",
 					"Acceso concedido");
 			UsuarioLogueado.getInstance().setUsuario(usuario);
+			System.out.println("Usuario: " + usuario.toString());
 
 			/* Ejecutando prceso de copia de historicos en cuanto nos logueamos */
 

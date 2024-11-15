@@ -126,6 +126,8 @@ public class PanelHistorico extends JPanel {
 			} catch (Exception e) {
 				WindowUtils.errorPane("Error en la carga desde la base de datos.", "Error en la base de datos");
 			}
+		}else {
+			historicos = usuario.getHistoricos();
 		}
 
 		return historicos;
