@@ -16,7 +16,6 @@ import javax.swing.border.EmptyBorder;
 import com.google.cloud.firestore.Firestore;
 
 import epicfitpc.bbdd.GestorDeHistoricos;
-import epicfitpc.ficheros.GestorDeFicherosXML;
 import epicfitpc.modelo.Historico;
 import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.Conexion;
@@ -26,6 +25,9 @@ import epicfitpc.utils.UsuarioLogueado;
 import epicfitpc.utils.WindowUtils;
 import epicfitpc.vista.componentes.HistoricoItemPanel;
 
+/**
+ * Panel que muestra el listado de históricos del usuario logueado.
+ */
 public class PanelHistorico extends JPanel {
 
 	private static final long serialVersionUID = 2651779404513169891L;

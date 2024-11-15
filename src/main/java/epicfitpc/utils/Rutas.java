@@ -1,11 +1,15 @@
 package epicfitpc.utils;
 
+/**
+ * Clase que almacena las rutas de las imágenes y archivos utilizados en la
+ * aplicación.
+ */
 public class Rutas {
-	
+
 	private Rutas() {
-		
+
 	}
-	
+
 	// Imágenes workout
 	public static final String IMG_BICEPS = "src/main/resources/img/workout/biceps.png";
 	public static final String IMG_TRICEPS = "src/main/resources/img/workout/triceps.png";
@@ -15,14 +19,14 @@ public class Rutas {
 	public static final String IMG_GLUTEOS = "src/main/resources/img/workout/gluteos.png";
 	public static final String IMG_ESPALDA = "src/main/resources/img/workout/espalda.png";
 	public static final String IMG_EJERCICIO = "src/main/resources/img/workout/ejercicio.png";
-	
+
 	// Logos
 	public static final String LOGO_EF = "src/main/resources/img/logos/logo_ef.png";
-	
+
 	// Iconos
 	public static final String ICONO_TICK = "src/main/resources/img/iconos/tick.png";
 	public static final String ICONO_CROSS = "src/main/resources/img/iconos/cross.png";
-	
+
 	// Ficheros
 	public static final String BACKUP_CARPETA = "src\\main\\java\\epicfitpc\\ficheros\\backup\\";
 	public static final String BACKUP_USUARIOS = BACKUP_CARPETA + "usuarios.dat";

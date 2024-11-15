@@ -4,43 +4,47 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * Singleton para detectar si hay conexión a Internet, donde se intenta conectar
+ * a Google.
+ */
 public class GestorDeConexiones {
-    private static GestorDeConexiones instancia;
-    private boolean conectado;
+	private static GestorDeConexiones instancia;
+	private boolean conectado;
 
-    private GestorDeConexiones() {
-        this.conectado = verificarConexion();
-    }
+	private GestorDeConexiones() {
+		this.conectado = verificarConexion();
+	}
 
-    public static synchronized GestorDeConexiones getInstance() {
-        if (instancia == null) {
-            instancia = new GestorDeConexiones();
-        }
-        return instancia;
-    }
+	public static synchronized GestorDeConexiones getInstance() {
+		if (instancia == null) {
+			instancia = new GestorDeConexiones();
+		}
+		return instancia;
+	}
 
-    private boolean verificarConexion() {
-        boolean conexion = true;
+	private boolean verificarConexion() {
+		boolean conexion = true;
 
-        try {
-            @SuppressWarnings("deprecation")
+		try {
+			@SuppressWarnings("deprecation")
 			URL url = new URL("https://www.google.com");
-            HttpURLConnection urlConnect = (HttpURLConnection) url.openConnection();
-            urlConnect.setConnectTimeout(1000);
-            urlConnect.connect();
-            conexion = (urlConnect.getResponseCode() == 200);
-        } catch (IOException e) {
-            conexion = false;
-        }
+			HttpURLConnection urlConnect = (HttpURLConnection) url.openConnection();
+			urlConnect.setConnectTimeout(1000);
+			urlConnect.connect();
+			conexion = (urlConnect.getResponseCode() == 200);
+		} catch (IOException e) {
+			conexion = false;
+		}
 
-        return conexion;
-    }
+		return conexion;
+	}
 
-    public boolean hayConexion() {
-        return this.conectado;
-    }
+	public boolean hayConexion() {
+		return this.conectado;
+	}
 
-    public void actualizarConexion() {
-        this.conectado = verificarConexion();
-    }
+	public void actualizarConexion() {
+		this.conectado = verificarConexion();
+	}
 }

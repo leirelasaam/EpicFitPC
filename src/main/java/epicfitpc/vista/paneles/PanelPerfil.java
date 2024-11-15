@@ -7,7 +7,6 @@ import javax.swing.border.EmptyBorder;
 import com.google.cloud.Timestamp;
 
 import epicfitpc.bbdd.GestorDeUsuarios;
-import epicfitpc.controlador.Controlador;
 import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.Conexion;
 import epicfitpc.utils.DateUtils;
@@ -15,6 +14,7 @@ import epicfitpc.utils.Estilos;
 import epicfitpc.utils.GestorDeConexiones;
 import epicfitpc.utils.UsuarioLogueado;
 import epicfitpc.utils.WindowUtils;
+import epicfitpc.validaciones.GestorDeValidaciones;
 import epicfitpc.vista.MainFrame;
 import epicfitpc.vista.componentes.JButtonPrimary;
 import epicfitpc.vista.componentes.JLabelTitle;
@@ -31,6 +31,9 @@ import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.awt.event.ActionEvent;
 
+/**
+ * Panel que muestra la información del usuario logueado.
+ */
 public class PanelPerfil extends JPanel {
 
 	private static final long serialVersionUID = -809466126072228019L;
@@ -193,7 +196,7 @@ public class PanelPerfil extends JPanel {
 		if (gdu == null)
 			gdu = new GestorDeUsuarios(Conexion.getInstance().getConexion());
 
-		Controlador ctr = new Controlador();
+		GestorDeValidaciones ctr = new GestorDeValidaciones();
 
 		if (!ctr.validarApellido(usuarioModificado.getApellido())) {
 			WindowUtils.errorPane("El apellido esta vacio o es mayor de 50 carácteres", "Datos incorrectos");

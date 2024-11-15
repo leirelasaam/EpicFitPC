@@ -18,11 +18,11 @@ import java.util.concurrent.ExecutionException;
 import javax.swing.JSpinner;
 
 import epicfitpc.bbdd.GestorDeUsuarios;
-import epicfitpc.controlador.Controlador;
 import epicfitpc.modelo.Usuario;
 import epicfitpc.utils.Conexion;
 import epicfitpc.utils.Estilos;
 import epicfitpc.utils.WindowUtils;
+import epicfitpc.validaciones.GestorDeValidaciones;
 import epicfitpc.vista.MainFrame;
 import epicfitpc.vista.componentes.JButtonPrimary;
 import epicfitpc.vista.componentes.JLabelTitle;
@@ -39,6 +39,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 
+/**
+ * Panel para llevar a cabo el registro en la aplicación.
+ */
 public class PanelRegistro extends JPanel {
 
 	private static final long serialVersionUID = -7631458094715795013L;
@@ -253,25 +256,25 @@ public class PanelRegistro extends JPanel {
 		if (gdu == null)
 			gdu = new GestorDeUsuarios(Conexion.getInstance().getConexion());
 		
-		Controlador ctr = new Controlador();
+		GestorDeValidaciones gdv = new GestorDeValidaciones();
 
 		String pass1 = new String(passwordField.getPassword());
 		String pass2 = new String(passwordField2.getPassword());
 
-		if (!ctr.validarApellido(usuario.getApellido())) {
+		if (!gdv.validarApellido(usuario.getApellido())) {
 			WindowUtils.errorPane("El apellido esta vacio o es mayor de 50 carácteres", "Datos incorrectos");
 			validar = false;
-		} else if (!ctr.validarCorreo(usuario.getCorreo())) {
+		} else if (!gdv.validarCorreo(usuario.getCorreo())) {
 			WindowUtils.errorPane("Correo incorrecto, vuelva a insertarlo.", "Datos incorrectos");
 			validar = false;
-		} else if (!ctr.validarFechaNacimiento(usuario.getFechaNac())) {
+		} else if (!gdv.validarFechaNacimiento(usuario.getFechaNac())) {
 			WindowUtils.errorPane("Fecha de nacimiento incorrecta. El usuario tiene que ser mayor de 14 años.",
 					"Datos incorrectos");
 			validar = false;
-		} else if (!ctr.validarNombre(usuario.getNombre())) {
+		} else if (!gdv.validarNombre(usuario.getNombre())) {
 			WindowUtils.errorPane("Nombre incorrecto, esta vacio o es mayor de 50 carácteres.", "Datos incorrectos");
 			validar = false;
-		} else if (!ctr.validarPassword(usuario.getPass())) {
+		} else if (!gdv.validarPassword(usuario.getPass())) {
 			WindowUtils.errorPane(
 					"Contraseña incorrecta, debe tener entre 8 y 20 caracteres, incluir al menos una letra minúscula, una mayúscula, un número y un carácter especial.",
 					"Datos incorrectos");

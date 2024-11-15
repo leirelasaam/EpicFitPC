@@ -9,6 +9,9 @@ import epicfitpc.utils.WindowUtils;
 import epicfitpc.utils.DateUtils;
 import java.awt.*;
 
+/**
+ * Panel para mostrar la información de un workout.
+ */
 public class WorkoutItemPanel extends JPanel {
 
     private static final long serialVersionUID = 8329219010128277587L;

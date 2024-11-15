@@ -43,6 +43,10 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+/**
+ * Panel que muestra los workouts que puede realizar el usuario logueado, lo
+ * cual depende de su nivel.
+ */
 public class PanelWorkouts extends JPanel {
 
 	private static final long serialVersionUID = 2651779404513169891L;
@@ -275,7 +279,7 @@ public class PanelWorkouts extends JPanel {
 		ArrayList<Workout> workouts = null;
 		Firestore db;
 		boolean hayConexion = GestorDeConexiones.getInstance().hayConexion();
-		
+
 		if (hayConexion) {
 			try {
 				db = Conexion.getInstance().getConexion();
@@ -289,11 +293,13 @@ public class PanelWorkouts extends JPanel {
 			try {
 				workouts = gdfb.leer();
 			} catch (FileNotFoundException e) {
-				WindowUtils.errorPane("No se ha encontrado el fichero de carga para los workouts.", "Error en la carga");
+				WindowUtils.errorPane("No se ha encontrado el fichero de carga para los workouts.",
+						"Error en la carga");
 			} catch (ClassNotFoundException e) {
 				WindowUtils.errorPane("No se ha encontrado la clase Workout.", "Error en la clase");
 			} catch (IOException e) {
-				WindowUtils.errorPane("No se ha podido realizar la lectura del fichero de carga.", "Error en la lectura");
+				WindowUtils.errorPane("No se ha podido realizar la lectura del fichero de carga.",
+						"Error en la lectura");
 			}
 		}
 

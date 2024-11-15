@@ -13,6 +13,9 @@ import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.RenderingHints;
 
+/**
+ * Panel que muestra la información de un ejercicio realizado.
+ */
 public class ResumenEjercicioPanel extends JPanel {
 
 	private static final long serialVersionUID = 8329219010128277587L;
@@ -22,7 +25,7 @@ public class ResumenEjercicioPanel extends JPanel {
 		this.tiempoEjercicio = tiempoEjercicio;
 		initialize();
 	}
-	
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -41,23 +44,28 @@ public class ResumenEjercicioPanel extends JPanel {
 		setOpaque(false);
 		setBackground(Estilos.CARD_BACKGROUND);
 
-		JLabelTitle lblNombre = new JLabelTitle(tiempoEjercicio.getEjercicio().getOrden() + ". " + tiempoEjercicio.getEjercicio().getNombre());
-		JLabel lblSeries = new JLabel("<html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Series</b>: " + tiempoEjercicio.getEjercicio().getSeries() + "</html>");
-		JLabel lblRepeticiones = new JLabel("<html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Repeticiones</b>: " + tiempoEjercicio.getEjercicio().getRepeticiones() + "</html>");
+		JLabelTitle lblNombre = new JLabelTitle(
+				tiempoEjercicio.getEjercicio().getOrden() + ". " + tiempoEjercicio.getEjercicio().getNombre());
+		JLabel lblSeries = new JLabel("<html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Series</b>: "
+				+ tiempoEjercicio.getEjercicio().getSeries() + "</html>");
+		JLabel lblRepeticiones = new JLabel("<html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Repeticiones</b>: "
+				+ tiempoEjercicio.getEjercicio().getRepeticiones() + "</html>");
 
 		// Obtener el tiempo en segundos
 		int tiempoEnSegundos = tiempoEjercicio.getEjercicio().getTiempoSerie();
 
 		String tiempoFormateado = DateUtils.formatearTiempo(tiempoEnSegundos);
-		JLabel lblTiempo = new JLabel("<html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Tiempo por serie</b>: " + tiempoFormateado + "</html>");
+		JLabel lblTiempo = new JLabel(
+				"<html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Tiempo por serie</b>: " + tiempoFormateado + "</html>");
 
 		tiempoEnSegundos = tiempoEjercicio.getTiempo();
 		tiempoFormateado = DateUtils.formatearTiempo(tiempoEnSegundos);
-		
-		JLabel lblTiempoDescanso = new JLabel("<html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Tiempo descanso</b>: " + tiempoEjercicio.getEjercicio().getDescanso() + " s" + "</html>");
-		JLabel lblTiempoReal = new JLabel("<html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Tu tiempo total</b>: " + tiempoFormateado + "</html>");
-		
-		
+
+		JLabel lblTiempoDescanso = new JLabel("<html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Tiempo descanso</b>: "
+				+ tiempoEjercicio.getEjercicio().getDescanso() + " s" + "</html>");
+		JLabel lblTiempoReal = new JLabel(
+				"<html>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Tu tiempo total</b>: " + tiempoFormateado + "</html>");
+
 		add(lblNombre);
 		add(lblSeries);
 		add(lblRepeticiones);

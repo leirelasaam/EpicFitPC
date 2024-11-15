@@ -2,6 +2,9 @@ package epicfitpc.utils;
 
 import epicfitpc.modelo.Usuario;
 
+/**
+ * Singleton para gestionar el usuario logueado.
+ */
 public class UsuarioLogueado {
     private static UsuarioLogueado instance;
     private Usuario usuario; 
