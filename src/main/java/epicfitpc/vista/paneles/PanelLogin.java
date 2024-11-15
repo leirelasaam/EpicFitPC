@@ -30,6 +30,7 @@ import javax.swing.ImageIcon;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridLayout;
 
 /**
@@ -126,6 +127,14 @@ public class PanelLogin extends JPanel {
 		panelDerecha.add(btnSalir);
 		btnSalir.setBackgroundColor(Estilos.BLACK);
 		btnSalir.setHoverColor(Color.DARK_GRAY);
+
+		if (!hayConexion) {
+			JLabelTitle lblSinConexion = new JLabelTitle("Modo sin conexión");
+			lblSinConexion.setFont(new Font("Noto Sans", Font.ITALIC, 18));
+			lblSinConexion.setForeground(Color.darkGray);
+			lblSinConexion.setBounds(180, 50, 300, 31);
+			panelDerecha.add(lblSinConexion);
+		}
 
 		// logo de la compania
 		ImageIcon img = WindowUtils.cargarImagen(Rutas.LOGO_EF, 500, 500);
