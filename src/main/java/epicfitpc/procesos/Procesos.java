@@ -48,9 +48,11 @@ public class Procesos implements Runnable {
 			e.printStackTrace();
 		}
 
-		GestorDeFicherosXML gestorDeFicherosXML = new GestorDeFicherosXML();
-		gestorDeFicherosXML.crearBackupXML(usuario, historicos, Rutas.BACKUP_HISTORICOS);
-
+		if(historicos != null) {
+			GestorDeFicherosXML gestorDeFicherosXML = new GestorDeFicherosXML();
+			gestorDeFicherosXML.crearBackupXML(usuario, historicos, Rutas.BACKUP_HISTORICOS);
+		}
+		
 		System.out.println("Proceso terminado de la creación de fichero XML de históricos...");
 	}
 
