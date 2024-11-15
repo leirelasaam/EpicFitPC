@@ -11,6 +11,12 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * La clase contiene los métodos de lectura y escritura de objetos en archivos
+ * binarios. El objeto T hace referencia al objeto en cuestión.
+ * 
+ * @param <T>
+ */
 public class GestorDeFicherosBinarios<T extends Serializable> {
 	// Ruta relativa del fichero
 	private String ruta = null;
@@ -25,6 +31,12 @@ public class GestorDeFicherosBinarios<T extends Serializable> {
 
 		try {
 			File fichero = new File(ruta);
+			
+			// Si el archivo no existe, se crea
+	        if (!fichero.exists()) {
+	            fichero.createNewFile();
+	        }
+			
 			fos = new FileOutputStream(fichero, false);
 			oos = new ObjectOutputStream(fos);
 			for (T t : ts) {

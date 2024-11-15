@@ -4,6 +4,9 @@ import javax.swing.JLabel;
 
 import epicfitpc.utils.DateUtils;
 
+/**
+ * Cronómetro que avanza de forma regresiva.
+ */
 public class CronometroRegresivo extends Thread {
 	private JLabel label;
 	private int tiempoMax = 0;

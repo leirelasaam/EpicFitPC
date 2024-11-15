@@ -9,6 +9,9 @@ import javax.swing.JButton;
 
 import epicfitpc.utils.Estilos;
 
+/**
+ * JButton con estilos personalizados.
+ */
 public class JButtonPrimary extends JButton implements MouseListener{
 
 	private static final long serialVersionUID = 7471587497181334610L;
