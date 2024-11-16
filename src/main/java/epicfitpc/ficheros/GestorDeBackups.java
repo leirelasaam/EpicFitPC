@@ -7,7 +7,6 @@ import java.util.concurrent.ExecutionException;
 
 import com.google.cloud.firestore.Firestore;
 import epicfitpc.bbdd.GestorDeUsuarios;
-import epicfitpc.bbdd.GestorDeWorkouts;
 import epicfitpc.modelo.Usuario;
 import epicfitpc.modelo.Workout;
 import epicfitpc.utils.Rutas;
@@ -19,14 +18,16 @@ public class GestorDeBackups {
 	private Firestore db = null;
 	private static final String FICHERO_USUARIOS = Rutas.BACKUP_USUARIOS;
 	private static final String FICHERO_WORKOUTS = Rutas.BACKUP_WORKOUTS;
+	private ArrayList<Workout> workouts = null;
 
-	public GestorDeBackups(Firestore db) {
+	public GestorDeBackups(Firestore db, ArrayList<Workout> workouts) {
 		this.db = db;
+		this.workouts = workouts;
 	}
 
 	public void realizarBackup() throws FileNotFoundException, InterruptedException, ExecutionException, IOException {
-		escribirUsuarios();
 		escribirWorkouts();
+		escribirUsuarios();
 	}
 
 	public void cargarBackup() throws FileNotFoundException, InterruptedException, ExecutionException, IOException,
@@ -48,7 +49,7 @@ public class GestorDeBackups {
 	public void escribirUsuarios() throws InterruptedException, ExecutionException, FileNotFoundException, IOException {
 		GestorDeFicherosBinarios<Usuario> gdfb = new GestorDeFicherosBinarios<Usuario>(FICHERO_USUARIOS);
 		GestorDeUsuarios gdu = new GestorDeUsuarios(db);
-		ArrayList<Usuario> usuarios = gdu.obtenerUsuariosConHistoricos();
+		ArrayList<Usuario> usuarios = gdu.obtenerUsuariosConHistoricos(workouts);
 
 		System.out.println("ESCRIBIENDO Usuarios...");
 		if (null != usuarios) {
@@ -65,10 +66,8 @@ public class GestorDeBackups {
 		return usuarios;
 	}
 
-	public void escribirWorkouts() throws InterruptedException, ExecutionException, FileNotFoundException, IOException {
+	public void escribirWorkouts() throws FileNotFoundException, IOException {
 		GestorDeFicherosBinarios<Workout> gdfb = new GestorDeFicherosBinarios<Workout>(FICHERO_WORKOUTS);
-		GestorDeWorkouts gdw = new GestorDeWorkouts(db);
-		ArrayList<Workout> workouts = gdw.obtenerTodosLosWorkouts();
 
 		System.out.println("ESCRIBIENDO Workouts...");
 		if (null != workouts) {

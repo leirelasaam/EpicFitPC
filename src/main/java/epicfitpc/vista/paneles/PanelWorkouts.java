@@ -17,19 +17,9 @@ import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.border.EmptyBorder;
 
-import com.google.cloud.firestore.Firestore;
-
-import epicfitpc.bbdd.GestorDeWorkouts;
-import epicfitpc.ficheros.GestorDeFicherosBinarios;
 import epicfitpc.modelo.Ejercicio;
-import epicfitpc.modelo.Usuario;
 import epicfitpc.modelo.Workout;
 import epicfitpc.utils.Estilos;
-import epicfitpc.utils.GestorDeConexiones;
-import epicfitpc.utils.Rutas;
-import epicfitpc.utils.Conexion;
-import epicfitpc.utils.UsuarioLogueado;
-import epicfitpc.utils.WindowUtils;
 import epicfitpc.vista.componentes.JButtonPrimary;
 import epicfitpc.vista.componentes.WorkoutEjItemPanel;
 import epicfitpc.vista.componentes.WorkoutItemPanel;
@@ -37,8 +27,6 @@ import epicfitpc.vista.componentes.WorkoutItemPanel;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.awt.event.ItemEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -55,7 +43,6 @@ public class PanelWorkouts extends JPanel {
 	private JLabel labelWorkout;
 	private JComboBox<String> comboBox;
 	private ArrayList<Workout> workouts = null;
-	private Usuario usuario = null;
 	private JButtonPrimary playButton;
 	private PanelMenu panelMenu = null;
 	private Workout workoutSeleccionado = null;
@@ -64,16 +51,14 @@ public class PanelWorkouts extends JPanel {
 	private static final String NIVELES_NONE = "-- No hay workouts disponibles --";
 	private static final String SELECCIONA_WORKOUT = "Selecciona un workout";
 	private static final int PANELES_NECESARIOS = 4;
-	private static final String FICHERO_WORKOUTS = Rutas.BACKUP_WORKOUTS;
 
 	/**
 	 * Constructor que inicializa el panel y recibe el listado de workouts.
 	 * 
 	 * @param workouts ArrayList de Workouts
 	 */
-	public PanelWorkouts(PanelMenu panelMenu) {
-		this.usuario = UsuarioLogueado.getInstance().getUsuario();
-		this.workouts = obtenerWorkouts();
+	public PanelWorkouts(PanelMenu panelMenu, ArrayList<Workout> workouts) {
+		this.workouts = workouts;
 		this.panelMenu = panelMenu;
 		initialize();
 	}
@@ -272,39 +257,6 @@ public class PanelWorkouts extends JPanel {
 			panelWInterior.revalidate();
 			panelWInterior.repaint();
 		}
-	}
-
-	private ArrayList<Workout> obtenerWorkouts() {
-		System.out.println("Obteniendo workouts en Workout");
-		ArrayList<Workout> workouts = null;
-		Firestore db;
-		boolean hayConexion = GestorDeConexiones.getInstance().hayConexion();
-
-		if (hayConexion) {
-			try {
-				db = Conexion.getInstance().getConexion();
-				GestorDeWorkouts gdw = new GestorDeWorkouts(db);
-				workouts = gdw.obtenerWorkoutsPorNivelUsuario(usuario.getNivel());
-			} catch (Exception e) {
-				WindowUtils.errorPane("Error en la carga desde la base de datos.", "Error en la base de datos");
-			}
-		} else {
-			GestorDeFicherosBinarios<Workout> gdfb = new GestorDeFicherosBinarios<Workout>(FICHERO_WORKOUTS);
-			try {
-				workouts = gdfb.leer();
-			} catch (FileNotFoundException e) {
-				WindowUtils.errorPane("No se ha encontrado el fichero de carga para los workouts.",
-						"Error en la carga");
-			} catch (ClassNotFoundException e) {
-				WindowUtils.errorPane("No se ha encontrado la clase Workout.", "Error en la clase");
-			} catch (IOException e) {
-				WindowUtils.errorPane("No se ha podido realizar la lectura del fichero de carga.",
-						"Error en la lectura");
-			}
-		}
-
-		return workouts;
-
 	}
 
 	private void iniciarWorkout() {

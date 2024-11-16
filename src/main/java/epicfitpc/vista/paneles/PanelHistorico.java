@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.util.List;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -13,16 +13,8 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import com.google.cloud.firestore.Firestore;
-
-import epicfitpc.bbdd.GestorDeHistoricos;
 import epicfitpc.modelo.Historico;
-import epicfitpc.modelo.Usuario;
-import epicfitpc.utils.Conexion;
 import epicfitpc.utils.Estilos;
-import epicfitpc.utils.GestorDeConexiones;
-import epicfitpc.utils.UsuarioLogueado;
-import epicfitpc.utils.WindowUtils;
 import epicfitpc.vista.componentes.HistoricoItemPanel;
 
 /**
@@ -32,8 +24,7 @@ public class PanelHistorico extends JPanel {
 
 	private static final long serialVersionUID = 2651779404513169891L;
 	private JPanel panelHInterior;
-	private List<Historico> historicos = null;
-	private Usuario usuario = null;
+	private ArrayList<Historico> historicos = null;
 	private static final int PANELES_NECESARIOS = 4;
 
 	/**
@@ -41,9 +32,8 @@ public class PanelHistorico extends JPanel {
 	 * 
 	 * @param workouts ArrayList de Workouts
 	 */
-	public PanelHistorico() {
-		this.usuario = UsuarioLogueado.getInstance().getUsuario();
-		this.historicos = obtenerHistoricos();
+	public PanelHistorico(ArrayList<Historico> historicos) {
+		this.historicos = historicos;
 		initialize();
 	}
 
@@ -110,28 +100,6 @@ public class PanelHistorico extends JPanel {
 			emptyPanel.setBackground(Estilos.BACKGROUND);
 			panel.add(emptyPanel);
 		}
-	}
-
-	private List<Historico> obtenerHistoricos() {
-		System.out.println("Obteniendo históricos en Histórico");
-		List<Historico> historicos = null;
-		Firestore db;
-		boolean hayConexion = GestorDeConexiones.getInstance().hayConexion();
-
-		if (hayConexion) {
-			try {
-				db = Conexion.getInstance().getConexion();
-				GestorDeHistoricos gdh = new GestorDeHistoricos(db);
-				historicos = gdh.obtenerTodosLosHistoricosPorUsuario(usuario);
-			} catch (Exception e) {
-				WindowUtils.errorPane("Error en la carga desde la base de datos.", "Error en la base de datos");
-			}
-		}else {
-			historicos = usuario.getHistoricos();
-		}
-
-		return historicos;
-
 	}
 
 }

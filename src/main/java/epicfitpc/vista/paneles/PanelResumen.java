@@ -21,7 +21,6 @@ import javax.swing.border.EmptyBorder;
 import epicfitpc.modelo.Historico;
 import epicfitpc.modelo.TiempoEjercicio;
 import epicfitpc.utils.Estilos;
-import epicfitpc.utils.UsuarioLogueado;
 import epicfitpc.vista.MainFrame;
 import epicfitpc.vista.componentes.JButtonPrimary;
 import epicfitpc.vista.componentes.JLabelTitle;
@@ -158,7 +157,7 @@ public class PanelResumen extends JPanel {
 
 	private void cerrarPanel() {
 		MainFrame.getInstance().getContentPane().removeAll();
-		MainFrame.getInstance().getContentPane().add(new PanelMenu(UsuarioLogueado.getInstance().getUsuario()));
+		MainFrame.getInstance().getContentPane().add(new PanelMenu());
 		MainFrame.getInstance().revalidate();
 		MainFrame.getInstance().repaint();
 	}

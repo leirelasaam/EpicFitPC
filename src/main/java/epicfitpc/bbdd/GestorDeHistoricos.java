@@ -27,7 +27,7 @@ public class GestorDeHistoricos {
 		this.db = db;
 	}
 
-	public ArrayList<Historico> obtenerTodosLosHistoricosPorUsuario(Usuario usuario)
+	public ArrayList<Historico> obtenerTodosLosHistoricosPorUsuario(Usuario usuario, ArrayList<Workout> workouts)
 			throws InterruptedException, ExecutionException {
 		System.out.println("BBDD: obtenerTodosLosHistoricosPorUsuario");
 		ArrayList<Historico> historicos = null;
@@ -44,16 +44,21 @@ public class GestorDeHistoricos {
 			throw e;
 		}
 
-		GestorDeWorkouts gestorDeWorkouts = new GestorDeWorkouts(db);
 		List<QueryDocumentSnapshot> documentos = querySnapshot.getDocuments();
 		for (QueryDocumentSnapshot documento : documentos) {
 			Historico historico = documento.toObject(Historico.class);
 			historico.setId(documento.getId());
 
 			DocumentReference workoutRef = historico.getWorkout();
+			Workout w = null;
 			if (workoutRef != null) {
-				Workout workout = obtenerWorkout(workoutRef, gestorDeWorkouts);
-				historico.setWorkoutObj(workout);
+				for (Workout workout : workouts) {
+					if (workoutRef.getId().equals(workout.getId())) {
+						w = workout;
+					}
+				}
+				
+				historico.setWorkoutObj(w);
 			}
 
 			if (historicos == null)
@@ -63,25 +68,6 @@ public class GestorDeHistoricos {
 		}
 		
 		return historicos;
-	}
-
-	private Workout obtenerWorkout(DocumentReference workoutRef, GestorDeWorkouts gestorDeWorkouts)
-			throws InterruptedException, ExecutionException {
-		Workout w = null;
-		try {
-			ArrayList<Workout> workouts = gestorDeWorkouts.obtenerTodosLosWorkouts();
-			for (Workout workout : workouts) {
-				if (workoutRef.getId().equals(workout.getId())) {
-					w = workout;
-				}
-			}
-		} catch (InterruptedException e) {
-			throw e;
-		} catch (ExecutionException e) {
-			throw e;
-		}
-
-		return w;
 	}
 
 	public boolean guardarHistorico(Usuario usuario, Historico historico)

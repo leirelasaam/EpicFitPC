@@ -203,7 +203,7 @@ public class PanelLogin extends JPanel {
 
 	private void irWorkouts() {
 		MainFrame.getInstance().getContentPane().removeAll();
-		MainFrame.getInstance().getContentPane().add(new PanelMenu(UsuarioLogueado.getInstance().getUsuario()));
+		MainFrame.getInstance().getContentPane().add(new PanelMenu());
 		MainFrame.getInstance().revalidate();
 		MainFrame.getInstance().repaint();
 	}

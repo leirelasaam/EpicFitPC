@@ -22,6 +22,7 @@ import com.google.cloud.firestore.WriteResult;
 
 import epicfitpc.modelo.Historico;
 import epicfitpc.modelo.Usuario;
+import epicfitpc.modelo.Workout;
 import epicfitpc.utils.DBUtils;
 
 public class GestorDeUsuarios {
@@ -60,7 +61,7 @@ public class GestorDeUsuarios {
 	}
 
 	// Para el backup
-	public ArrayList<Usuario> obtenerUsuariosConHistoricos() throws InterruptedException, ExecutionException {
+	public ArrayList<Usuario> obtenerUsuariosConHistoricos(ArrayList<Workout> workouts) throws InterruptedException, ExecutionException {
 		System.out.println("BBDD: obtenerUsuariosConHistoricos");
 		ArrayList<Usuario> usuarios = null;
 		CollectionReference usuariosDb = db.collection(DBUtils.USUARIOS);
@@ -81,7 +82,7 @@ public class GestorDeUsuarios {
 			Usuario usuario = documento.toObject(Usuario.class);
 			usuario.setId(documento.getId());
 
-			ArrayList<Historico> historicos = gdh.obtenerTodosLosHistoricosPorUsuario(usuario);
+			ArrayList<Historico> historicos = gdh.obtenerTodosLosHistoricosPorUsuario(usuario, workouts);
 			usuario.setHistoricos(historicos);
 
 			if (null == usuarios)

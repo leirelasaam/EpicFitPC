@@ -1,28 +1,38 @@
 package epicfitpc.procesos;
 
 import java.io.IOException;
-
-import java.util.List;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import com.google.cloud.firestore.Firestore;
 
 import epicfitpc.bbdd.GestorDeHistoricos;
+import epicfitpc.bbdd.GestorDeWorkouts;
 import epicfitpc.ficheros.GestorDeBackups;
 import epicfitpc.ficheros.GestorDeFicherosXML;
 import epicfitpc.modelo.Historico;
 import epicfitpc.modelo.Usuario;
+import epicfitpc.modelo.Workout;
 import epicfitpc.utils.Conexion;
 import epicfitpc.utils.GestorDeConexiones;
 import epicfitpc.utils.Rutas;
 import epicfitpc.utils.UsuarioLogueado;
 
 public class Procesos implements Runnable {
+	private ArrayList<Workout> workouts = null;
 
 	@Override
 	public void run() {
 		if (GestorDeConexiones.getInstance().hayConexion()) {
 			Firestore db = conexionFirebase();
+			
+			GestorDeWorkouts gdw = new GestorDeWorkouts(db);
+			try {
+				workouts = gdw.obtenerTodosLosWorkouts();
+			} catch (InterruptedException | ExecutionException e) {
+				System.out.println("No se han podido obtener los workouts.");
+			}
+			
 			procesoFicheroXML(db);
 			procesoFicheroBinario(db);
 		} else {
@@ -41,9 +51,9 @@ public class Procesos implements Runnable {
 		Usuario usuario = UsuarioLogueado.getInstance().getUsuario();
 
 		GestorDeHistoricos gestorDeHistoricos = new GestorDeHistoricos(db);
-		List<Historico> historicos = null;
+		ArrayList<Historico> historicos = null;
 		try {
-			historicos = gestorDeHistoricos.obtenerTodosLosHistoricosPorUsuario(usuario);
+			historicos = gestorDeHistoricos.obtenerTodosLosHistoricosPorUsuario(usuario, workouts);
 		} catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();
 		}
@@ -61,7 +71,7 @@ public class Procesos implements Runnable {
 	 */
 	public void procesoFicheroBinario(Firestore db) {
 		System.out.println("Iniciando el proceso de obtención del backup binario...");
-		GestorDeBackups gestorDeBackups = new GestorDeBackups(db);
+		GestorDeBackups gestorDeBackups = new GestorDeBackups(db, workouts);
 		try {
 			gestorDeBackups.realizarBackup();
 			System.out.println("Proceso de obtención del backup binario realizado con éxito ...");
